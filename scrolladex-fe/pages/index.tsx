@@ -25,26 +25,26 @@ const Index = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const data = await getEmployeesOverviewAPI();
-        if (data) {
-          setEmployees(data);
-          setLoaded(new Array(data.length).fill(false));
-        }
-      } catch (error: any) {
-        toast({
-          title: "Error",
-          description: `Failed to call API: ${error.message}`,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        throw error;
+  const fetchEmployees = async () => {
+    try {
+      const data = await getEmployeesOverviewAPI();
+      if (data) {
+        setEmployees(data);
+        setLoaded(new Array(data.length).fill(false));
       }
-    };
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: `Failed to call API: ${error.message}`,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      throw error;
+    }
+  };
 
+  useEffect(() => {
     fetchEmployees();
   }, []);
 
@@ -142,12 +142,12 @@ const Index = () => {
           </MotionBox>
         ))}
       </SimpleGrid>
-
       {employee && (
         <EmployeeDetailsModal
           isOpen={isOpen}
           onClose={onClose}
           employee={employee}
+          fetchEmployees={fetchEmployees}
         />
       )}
     </MotionBox>
