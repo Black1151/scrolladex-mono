@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -82,7 +81,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
     },
     {
       icon: <FaTimes size={30} />,
-      tooltipLabel: "Close Modal",
+      tooltipLabel: "Close",
       onClick: onClose,
     },
   ];
