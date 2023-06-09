@@ -119,6 +119,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
                 border="none"
                 color="white"
                 _hover={{ bg: "emerald" }}
+                _focus={{ outline: 0 }}
               />
             </Flex>
           </Flex>
