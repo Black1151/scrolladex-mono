@@ -18,7 +18,6 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-
 import AddEmployeeModal from "../modals/AddEmployeeModal";
 import AddDepartmentModal from "../modals/AddDepartmentModal";
 import { getDepartmentsAPI } from "@/api/departmentAPI";
@@ -39,17 +38,12 @@ const Navbar = () => {
     "success"
   );
   const [isOutcomeOpen, setOutcomeOpen] = useState(false);
-
   const { authenticated, setAuthenticated } = useAuth();
-
   const toast = useToast();
-
   const MotionBox = motion(Box);
-
   const router = useRouter();
 
   const createDepartmentDropdownList = async (): Promise<void> => {
-    console.log("createDepartmentDropdownList started");
     try {
       const departments = await getDepartmentsAPI();
       if (departments != null) {
@@ -59,7 +53,6 @@ const Navbar = () => {
         }));
         setDepartmentList(newDepartmentsArray);
       }
-      console.log("createDepartmentDropdownList try finished");
     } catch (error: any) {
       toast({
         title: "An error occurred.",
@@ -99,7 +92,6 @@ const Navbar = () => {
     };
 
   const showOutcomeModal = (status: "success" | "error", message: string) => {
-    console.log("showOutcomeModal");
     setOutcomeStatus(status);
     setOutcomeMessage(message);
     setOutcomeOpen(true);
