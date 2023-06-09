@@ -13,16 +13,15 @@ import { motion } from "framer-motion";
 import { getEmployeesOverviewAPI } from "../api/employeeApi";
 import { EmployeeOverview } from "../types";
 import EmployeeDetailsModal from "@/components/modals/EmployeeDetailsModal";
+import { Employee } from "../types";
+import { getEmployeeAPI } from "../api/employeeApi";
 
 const MotionBox = motion(Box);
 
 const Index = () => {
   const [employees, setEmployees] = useState<EmployeeOverview[]>([]);
+  const [employee, setEmployee] = useState<Employee | null>(null);
   const [loaded, setLoaded] = useState<boolean[]>([]);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(
-    null
-  );
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -57,9 +56,24 @@ const Index = () => {
     });
   };
 
-  const handleCardClick = (id: number) => {
-    setSelectedEmployeeId(id);
-    onOpen();
+  const handleCardClick = async (id: number) => {
+    try {
+      const employeeData = await getEmployeeAPI(id);
+      setEmployee(employeeData);
+      onOpen();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: `Failed to fetch employee details: ${error.message}`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      } else {
+        throw error;
+      }
+    }
   };
 
   return (
@@ -129,11 +143,11 @@ const Index = () => {
         ))}
       </SimpleGrid>
 
-      {selectedEmployeeId && (
+      {employee && (
         <EmployeeDetailsModal
           isOpen={isOpen}
           onClose={onClose}
-          id={selectedEmployeeId}
+          employee={employee}
         />
       )}
     </MotionBox>

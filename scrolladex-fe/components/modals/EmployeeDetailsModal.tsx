@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -14,7 +14,6 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
-import { getEmployeeAPI } from "@/api/employeeApi";
 import { Employee } from "@/types";
 import {
   FaBriefcase,
@@ -27,26 +26,17 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import ModalIconButton from "./ModalIconButton";
 
 interface Props {
-  id: number;
+  employee: Employee;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
-  const closeButtonRef = useRef(null); // Create a ref for the close button
-
-  const [employee, setEmployee] = useState<Employee | null>(null);
-
-  const fetchEmployee = async (id: number) => {
-    const employeeData = await getEmployeeAPI(id);
-    setEmployee(employeeData);
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      fetchEmployee(id);
-    }
-  }, [isOpen, id]);
+const EmployeeDetailsModal: React.FC<Props> = ({
+  employee,
+  isOpen,
+  onClose,
+}) => {
+  const closeButtonRef = useRef(null);
 
   const employeeDetails: { icon: JSX.Element; key: keyof Employee }[] = [
     {
@@ -84,7 +74,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
     },
   ];
 
-  const generateEmployeeDetails = (employee: Employee | null) =>
+  const generateEmployeeDetails = () =>
     employeeDetails.map(({ icon, key }) => (
       <Flex gap={2} alignItems="center" key={key}>
         <Box color="pictonBlue">{icon}</Box>
@@ -139,7 +129,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
                   {employee?.firstName} {employee?.lastName}
                 </Text>
                 <Flex flexDirection="column" gap={4}>
-                  {generateEmployeeDetails(employee)}
+                  {generateEmployeeDetails()}
                 </Flex>
               </VStack>
               <Center>
