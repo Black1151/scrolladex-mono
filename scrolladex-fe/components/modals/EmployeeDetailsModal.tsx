@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -11,6 +11,7 @@ import {
   Image,
   SimpleGrid,
   Center,
+  IconButton,
 } from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
 import { getEmployeeAPI } from "@/api/employeeApi";
@@ -32,6 +33,8 @@ interface Props {
 }
 
 const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
+  const closeButtonRef = useRef(null); // Create a ref for the close button
+
   const [employee, setEmployee] = useState<Employee | null>(null);
 
   const fetchEmployee = async (id: number) => {
@@ -79,11 +82,6 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
       tooltipLabel: "Delete Employee",
       onClick: () => console.log("delete employee"),
     },
-    {
-      icon: <FaTimes size={30} />,
-      tooltipLabel: "Close",
-      onClick: onClose,
-    },
   ];
 
   const generateEmployeeDetails = (employee: Employee | null) =>
@@ -98,7 +96,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={closeButtonRef}>
         <ModalOverlay />
         <ModalContent maxW={650} w="100%" borderTopRadius="lg">
           <Flex
@@ -121,6 +119,17 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
                   onClick={button.onClick}
                 />
               ))}
+              <IconButton
+                aria-label="Close"
+                onClick={onClose}
+                ref={closeButtonRef}
+                icon={<FaTimes size={30} />}
+                bg="emerald"
+                mx={2}
+                border="none"
+                color="white"
+                _hover={{ bg: "emerald" }}
+              />
             </Flex>
           </Flex>
           <ModalBody>
