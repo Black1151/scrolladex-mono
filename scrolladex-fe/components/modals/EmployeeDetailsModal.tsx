@@ -1,67 +1,94 @@
 import React, { useRef } from "react";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  Text,
-  Flex,
-  VStack,
   Box,
-  Image,
-  SimpleGrid,
   Center,
+  Flex,
   IconButton,
+  Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
+  SimpleGrid,
+  Text,
+  useDisclosure,
+  useToast,
+  VStack,
 } from "@chakra-ui/react";
-import { FaTimes } from "react-icons/fa";
-import { Employee } from "@/types";
 import {
   FaBriefcase,
   FaBuilding,
-  FaIdCard,
+  FaEdit,
   FaEnvelope,
+  FaIdCard,
   FaPhone,
+  FaTimes,
+  FaTrash,
 } from "react-icons/fa";
-import { FaEdit, FaTrash } from "react-icons/fa";
+
+import { Employee } from "@/types";
 import ModalIconButton from "./ModalIconButton";
+import ConfirmationModal from "./ConfirmationModal";
+import { deleteEmployeeAPI } from "@/api/employeeApi";
 
 interface Props {
   employee: Employee;
   isOpen: boolean;
   onClose: () => void;
+  fetchEmployees: () => void;
 }
 
 const EmployeeDetailsModal: React.FC<Props> = ({
   employee,
   isOpen,
   onClose,
+  fetchEmployees,
 }) => {
   const closeButtonRef = useRef(null);
+  const confirmationDisclosure = useDisclosure();
+  const toast = useToast();
 
-  const employeeDetails: { icon: JSX.Element; key: keyof Employee }[] = [
-    {
-      icon: <FaBriefcase />,
-      key: "jobTitle",
-    },
-    {
-      icon: <FaBuilding />,
-      key: "departmentName",
-    },
-    {
-      icon: <FaIdCard />,
-      key: "empNo",
-    },
-    {
-      icon: <FaPhone />,
-      key: "telephone",
-    },
-    {
-      icon: <FaEnvelope />,
-      key: "email",
-    },
-  ];
+  const handleDelete = async () => {
+    try {
+      await deleteEmployeeAPI(employee.id);
+      confirmationDisclosure.onClose();
+      fetchEmployees();
+      onClose();
 
-  const buttons = [
+      toast({
+        title: "Employee Deleted",
+        description: `${employee.firstName} ${employee.lastName} has been deleted.`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: `Failed to delete employee: ${error.message}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const employeeDetails = [
+    { icon: <FaBriefcase />, key: "jobTitle" },
+    { icon: <FaBuilding />, key: "departmentName" },
+    { icon: <FaIdCard />, key: "empNo" },
+    { icon: <FaPhone />, key: "telephone" },
+    { icon: <FaEnvelope />, key: "email" },
+  ].map(({ icon, key }) => (
+    <Flex gap={2} alignItems="center" key={key}>
+      <Box color="pictonBlue">{icon}</Box>
+      <Text fontSize={["md", "md", "xl"]} whiteSpace="nowrap">
+        {employee?.[key as keyof Employee]}
+      </Text>
+    </Flex>
+  ));
+
+  const actionButtons = [
     {
       icon: <FaEdit size={25} />,
       tooltipLabel: "Edit Employee Details",
@@ -70,19 +97,16 @@ const EmployeeDetailsModal: React.FC<Props> = ({
     {
       icon: <FaTrash size={20} />,
       tooltipLabel: "Delete Employee",
-      onClick: () => console.log("delete employee"),
+      onClick: confirmationDisclosure.onOpen,
     },
-  ];
-
-  const generateEmployeeDetails = () =>
-    employeeDetails.map(({ icon, key }) => (
-      <Flex gap={2} alignItems="center" key={key}>
-        <Box color="pictonBlue">{icon}</Box>
-        <Text fontSize={["md", "md", "xl"]} whiteSpace="nowrap">
-          {employee?.[key]}
-        </Text>
-      </Flex>
-    ));
+  ].map((button, index) => (
+    <ModalIconButton
+      key={index}
+      icon={button.icon}
+      tooltipLabel={button.tooltipLabel}
+      onClick={button.onClick}
+    />
+  ));
 
   return (
     <>
@@ -101,14 +125,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
               Employee Details
             </Text>
             <Flex position="relative">
-              {buttons.map((button, index) => (
-                <ModalIconButton
-                  key={index}
-                  icon={button.icon}
-                  tooltipLabel={button.tooltipLabel}
-                  onClick={button.onClick}
-                />
-              ))}
+              {actionButtons}
               <IconButton
                 aria-label="Close"
                 onClick={onClose}
@@ -130,7 +147,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
                   {employee?.firstName} {employee?.lastName}
                 </Text>
                 <Flex flexDirection="column" gap={4}>
-                  {generateEmployeeDetails()}
+                  {employeeDetails}
                 </Flex>
               </VStack>
               <Center>
@@ -149,6 +166,13 @@ const EmployeeDetailsModal: React.FC<Props> = ({
           </ModalBody>
         </ModalContent>
       </Modal>
+      <ConfirmationModal
+        onConfirm={handleDelete}
+        isOpen={confirmationDisclosure.isOpen}
+        onClose={confirmationDisclosure.onClose}
+        title="Delete Employee"
+        message={`Are you sure you want to delete ${employee.firstName} ${employee.lastName}? This action cannot be undone.`}
+      />
     </>
   );
 };
