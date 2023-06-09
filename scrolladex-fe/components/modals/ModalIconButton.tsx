@@ -13,7 +13,7 @@ const ModalIconButton: React.FC<ModalIconButtons> = ({
   ...props
 }) => {
   return (
-    <Tooltip label={tooltipLabel} openDelay={1000}>
+    <Tooltip label={tooltipLabel} openDelay={500}>
       <Button
         bg="emerald"
         border="none"
