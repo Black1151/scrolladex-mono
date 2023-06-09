@@ -11,14 +11,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-interface ConfirmationModalProps {
+interface OutcomeModalProps {
   isOpen: boolean;
   onClose: () => void;
   status: "success" | "error";
   bodyText: string;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
+const OutcomeModal: React.FC<OutcomeModalProps> = ({
   isOpen,
   onClose,
   status,
@@ -52,4 +52,4 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   );
 };
 
-export default ConfirmationModal;
+export default OutcomeModal;

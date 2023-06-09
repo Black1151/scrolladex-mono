@@ -24,7 +24,7 @@ import AddDepartmentModal from "../modals/AddDepartmentModal";
 import { getDepartmentsAPI } from "@/api/departmentAPI";
 import { DepartmentListItem } from "@/types";
 import { motion } from "framer-motion";
-import ConfirmationModal from "../modals/ConfirmationModal";
+import OutcomeModal from "../modals/OutcomeModal";
 import { logoutUserAPI } from "@/api/authAPI";
 import { useRouter } from "next/router";
 import { useAuth } from "@/providers/AuthProvider";
@@ -34,11 +34,11 @@ const Navbar = () => {
   const [departmentList, setDepartmentList] = useState<DepartmentListItem[]>(
     []
   );
-  const [confirmationMessage, setConfirmationMessage] = useState("");
-  const [confirmationStatus, setConfirmationStatus] = useState<
-    "success" | "error"
-  >("success");
-  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
+  const [outcomeMessage, setOutcomeMessage] = useState("");
+  const [outcomeStatus, setOutcomeStatus] = useState<"success" | "error">(
+    "success"
+  );
+  const [isOutcomeOpen, setOutcomeOpen] = useState(false);
 
   const { authenticated, setAuthenticated } = useAuth();
 
@@ -81,31 +81,28 @@ const Navbar = () => {
       try {
         await apiFunction(values);
         createDepartmentDropdownList();
-        showConfirmationModal("success", successMessage);
+        showOutcomeModal("success", successMessage);
         actions.setSubmitting(false);
       } catch (error) {
         console.error(error);
         if (error instanceof Error) {
-          showConfirmationModal(
+          showOutcomeModal(
             "error",
             error.message || "An unexpected error occurred."
           );
         } else {
-          showConfirmationModal("error", errorMessage);
+          showOutcomeModal("error", errorMessage);
         }
       } finally {
         actions.setSubmitting(false);
       }
     };
 
-  const showConfirmationModal = (
-    status: "success" | "error",
-    message: string
-  ) => {
-    console.log("showConfirmationModal");
-    setConfirmationStatus(status);
-    setConfirmationMessage(message);
-    setConfirmationOpen(true);
+  const showOutcomeModal = (status: "success" | "error", message: string) => {
+    console.log("showOutcomeModal");
+    setOutcomeStatus(status);
+    setOutcomeMessage(message);
+    setOutcomeOpen(true);
   };
 
   useEffect(() => {
@@ -184,11 +181,11 @@ const Navbar = () => {
           </Box>
         </Flex>
       </MotionBox>
-      <ConfirmationModal
-        isOpen={isConfirmationOpen}
-        onClose={() => setConfirmationOpen(false)}
-        status={confirmationStatus}
-        bodyText={confirmationMessage}
+      <OutcomeModal
+        isOpen={isOutcomeOpen}
+        onClose={() => setOutcomeOpen(false)}
+        status={outcomeStatus}
+        bodyText={outcomeMessage}
       />
     </>
   );
