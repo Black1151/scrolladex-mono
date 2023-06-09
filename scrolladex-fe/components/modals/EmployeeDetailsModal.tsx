@@ -23,6 +23,8 @@ import {
   FaEnvelope,
   FaPhone,
 } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import ModalIconButton from "./ModalIconButton";
 
 interface Props {
   id: number;
@@ -67,6 +69,24 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
     },
   ];
 
+  const buttons = [
+    {
+      icon: <FaEdit size={25} />,
+      tooltipLabel: "Edit Employee Details",
+      onClick: () => console.log("edit employee"),
+    },
+    {
+      icon: <FaTrash size={20} />,
+      tooltipLabel: "Delete Employee",
+      onClick: () => console.log("delete employee"),
+    },
+    {
+      icon: <FaTimes size={30} />,
+      tooltipLabel: "Close Modal",
+      onClick: onClose,
+    },
+  ];
+
   const generateEmployeeDetails = (employee: Employee | null) =>
     employeeDetails.map(({ icon, key }) => (
       <Flex gap={2} alignItems="center" key={key}>
@@ -93,16 +113,16 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
             <Text fontSize="3xl" color="white">
               Employee Details
             </Text>
-            <Button
-              bg="emerald"
-              border="none"
-              color="white"
-              size="xl"
-              _hover={{ bg: "emerald" }}
-              onClick={onClose}
-            >
-              <FaTimes size={30} />
-            </Button>
+            <Flex position="relative">
+              {buttons.map((button, index) => (
+                <ModalIconButton
+                  key={index}
+                  icon={button.icon}
+                  tooltipLabel={button.tooltipLabel}
+                  onClick={button.onClick}
+                />
+              ))}
+            </Flex>
           </Flex>
           <ModalBody>
             <SimpleGrid columns={[1, 2]} spacing={10}>
@@ -118,6 +138,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({ id, isOpen, onClose }) => {
                 <Image
                   src={
                     process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
+                      "/public" +
                       employee?.profilePictureUrl || ""
                   }
                   alt={employee?.firstName + " " + employee?.lastName}
