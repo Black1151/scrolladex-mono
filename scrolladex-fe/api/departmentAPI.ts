@@ -1,15 +1,6 @@
 import { AxiosResponse } from 'axios';
 import apiClient from './apiClient';
-
-interface Department {
-  id?: number;
-  departmentName: string;
-  addressLineOne: string;
-  addressLineTwo?: string;
-  town: string;
-  county: string;
-  postcode: string;
-}
+import { Department } from '../types';
 
 export const getDepartmentsAPI = async (): Promise<Department[] | null> => {
   try {
