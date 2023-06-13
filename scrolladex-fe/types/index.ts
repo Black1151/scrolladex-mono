@@ -13,6 +13,16 @@ export interface FormModalProps {
   ) => (values: any, actions: any) => Promise<void>;
 }
 
+export interface Department {
+  id?: number;
+  departmentName: string;
+  addressLineOne: string;
+  addressLineTwo?: string;
+  town: string;
+  county: string;
+  postcode: string;
+}
+
 export type DepartmentListItem = {
     id: number;
     departmentName: string;
@@ -39,3 +49,13 @@ export type EmployeeCreateUpdate = Omit<Employee, 'profilePictureUrl' | 'id'> & 
 
 
 export type EmployeeOverview = Pick<Employee, 'firstName' | 'lastName' | 'jobTitle' | 'departmentName' | 'profilePictureUrl'> & { id: number };
+
+/// REDUX TYPES
+
+export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+
+export type RequestState<T> = {
+    data: T | null;
+    status: RequestStatus;
+    error: string | null;
+  };
