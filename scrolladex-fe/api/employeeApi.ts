@@ -1,15 +1,6 @@
 import apiClient from './apiClient';
 import { Employee, EmployeeOverview, EmployeeCreateUpdate } from '../types';
 
-export const getEmployeesAPI = async (): Promise<Employee[]> => {
-  try {
-    const response = await apiClient.get<Employee[]>('/employees');
-    return response.data;
-  } catch (error) {
-    console.error('Error getting employees', error);
-    throw error;
-  }
-};
 
 export const getEmployeesOverviewAPI = async (): Promise<EmployeeOverview[]> => {
   try {
@@ -24,6 +15,7 @@ export const getEmployeesOverviewAPI = async (): Promise<EmployeeOverview[]> => 
 export const getEmployeeAPI = async (id: number): Promise<Employee> => {
   try {
     const response = await apiClient.get<Employee>(`/employees/${id}`);
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error(`Error getting employee with id ${id}`, error);
