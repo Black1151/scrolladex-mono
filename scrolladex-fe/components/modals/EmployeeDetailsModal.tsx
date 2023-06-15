@@ -12,7 +12,6 @@ import {
   SimpleGrid,
   Text,
   useDisclosure,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import {
@@ -29,7 +28,8 @@ import {
 import { Employee } from "@/types";
 import ModalIconButton from "./ModalIconButton";
 import ConfirmationModal from "./ConfirmationModal";
-import { deleteEmployeeAPI } from "@/api/employeeApi";
+import { deleteEmployee } from "@/store/employeeSlice";
+import { useAsyncAction } from "@/hooks/async";
 
 interface Props {
   employee: Employee;
@@ -42,35 +42,20 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   employee,
   isOpen,
   onClose,
-  fetchEmployees,
 }) => {
   const closeButtonRef = useRef(null);
   const confirmationDisclosure = useDisclosure();
-  const toast = useToast();
+
+  const executeDelete = useAsyncAction({
+    action: deleteEmployee,
+    successMessage: `${employee.firstName} ${employee.lastName} has been deleted.`,
+    errorMessage: "Failed to delete employee",
+    showSuccess: true,
+  });
 
   const handleDelete = async () => {
-    try {
-      await deleteEmployeeAPI(employee.id);
-      confirmationDisclosure.onClose();
-      fetchEmployees();
-      onClose();
-
-      toast({
-        title: "Employee Deleted",
-        description: `${employee.firstName} ${employee.lastName} has been deleted.`,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: `Failed to delete employee: ${error.message}`,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+    await executeDelete(employee.id);
+    onClose();
   };
 
   const employeeDetails = [
