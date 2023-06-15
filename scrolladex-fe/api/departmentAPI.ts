@@ -12,6 +12,17 @@ export const getDepartmentsAPI = async (): Promise<Department[] | null> => {
   }
 };
 
+export const getDepartmentDropDownListAPI = async (): Promise<{id: number, departmentName: string}[] | null> => {
+  try {
+    const response: AxiosResponse<{id: number, departmentName: string}[]> = await apiClient.get('/departments/dropdown');
+    return response.data;
+  } catch (error) {
+    console.error('Error getting department names', error);
+    throw error;
+  }
+};
+
+
 export const getDepartmentAPI = async (id: number): Promise<Department | null> => {
   try {
     const response: AxiosResponse<Department> = await apiClient.get(`/departments/${id}`);
