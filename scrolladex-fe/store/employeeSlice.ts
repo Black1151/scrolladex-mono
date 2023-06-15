@@ -17,18 +17,18 @@ const initialRequestState = <T>(): RequestState<T> => ({
 
 type EmployeesState = {
   employeeEntities: RequestState<EmployeeOverview[]>;
-  employeeDetailData: RequestState<Employee>;
-  employeeCreateStatus: RequestState<number>;
-  employeeUpdateData: RequestState<Employee>;
-  employeeDeleteStatus: RequestState<void>;
+  employeeDetail: RequestState<Employee>;
+  createEmployee: RequestState<number>;
+  updateEmployee: RequestState<Employee>;
+  deleteEmployee: RequestState<void>;
 };
 
 const initialState: EmployeesState = { 
   employeeEntities: initialRequestState<EmployeeOverview[]>(),
-  employeeDetailData: initialRequestState<Employee>(),
-  employeeCreateStatus: initialRequestState<number>(),
-  employeeUpdateData: initialRequestState<Employee>(),
-  employeeDeleteStatus: initialRequestState<void>(),
+  employeeDetail: initialRequestState<Employee>(),
+  createEmployee: initialRequestState<number>(),
+  updateEmployee: initialRequestState<Employee>(),
+  deleteEmployee: initialRequestState<void>(),
 };
 
 const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
@@ -36,8 +36,9 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
     const response = await apiCall;
     return response;
   } catch (error) {
+    console.error('Error occurred:', error);
     const err = error as Error;
-    return thunkAPI.rejectWithValue({ error: err.message });
+    return thunkAPI.rejectWithValue({ error: err.message || 'Unknown error occurred' });
   }
 };
 
@@ -53,7 +54,13 @@ export const fetchEmployee = createAsyncThunk(
 
 export const createEmployee = createAsyncThunk(
   "employees/createEmployee",
-  (newEmployee: EmployeeCreateUpdate, thunkAPI) => handleThunkAPI(createEmployeeAPI(newEmployee), thunkAPI)
+  async (newEmployee: EmployeeCreateUpdate, thunkAPI) => {
+    const response = await handleThunkAPI(createEmployeeAPI(newEmployee), thunkAPI);
+    if (!response.error) {
+      thunkAPI.dispatch(fetchEmployeeOverview());
+    }
+    return response;
+  }
 );
 
 export const updateEmployee = createAsyncThunk(
@@ -63,7 +70,13 @@ export const updateEmployee = createAsyncThunk(
 
 export const deleteEmployee = createAsyncThunk(
   "employees/deleteEmployee",
-  (id: number, thunkAPI) => handleThunkAPI(deleteEmployeeAPI(id), thunkAPI)
+  async (id: number, thunkAPI) => {
+    const statusCode = await handleThunkAPI(deleteEmployeeAPI(id), thunkAPI);
+    if (statusCode === 200 || statusCode === 204) { 
+      thunkAPI.dispatch(fetchEmployeeOverview());
+    }
+    return statusCode;
+  }
 );
 
 const employeesSlice = createSlice({
@@ -71,12 +84,13 @@ const employeesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    handleAsyncReducers(builder, fetchEmployeeOverview, 'loading', 'employeeEntities', 'fetchError');
-    handleAsyncReducers(builder, fetchEmployee, 'loading', 'employeeDetail', 'fetchError');
-    handleAsyncReducers(builder, createEmployee, 'createStatus', null, 'createError');
-    handleAsyncReducers(builder, updateEmployee, 'updateStatus', 'employeeDetail', 'updateError');
-    handleAsyncReducers(builder, deleteEmployee, 'deleteStatus', null, 'deleteError');
+    handleAsyncReducers(builder, fetchEmployeeOverview, 'employeeEntities');
+    handleAsyncReducers(builder, fetchEmployee, 'employeeDetail');
+    handleAsyncReducers(builder, createEmployee, 'createEmployee');
+    handleAsyncReducers(builder, updateEmployee, 'updateEmployee');
+    handleAsyncReducers(builder, deleteEmployee, 'deleteEmployee');
   },
 });
+
 
 export default employeesSlice.reducer;
