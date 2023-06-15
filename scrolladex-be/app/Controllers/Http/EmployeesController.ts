@@ -82,10 +82,12 @@ export default class EmployeesController {
   }
 
   public async destroy ({ params, response }: HttpContextContract) {
-    const employee = await Employee.find(params.id)
+    const employee = await Employee.find(params.id);
     if (employee) {
-      await employee.delete()
+      await employee.delete();
+      return response.status(200);
+    } else {
+      return response.status(404);
     }
-    return response.json(employee)
-  }
+  }  
 }
