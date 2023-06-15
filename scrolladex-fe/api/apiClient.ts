@@ -59,28 +59,6 @@ const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_ADDRESS + '/api',
 });
 
-const getErrorMessage = (error : ErrorObject) => {
-  if (error.response) {
-    switch (error.response.status) {
-      case 400:
-        return 'Bad Request';
-      case 401:
-        return 'Unauthorized';
-      case 403:
-        return 'Forbidden';
-      case 404:
-        return 'Not Found';
-      case 500:
-        return "Internal Server Error:";
-      default:
-        return 'An unexpected error occurred.';
-    }
-  } else if (error.request) {
-    return 'No response was received from the server.';
-  } else {
-    return 'An error occurred while making the request.';
-  }
-};
 
 
 apiClient.interceptors.request.use(handleFormData);
@@ -93,7 +71,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    error.message = getErrorMessage(error);
+    console.error('Axios error:', error, 'Axios response:', error.response, 'Axios error message:', error.message);
     return Promise.reject(error);
   }
 );
