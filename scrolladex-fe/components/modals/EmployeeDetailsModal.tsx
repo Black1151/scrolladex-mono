@@ -28,7 +28,7 @@ import {
 import { Employee } from "@/types";
 import ModalIconButton from "./ModalIconButton";
 import ConfirmationModal from "./ConfirmationModal";
-import { deleteEmployee } from "@/store/employeeSlice";
+import { deleteEmployee, fetchEmployeeOverview } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
 
 interface Props {
@@ -46,6 +46,11 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   const closeButtonRef = useRef(null);
   const confirmationDisclosure = useDisclosure();
 
+  const fetchEmployees = useAsyncAction({
+    action: fetchEmployeeOverview,
+    errorMessage: "Failed to fetch employees",
+  });
+
   const executeDelete = useAsyncAction({
     action: deleteEmployee,
     successMessage: `${employee.firstName} ${employee.lastName} has been deleted.`,
@@ -54,8 +59,11 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   });
 
   const handleDelete = async () => {
-    await executeDelete(employee.id);
-    onClose();
+    const response = await executeDelete(employee.id);
+    if (!response.error) {
+      fetchEmployees();
+      onClose();
+    }
   };
 
   const employeeDetails = [

@@ -21,6 +21,9 @@ import { fetchDepartmentDropdownList } from "@/store/departmentSlice";
 import { useAsyncAction } from "@/hooks/async";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { FormikHelpers } from "formik";
+import { EmployeeCreateUpdate } from "@/types";
+import { fetchEmployeeOverview } from "../../store/employeeSlice";
 
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is a required field."),
@@ -62,6 +65,11 @@ const AddEmployeeModal: React.FC<Props> = () => {
     errorMessage: "Failed to fetch department list",
   });
 
+  const updateEmployeeOverview = useAsyncAction({
+    action: fetchEmployeeOverview,
+    errorMessage: "Error fetching employee overview",
+  });
+
   useEffect(() => {
     fetchDropdownData();
   }, []);
@@ -69,6 +77,16 @@ const AddEmployeeModal: React.FC<Props> = () => {
   const handleModalClose = (formikReset: () => void) => {
     formikReset();
     onClose();
+  };
+
+  const handleFormSubmit = async (
+    values: EmployeeCreateUpdate,
+    actions: FormikHelpers<EmployeeCreateUpdate>
+  ) => {
+    const result = await handleSubmit(values, actions);
+    if (result) {
+      updateEmployeeOverview();
+    }
   };
 
   return (
@@ -92,7 +110,7 @@ const AddEmployeeModal: React.FC<Props> = () => {
           profilePicture: null,
         }}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
       >
         {(formik) => (
           <Form onSubmit={formik.handleSubmit}>

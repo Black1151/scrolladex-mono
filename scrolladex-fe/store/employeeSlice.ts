@@ -54,13 +54,7 @@ export const fetchEmployee = createAsyncThunk(
 
 export const createEmployee = createAsyncThunk(
   "employees/createEmployee",
-  async (newEmployee: EmployeeCreateUpdate, thunkAPI) => {
-    const response = await handleThunkAPI(createEmployeeAPI(newEmployee), thunkAPI);
-    if (!response.error) {
-      thunkAPI.dispatch(fetchEmployeeOverview());
-    }
-    return response;
-  }
+   (newEmployee: EmployeeCreateUpdate, thunkAPI) => handleThunkAPI(createEmployeeAPI(newEmployee), thunkAPI)
 );
 
 export const updateEmployee = createAsyncThunk(
@@ -70,13 +64,7 @@ export const updateEmployee = createAsyncThunk(
 
 export const deleteEmployee = createAsyncThunk(
   "employees/deleteEmployee",
-  async (id: number, thunkAPI) => {
-    const statusCode = await handleThunkAPI(deleteEmployeeAPI(id), thunkAPI);
-    if (statusCode === 200 || statusCode === 204) { 
-      thunkAPI.dispatch(fetchEmployeeOverview());
-    }
-    return statusCode;
-  }
+  async (id: number, thunkAPI) => handleThunkAPI(deleteEmployeeAPI(id), thunkAPI)
 );
 
 const employeesSlice = createSlice({
