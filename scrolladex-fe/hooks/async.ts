@@ -1,14 +1,21 @@
-// useAsyncAction.ts
 import { useErrorToast, useSuccessToast } from './toasts';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from "@/store/store";
-import { AsyncThunk, unwrapResult, PayloadAction } from '@reduxjs/toolkit';
+import { AsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 
 interface ExecuteAction {
   (arg?: any): Promise<any>;
 }
 
-export const useAsyncAction = (action: AsyncThunk<any, any, any>, showSuccess: boolean = false): ExecuteAction => {
+interface UseAsyncActionOptions {
+  action: AsyncThunk<any, any, any>;
+  successMessage?: string;
+  errorMessage?: string;
+  showSuccess?: boolean;
+}
+
+export const useAsyncAction = (options: UseAsyncActionOptions): ExecuteAction => {
+  const { action, successMessage = "Action executed successfully", errorMessage = "Failed to execute action", showSuccess = false } = options;
   const dispatch: AppDispatch = useDispatch();
   const showErrorToast = useErrorToast();
   const showSuccessToast = useSuccessToast();
@@ -18,11 +25,15 @@ export const useAsyncAction = (action: AsyncThunk<any, any, any>, showSuccess: b
       const resultAction = await dispatch(action(arg));
       const result = unwrapResult(resultAction);
       if (showSuccess) {
-        showSuccessToast("Action executed successfully");
+        showSuccessToast(successMessage);
       }
       return result;
     } catch (error: any) {
-      showErrorToast(`Failed to execute action: ${error.payload}`);
+      if (error.payload) {
+        showErrorToast(`${errorMessage}: ${error.payload}`);
+      } else {
+        showErrorToast(errorMessage);
+      }
     }
   };
 
