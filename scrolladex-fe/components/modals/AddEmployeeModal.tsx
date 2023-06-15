@@ -1,5 +1,5 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useEffect } from "react";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import {
   FormControl,
@@ -12,10 +12,15 @@ import {
 } from "@chakra-ui/react";
 import AppFormInput from "../forms/AppFormInput";
 import DragAndDropFileInput from "../forms/DragAndDropFileInput";
-import { createEmployeeAPI } from "@/api/employeeApi";
+import { createEmployee } from "../../store/employeeSlice";
 import { DepartmentListItem } from "@/types";
 import ModalWrapper from "./ModalWrapper";
 import { FormModalProps } from "@/types";
+import { useSubmitHandler } from "@/hooks/submitHandler";
+import { fetchDepartmentDropdownList } from "@/store/departmentSlice";
+import { useAsyncAction } from "@/hooks/async";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is a required field."),
@@ -37,14 +42,43 @@ interface Props extends FormModalProps {
   departmentList: DepartmentListItem[];
 }
 
-const AddEmployeeModal: React.FC<Props> = ({
-  createOnSubmitHandler,
-  departmentList,
-}) => {
-  const { onClose } = useDisclosure();
+const AddEmployeeModal: React.FC<Props> = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const departmentList = useSelector(
+    (state: RootState) => state.department.departmentDropdownList.data
+  );
+
+  const handleSubmit = useSubmitHandler({
+    apiFunction: createEmployee,
+    successMessage: "Employee was added successfully",
+    errorMessage: "An error occurred while adding the employee.",
+    showSuccess: true,
+    resetForm: true,
+    onClose: onClose,
+  });
+
+  const fetchDropdownData = useAsyncAction({
+    action: fetchDepartmentDropdownList,
+    errorMessage: "Failed to fetch department list",
+  });
+
+  useEffect(() => {
+    fetchDropdownData();
+  }, []);
+
+  const handleModalClose = (formikReset: () => void) => {
+    formikReset();
+    onClose();
+  };
 
   return (
-    <ModalWrapper buttonText="Add Employee" title="Add Employee">
+    <ModalWrapper
+      buttonText="Add Employee"
+      title="Add Employee"
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+    >
       <Formik
         initialValues={{
           title: "",
@@ -58,11 +92,7 @@ const AddEmployeeModal: React.FC<Props> = ({
           profilePicture: null,
         }}
         validationSchema={validationSchema}
-        onSubmit={createOnSubmitHandler(
-          createEmployeeAPI,
-          "Employee was added successfully",
-          "An error occurred while adding the employee."
-        )}
+        onSubmit={handleSubmit}
       >
         {(formik) => (
           <Form onSubmit={formik.handleSubmit}>
@@ -94,7 +124,7 @@ const AddEmployeeModal: React.FC<Props> = ({
                   type="select"
                   name="departmentId"
                   label="Department"
-                  options={departmentList.map((department) => ({
+                  options={departmentList?.map((department) => ({
                     value: department.id,
                     label: department.departmentName,
                   }))}
@@ -121,7 +151,11 @@ const AddEmployeeModal: React.FC<Props> = ({
                 </FormErrorMessage>
               </FormControl>
               <HStack mt={4} gap={[0, 4]} flex={1}>
-                <Button flex={1} variant={"orange"} onClick={onClose}>
+                <Button
+                  flex={1}
+                  variant={"orange"}
+                  onClick={() => handleModalClose(formik.resetForm)}
+                >
                   Cancel
                 </Button>
                 <Button
