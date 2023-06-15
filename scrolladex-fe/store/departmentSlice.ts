@@ -68,8 +68,8 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
   
   export const createDepartment = createAsyncThunk(
     "departments/createDepartment",
-    async (newDepartment: Department, thunkAPI) => {
-      return handleThunkAPI(createDepartmentAPI(newDepartment), thunkAPI);
+      (newDepartment: Department, thunkAPI) => {
+      handleThunkAPI(createDepartmentAPI(newDepartment), thunkAPI);
     }
   );
   
