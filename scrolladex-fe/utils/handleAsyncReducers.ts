@@ -5,30 +5,21 @@ type State = Record<string, any>;
 const handleAsyncReducers = <ThunkArg, ThunkConfig>(
   builder: any,
   asyncThunk: AsyncThunk<ThunkArg, ThunkConfig, {}>,
-  statusKey: string,
-  dataKey: string | null,
-  errorKey: string | null
+  stateKey: string
 ) => {
   const pendingReducer: CaseReducer<State, PayloadAction<null, string, any, any>> = (state) => {
-    state[statusKey] = "loading";
-    if (errorKey) {
-      state[errorKey] = null;
-    }
+    state[stateKey].status = "loading";
+    state[stateKey].error = null;
   };
   
   const fulfilledReducer: CaseReducer<State, PayloadAction<ThunkArg, string, any, any>> = (state, action) => {
-    state[statusKey] = "idle";
-    if (dataKey) {
-      console.log(`Setting state.${dataKey}.data with payload:`, action.payload);
-      state[dataKey].data = action.payload;
-    }
+    state[stateKey].status = "idle";
+    state[stateKey].data = action.payload;
   };
   
   const rejectedReducer: CaseReducer<State, PayloadAction<null, string, any, any>> = (state, action) => {
-    state[statusKey] = "failed";
-    if (errorKey) {
-      state[errorKey] = action.error.message;
-    }
+    state[stateKey].status = "failed";
+    state[stateKey].error = action.error ? action.error.message : 'Unknown error';
   };
   
   builder.addCase(asyncThunk.pending, pendingReducer);
