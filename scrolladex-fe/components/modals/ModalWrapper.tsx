@@ -14,11 +14,19 @@ interface Props {
   buttonText: string;
   title: string;
   children: React.ReactNode;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 
-const ModalWrapper: React.FC<Props> = ({ buttonText, title, children }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
+const ModalWrapper: React.FC<Props> = ({
+  buttonText,
+  title,
+  children,
+  isOpen,
+  onOpen,
+  onClose,
+}) => {
   return (
     <>
       <Button variant="green" onClick={onOpen}>
