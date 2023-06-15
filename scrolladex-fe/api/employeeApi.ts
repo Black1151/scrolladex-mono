@@ -15,7 +15,6 @@ export const getEmployeesOverviewAPI = async (): Promise<EmployeeOverview[]> => 
 export const getEmployeeAPI = async (id: number): Promise<Employee> => {
   try {
     const response = await apiClient.get<Employee>(`/employees/${id}`);
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error(`Error getting employee with id ${id}`, error);
@@ -43,9 +42,10 @@ export const updateEmployeeAPI = async (data: EmployeeCreateUpdate): Promise<Emp
   }
 };
 
-export const deleteEmployeeAPI = async (id: number): Promise<void> => {
+export const deleteEmployeeAPI = async (id: number): Promise<number> => {
   try {
-    await apiClient.delete(`/employees/${id}`);
+    const response = await apiClient.delete(`/employees/${id}`);
+    return response.status;
   } catch (error) {
     console.error(`Error deleting employee with id ${id}`, error);
     throw error;
