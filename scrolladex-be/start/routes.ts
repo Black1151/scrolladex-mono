@@ -21,8 +21,10 @@
 import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
 Route.get('/employees/overview', 'EmployeesController.overview')
-Route.resource('/departments', 'DepartmentsController').apiOnly()
+Route.get('/departments/dropdown', 'DepartmentsController.dropdown')
+
 Route.resource('/employees', 'EmployeesController').apiOnly()
+Route.resource('/departments', 'DepartmentsController').apiOnly()
 
 Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
