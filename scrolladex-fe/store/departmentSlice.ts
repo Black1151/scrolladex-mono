@@ -6,7 +6,8 @@ import {
   createDepartmentAPI, 
   getDepartmentAPI, 
   updateDepartmentAPI, 
-  deleteDepartmentAPI 
+  deleteDepartmentAPI,
+  getDepartmentDropDownListAPI 
 } from "@/api/departmentAPI";
 
 const initialRequestState = <T>(): RequestState<T> => ({
@@ -16,20 +17,23 @@ const initialRequestState = <T>(): RequestState<T> => ({
 });
 
 type DepartmentsState = {
-  departments: RequestState<Department[]>;
+  departmentEntities: RequestState<Department[]>;
   departmentDetail: RequestState<Department>;
-  createStatus: RequestState<number>;
-  updateStatus: RequestState<Department>;
-  deleteStatus: RequestState<void>;
+  createDepartment: RequestState<number>;
+  updateDepartment: RequestState<Department>;
+  deleteDepartment: RequestState<void>;
+  departmentDropdownList: RequestState<{id: number, departmentName: string}[]>;
 };
 
 const initialState: DepartmentsState = { 
-  departments: initialRequestState<Department[]>(),
+  departmentEntities: initialRequestState<Department[]>(),
   departmentDetail: initialRequestState<Department>(),
-  createStatus: initialRequestState<number>(),
-  updateStatus: initialRequestState<Department>(),
-  deleteStatus: initialRequestState<void>(),
+  createDepartment: initialRequestState<number>(),
+  updateDepartment: initialRequestState<Department>(),
+  deleteDepartment: initialRequestState<void>(),
+  departmentDropdownList: initialRequestState<{id: number, departmentName: string}[]>(),
 };
+
 
 const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
     try {
@@ -40,6 +44,13 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
       return thunkAPI.rejectWithValue({ error: err.message });
     }
   };
+
+  export const fetchDepartmentDropdownList = createAsyncThunk( 
+    "departments/fetchDepartmentDropdownList",
+    async (_, thunkAPI) => {
+      return handleThunkAPI(getDepartmentDropDownListAPI(), thunkAPI);
+    }
+  );
   
   export const fetchDepartments = createAsyncThunk(
     "departments/fetchDepartments",
@@ -76,17 +87,18 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
     }
   );
 
-const departmentsSlice = createSlice({
-  name: "departments",
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    handleAsyncReducers(builder, fetchDepartments, 'departmentsStatus', 'departmentsData', 'departmentsError');
-    handleAsyncReducers(builder, fetchDepartment, 'departmentDetailStatus', 'departmentDetailData', 'departmentDetailError');
-    handleAsyncReducers(builder, createDepartment, 'createStatus', 'createData', 'createError');
-    handleAsyncReducers(builder, updateDepartment, 'updateStatus', 'updateData', 'updateError');
-    handleAsyncReducers(builder, deleteDepartment, 'deleteStatus', 'deleteData', 'deleteError');
-  },
-});
+  const departmentsSlice = createSlice({
+    name: "departments",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      handleAsyncReducers(builder, fetchDepartments, 'departmentEntities');
+      handleAsyncReducers(builder, fetchDepartment, 'departmentDetail');
+      handleAsyncReducers(builder, createDepartment, 'createDepartment');
+      handleAsyncReducers(builder, updateDepartment, 'updateDepartment');
+      handleAsyncReducers(builder, deleteDepartment, 'deleteDepartment');
+      handleAsyncReducers(builder, fetchDepartmentDropdownList, 'departmentDropdownList');
+    },
+  });
 
 export default departmentsSlice.reducer;
