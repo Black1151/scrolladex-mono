@@ -7,29 +7,39 @@ import {
   Flex,
   Image,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import EmployeeDetailsModal from "@/components/modals/EmployeeDetailsModal";
-import { Employee } from "../types";
-import { getEmployeeAPI } from "../api/employeeApi";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/store/store";
-import { fetchEmployeeOverview } from "@/store/employeeSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { fetchEmployeeOverview, fetchEmployee } from "@/store/employeeSlice";
+import { useAsyncAction } from "@/hooks/async";
 
 const MotionBox = motion(Box);
 
 const Index = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const employees = useSelector((state: RootState) => state.employee.entities);
-  const [employee, setEmployee] = useState<Employee | null>(null);
+  const employeeState = useSelector((state: RootState) => state.employee);
+  const employees = employeeState.employeeEntities.data;
   const [loaded, setLoaded] = useState<boolean[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+  const fetchEmployees = useAsyncAction({
+    action: fetchEmployeeOverview,
+    successMessage: "Employees fetched successfully",
+    errorMessage: "Failed to fetch employees",
+  });
+  const fetchEmployeeDetails = useAsyncAction({
+    action: fetchEmployee,
+    successMessage: "Employee details fetched successfully",
+    errorMessage: "Failed to fetch employee details",
+  });
+
+  const employee = useSelector(
+    (state: RootState) => state.employee.employeeDetail.data
+  );
 
   useEffect(() => {
-    dispatch(fetchEmployeeOverview());
-  }, [dispatch]);
+    fetchEmployees();
+  }, []);
 
   const handleImageLoad = (index: number) => {
     setLoaded((prev) => {
@@ -39,24 +49,10 @@ const Index = () => {
     });
   };
 
-  const handleCardClick = async (id: number) => {
-    try {
-      const employeeData = await getEmployeeAPI(id);
-      setEmployee(employeeData);
+  const handleCardClick = (id: number) => {
+    fetchEmployeeDetails(id).then(() => {
       onOpen();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast({
-          title: "Error",
-          description: `Failed to fetch employee details: ${error.message}`,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      } else {
-        throw error;
-      }
-    }
+    });
   };
 
   return (
@@ -72,11 +68,10 @@ const Index = () => {
         spacing={5}
         position="relative"
       >
-        {employees.map((employee, index) => (
-          <>
-            {console.log(employee.profilePictureUrl)}
+        {employees &&
+          employees.map((employee, index) => (
             <MotionBox
-              key={employee.id}
+              key={employee.id + index}
               initial={{ opacity: 0 }}
               animate={{ opacity: loaded[index] ? 1 : 0 }}
               transition={{ duration: Math.random() * 1 }}
@@ -125,8 +120,7 @@ const Index = () => {
                 </Flex>
               </Box>
             </MotionBox>
-          </>
-        ))}
+          ))}
       </SimpleGrid>
       {employee && (
         <EmployeeDetailsModal
