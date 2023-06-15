@@ -7,6 +7,11 @@ export default class DepartmentsController {
     return response.json(departments)
   }
 
+  public async dropdown ({ response }: HttpContextContract) {
+    const departments = await Department.query().select('id', 'department_name')
+    return response.json(departments)
+  }  
+
   public async store ({ request, response }: HttpContextContract) {
     const departmentData = request.only(['department_name', 'address_line_one', 'address_line_two', 'town', 'county', 'postcode'])
     const department = await Department.create(departmentData)
