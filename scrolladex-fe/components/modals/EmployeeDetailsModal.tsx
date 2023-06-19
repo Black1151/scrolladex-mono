@@ -1,3 +1,4 @@
+// External Dependencies
 import React, { useRef } from "react";
 import {
   Box,
@@ -25,11 +26,13 @@ import {
   FaTrash,
 } from "react-icons/fa";
 
+// Internal Dependencies
 import { Employee } from "@/types";
 import ModalIconButton from "./ModalIconButton";
 import ConfirmationModal from "./ConfirmationModal";
 import { deleteEmployee, fetchEmployeeOverview } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
+import UpdateEmployeeModal from "./UpdateEmployeeModal";
 
 interface Props {
   employee: Employee;
@@ -45,6 +48,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
 }) => {
   const closeButtonRef = useRef(null);
   const confirmationDisclosure = useDisclosure();
+  const editEmployeeDisclosure = useDisclosure();
 
   const fetchEmployees = useAsyncAction({
     action: fetchEmployeeOverview,
@@ -85,7 +89,10 @@ const EmployeeDetailsModal: React.FC<Props> = ({
     {
       icon: <FaEdit size={25} />,
       tooltipLabel: "Edit Employee Details",
-      onClick: () => console.log("edit employee"),
+      onClick: () => {
+        editEmployeeDisclosure.onOpen();
+        onClose();
+      },
     },
     {
       icon: <FaTrash size={20} />,
@@ -165,6 +172,11 @@ const EmployeeDetailsModal: React.FC<Props> = ({
         onClose={confirmationDisclosure.onClose}
         title="Delete Employee"
         message={`Are you sure you want to delete ${employee.firstName} ${employee.lastName}? This action cannot be undone.`}
+      />
+      <UpdateEmployeeModal
+        isOpen={editEmployeeDisclosure.isOpen}
+        onOpen={editEmployeeDisclosure.onOpen}
+        onClose={editEmployeeDisclosure.onClose}
       />
     </>
   );

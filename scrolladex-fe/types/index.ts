@@ -44,9 +44,9 @@ export interface Employee {
 
 export type EmployeeCreateUpdate = Omit<Employee, 'profilePictureUrl' | 'id'> & {
     id?: number;
-    profilePicture: File | Blob | null;
+    profilePicture?: File | Blob | string | null;
+    profilePictureUrl?: string;
 };
-
 
 export type EmployeeOverview = Pick<Employee, 'firstName' | 'lastName' | 'jobTitle' | 'departmentName' | 'profilePictureUrl'> & { id: number };
 

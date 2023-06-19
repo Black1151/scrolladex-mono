@@ -29,6 +29,17 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/providers/AuthProvider";
 
 const Navbar = () => {
+  const {
+    onOpen: addEmployeeOnOpen,
+    isOpen: addEmployeeIsOpen,
+    onClose: addEmployeeOnClose,
+  } = useDisclosure();
+  const {
+    onOpen: addDepartmentOnOpen,
+    isOpen: addDepartmentIsOpen,
+    onClose: addDepartmentOnClose,
+  } = useDisclosure();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [departmentList, setDepartmentList] = useState<DepartmentListItem[]>(
     []
@@ -130,9 +141,12 @@ const Navbar = () => {
           {authenticated && (
             <HStack display={{ base: "none", md: "flex" }}>
               <AddEmployeeModal
-                departmentList={departmentList}
-                createOnSubmitHandler={createOnSubmitHandler}
+                isOpen={addEmployeeIsOpen}
+                onClose={addEmployeeOnClose}
               />
+              <Button variant="green" onClick={addEmployeeOnOpen}>
+                Add Employee
+              </Button>
               <AddDepartmentModal
                 createOnSubmitHandler={createOnSubmitHandler}
               />
@@ -160,10 +174,6 @@ const Navbar = () => {
                 <DrawerCloseButton />
                 <DrawerHeader>Menu</DrawerHeader>
                 <DrawerBody>
-                  <AddEmployeeModal
-                    departmentList={departmentList}
-                    createOnSubmitHandler={createOnSubmitHandler}
-                  />
                   <AddDepartmentModal
                     createOnSubmitHandler={createOnSubmitHandler}
                   />

@@ -2,6 +2,21 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Employee from 'App/Models/Employee'
 import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
+import fs from 'fs'
+import path from 'path'
+
+interface Updates {
+  title?: any;
+  first_name?: any;
+  last_name?: any;
+  emp_no?: any;
+  job_title?: any;
+  department_id?: any;
+  telephone?: any;
+  email?: any;
+  profile_picture_url?: string;
+}
+
 
 export default class EmployeesController {
   public async index ({ response }: HttpContextContract) {
@@ -71,14 +86,51 @@ export default class EmployeesController {
     return response.json(employee)
   }
 
-  public async update ({ params, request, response }: HttpContextContract) {
-    const employeeData = request.only(['title', 'first_name', 'last_name', 'emp_no', 'job_title', 'department_id', 'telephone', 'email', 'profile_picture_url'])
-    const employee = await Employee.find(params.id)
-    if (employee) {
-      employee.merge(employeeData)
-      await employee.save()
+  public async update({ params, request, response }: HttpContextContract) {
+    const profilePicture = request.file('profile_picture', {
+      size: '2mb',
+      extnames: ['jpg', 'png', 'jpeg'],
+    });
+    
+    const employee = await Employee.find(params.id);
+    if (!employee) {
+      return response.status(404).json({ message: 'Employee not found' });
     }
-    return response.json(employee)
+    
+    const updates : Updates = request.only([
+      'title', 
+      'first_name', 
+      'last_name', 
+      'emp_no', 
+      'job_title', 
+      'department_id', 
+      'telephone', 
+      'email',
+    ]);
+    
+    if (profilePicture) {
+      const fileName = `${new Date().getTime()}.${profilePicture.extname}`;
+      const newProfilePicturePath = `/uploads/${fileName}`;
+
+      if (employee.profile_picture_url) {
+        const oldProfilePicturePath = path.join(Application.publicPath(), employee.profile_picture_url);
+        if (fs.existsSync(oldProfilePicturePath)) {
+          await fs.promises.unlink(oldProfilePicturePath);
+        }
+      }
+
+      await profilePicture.move(Application.publicPath('uploads'), {
+        name: fileName,
+        overwrite: true,
+      });
+
+      updates.profile_picture_url = newProfilePicturePath;
+    }
+  
+    employee.merge(updates);
+    await employee.save();
+    
+    return response.json(employee);
   }
 
   public async destroy ({ params, response }: HttpContextContract) {

@@ -6,7 +6,6 @@ import {
   Button,
   Flex,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
 
@@ -15,23 +14,17 @@ interface Props {
   title: string;
   children: React.ReactNode;
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
 }
 
 const ModalWrapper: React.FC<Props> = ({
-  buttonText,
   title,
   children,
   isOpen,
-  onOpen,
   onClose,
 }) => {
   return (
     <>
-      <Button variant="green" onClick={onOpen}>
-        {buttonText}
-      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent maxW={900} w="100%" borderTopRadius="lg">
