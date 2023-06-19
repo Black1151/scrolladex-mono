@@ -11,7 +11,7 @@ import DepartmentForm from "../forms/DepartmentForm";
 import ModalWrapper from "./ModalWrapper";
 
 const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
-  const handleSubmit = useSubmitHandler({
+  const submitForm = useSubmitHandler({
     apiFunction: createDepartment,
     successMessage: "Department was added successfully",
     errorMessage: "An error occurred while adding the department.",
@@ -29,7 +29,7 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
     values: Department,
     actions: FormikHelpers<Department>
   ) => {
-    const result = await handleSubmit(values, actions);
+    const result = await submitForm(values, actions);
     if (result) {
       updateEmployeeOverview();
     }
