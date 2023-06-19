@@ -1,16 +1,18 @@
 import axios, { AxiosResponse } from 'axios';
-import { camelCase, snakeCase, mapKeys, isObject } from "lodash";
-import { ErrorObject } from '@/types';
+import { camelCase, snakeCase, isObject } from "lodash";
 
 const convertKeys = (data: any, converter: (key: string) => string): any => {
   if (Array.isArray(data)) {
     return data.map(item => convertKeys(item, converter));
   } else if (isObject(data)) {
-    return mapKeys(data, (_, key) => converter(key));
+    return Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [converter(key), convertKeys(value, converter)])
+    );
   } else {
     return data;
   }
 };
+
 
 const isFile = (item: any): item is File => item instanceof File;
 const isBlob = (item: any): item is Blob => item instanceof Blob;
