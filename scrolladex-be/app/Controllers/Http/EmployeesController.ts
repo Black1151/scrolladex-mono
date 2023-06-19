@@ -38,18 +38,23 @@ export default class EmployeesController {
   public async overview ({ response }: HttpContextContract) {
     const employees = await Employee.query()
       .select('id', 'title', 'first_name', 'last_name', 'job_title', 'department_id', "profile_picture_url")
-      .preload('department'); 
+      .preload('department', query => query.select('id', 'department_name'));
   
     const employeesWithDepartment = employees.map((employee) => {
       return {
-        ...employee.serialize(), 
-        department_name: employee.department.department_name, 
+        id: employee.id,
+        title: employee.title,
+        first_name: employee.first_name,
+        last_name: employee.last_name,
+        job_title: employee.job_title,
+        department_id: employee.department_id,
+        profile_picture_url: employee.profile_picture_url,
+        department_name: employee.department.department_name,
       };
     });
   
     return response.json(employeesWithDepartment);
   }
-  
   
   public async store({ request, response }: HttpContextContract) {
     const profilePicture = request.file('profile_picture', {
@@ -80,11 +85,39 @@ export default class EmployeesController {
     const employee = await Employee.create(employeeData as Employee)
     return response.json(employee)
   }
-  
+
   public async show ({ params, response }: HttpContextContract) {
-    const employee = await Employee.query().where('id', params.id).preload('department').first()
-    return response.json(employee)
+    const employee = await Employee.query()
+      .select('id', 'title', 'first_name', 'last_name', 'job_title', 'department_id', "telephone", "emp_no", "email", "profile_picture_url")
+      .where('id', params.id)
+      .preload('department', query => query.select('id', 'department_name'))
+      .first()
+  
+    if (!employee) {
+      return response.status(404).json({ message: 'Employee not found' })
+    }
+  
+    const employeeWithDepartmentName = {
+      id: employee.id,
+      title: employee.title,
+      first_name: employee.first_name,
+      last_name: employee.last_name,
+      job_title: employee.job_title,
+      department_id: employee.department_id,
+      profile_picture_url: employee.profile_picture_url,
+      department_name: employee.department.department_name,
+      telephone: employee.telephone,
+      email: employee.email,
+      emp_no: employee.emp_no,
+    }
+  
+    console.log(employeeWithDepartmentName)
+  
+    return response.json(employeeWithDepartmentName)
   }
+  
+  
+  
 
   public async update({ params, request, response }: HttpContextContract) {
     const profilePicture = request.file('profile_picture', {
