@@ -81,12 +81,7 @@ const UpdateEmployeeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <ModalWrapper
-      buttonText="Edit Employee"
-      title="Edit Employee"
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <ModalWrapper title="Edit Employee" isOpen={isOpen} onClose={onClose}>
       <EmployeeForm
         initialValues={mapSelectedEmployeeToFormValues}
         onSubmit={handleFormSubmit}
