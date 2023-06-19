@@ -6,11 +6,8 @@ export interface ErrorObject {
 }
 
 export interface FormModalProps {
-  createOnSubmitHandler: (
-    apiFunction: (values: any) => Promise<any>,
-    successMessage: string,
-    errorMessage: string
-  ) => (values: any, actions: any) => Promise<void>;
+    isOpen: boolean;
+    onClose: () => void;
 }
 
 export interface Department {
