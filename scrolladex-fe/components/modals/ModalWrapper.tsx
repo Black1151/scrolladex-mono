@@ -10,7 +10,6 @@ import {
 import { FaTimes } from "react-icons/fa";
 
 interface Props {
-  buttonText: string;
   title: string;
   children: React.ReactNode;
   isOpen: boolean;
