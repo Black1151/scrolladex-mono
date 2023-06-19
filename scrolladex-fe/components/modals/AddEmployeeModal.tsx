@@ -1,19 +1,15 @@
 import React from "react";
-import ModalWrapper from "./ModalWrapper";
-import EmployeeForm from "../forms/EmployeeForm";
-import { createEmployee } from "../../store/employeeSlice";
-import { useSubmitHandler } from "@/hooks/submitHandler";
-import { EmployeeCreateUpdate } from "@/types";
 import { FormikHelpers } from "formik";
+
+import { useSubmitHandler } from "@/hooks/submitHandler";
 import { useAsyncAction } from "@/hooks/async";
-import { fetchEmployeeOverview } from "../../store/employeeSlice";
+import { EmployeeCreateUpdate, FormModalProps } from "@/types";
 
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import EmployeeForm from "../forms/EmployeeForm";
+import ModalWrapper from "./ModalWrapper";
+import { createEmployee, fetchEmployeeOverview } from "@/store/employeeSlice";
 
-const AddEmployeeModal: React.FC<Props> = ({ isOpen, onClose }) => {
+const AddEmployeeModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
   const submitForm = useSubmitHandler({
     apiFunction: createEmployee,
     successMessage: "Employee was added successfully",
@@ -39,12 +35,7 @@ const AddEmployeeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <ModalWrapper
-      buttonText="Add Employee"
-      title="Add Employee"
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <ModalWrapper title="Add Employee" isOpen={isOpen} onClose={onClose}>
       <EmployeeForm
         initialValues={{
           title: "",
