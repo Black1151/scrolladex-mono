@@ -114,75 +114,67 @@ const Navbar = () => {
 
   return (
     <>
-      <MotionBox
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+      <Flex
+        as="nav"
+        align="center"
+        justify="space-between"
+        padding="1rem"
+        bg="pictonBlue"
+        color="white"
+        px={[2, null, 8, null, 24]}
       >
-        <Flex
-          as="nav"
-          align="center"
-          justify="space-between"
-          padding="1rem"
-          bg="pictonBlue"
-          color="white"
-          px={[2, null, 8, null, 24]}
-        >
-          <VStack alignItems="flex-start">
-            <Text fontSize={["xl", null, "2xl", "4xl"]} color="white">
-              Scroll-a-dex!
-            </Text>
-            <Text fontSize="xl" color="white" whiteSpace="nowrap">
-              Your complete personnel directory
-            </Text>
-          </VStack>
-          <Spacer />
+        <VStack alignItems="flex-start">
+          <Text fontSize={["xl", null, "2xl", "4xl"]} color="white">
+            Scroll-a-dex!
+          </Text>
+          <Text fontSize="xl" color="white" whiteSpace="nowrap">
+            Your complete personnel directory
+          </Text>
+        </VStack>
+        <Spacer />
 
-          {authenticated && (
-            <HStack display={{ base: "none", md: "flex" }}>
-              <AddEmployeeModal
-                isOpen={addEmployeeIsOpen}
-                onClose={addEmployeeOnClose}
-              />
-              <Button variant="green" onClick={addEmployeeOnOpen}>
-                Add Employee
-              </Button>
-              <AddDepartmentModal
-                createOnSubmitHandler={createOnSubmitHandler}
-              />
-              <Button
-                onClick={() => {
-                  logoutUserAPI();
-                  setAuthenticated(false);
-                  router.replace("/login");
-                }}
-                variant="orange"
-              >
-                Logout
-              </Button>
-            </HStack>
-          )}
-          <Box display={{ base: "block", md: "none" }}>
-            <IconButton
-              aria-label="Open menu"
-              icon={<HamburgerIcon />}
-              onClick={onOpen}
+        {authenticated && (
+          <HStack display={{ base: "none", md: "flex" }}>
+            <AddEmployeeModal
+              isOpen={addEmployeeIsOpen}
+              onClose={addEmployeeOnClose}
             />
-            <Drawer isOpen={isOpen} onClose={onClose} placement="right">
-              <DrawerOverlay />
-              <DrawerContent bg="blue">
-                <DrawerCloseButton />
-                <DrawerHeader>Menu</DrawerHeader>
-                <DrawerBody>
-                  <AddDepartmentModal
-                    createOnSubmitHandler={createOnSubmitHandler}
-                  />
-                </DrawerBody>
-              </DrawerContent>
-            </Drawer>
-          </Box>
-        </Flex>
-      </MotionBox>
+            <Button variant="green" onClick={addEmployeeOnOpen}>
+              Add Employee
+            </Button>
+            <AddDepartmentModal createOnSubmitHandler={createOnSubmitHandler} />
+            <Button
+              onClick={() => {
+                logoutUserAPI();
+                setAuthenticated(false);
+                router.replace("/login");
+              }}
+              variant="orange"
+            >
+              Logout
+            </Button>
+          </HStack>
+        )}
+        <Box display={{ base: "block", md: "none" }}>
+          <IconButton
+            aria-label="Open menu"
+            icon={<HamburgerIcon />}
+            onClick={onOpen}
+          />
+          <Drawer isOpen={isOpen} onClose={onClose} placement="right">
+            <DrawerOverlay />
+            <DrawerContent bg="blue">
+              <DrawerCloseButton />
+              <DrawerHeader>Menu</DrawerHeader>
+              <DrawerBody>
+                <AddDepartmentModal
+                  createOnSubmitHandler={createOnSubmitHandler}
+                />
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </Box>
+      </Flex>
       <OutcomeModal
         isOpen={isOutcomeOpen}
         onClose={() => setOutcomeOpen(false)}
