@@ -26,7 +26,7 @@ const ModalWrapper: React.FC<Props> = ({
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW={900} w="100%" borderTopRadius="lg">
+        <ModalContent maxW={1000} w="100%" borderTopRadius="lg">
           <Flex
             bg="emerald"
             borderTopRadius="md"

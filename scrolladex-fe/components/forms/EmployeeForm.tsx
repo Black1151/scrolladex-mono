@@ -1,4 +1,3 @@
-// External dependencies
 import React, { useEffect, useState } from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
@@ -7,13 +6,13 @@ import {
   FormLabel,
   FormErrorMessage,
   Button,
-  Flex,
-  HStack,
   Image,
+  Grid,
+  GridItem,
+  Box,
+  Flex,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-
-// Internal dependencies
 import AppFormInput from "@/components/forms/AppFormInput";
 import DragAndDropFileInput from "@/components/forms/DragAndDropFileInput";
 import { useAsyncAction } from "@/hooks/async";
@@ -89,11 +88,15 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
       onSubmit={onSubmit}
     >
       {(formik) => (
-        <>
-          {console.log("Formik errors", formik.errors)}
-          <Form onSubmit={formik.handleSubmit}>
-            <Flex p={4} gap={4} flexDirection="column">
-              <Flex flexDirection={["column", null, "row"]} gap={4}>
+        <Form onSubmit={formik.handleSubmit}>
+          <Grid templateColumns={["1fr", null, "repeat(3, 1fr)"]} gap={4} p={4}>
+            <GridItem colSpan={{ base: 1, md: 2 }}>
+              <Grid
+                gap={4}
+                rowGap={8}
+                templateColumns={["1fr", "repeat(2, 1fr)"]}
+                gridRow="span 2"
+              >
                 <AppFormInput
                   type="select"
                   name="title"
@@ -106,15 +109,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
                     { value: "Dr.", label: "Dr." },
                   ]}
                 />
-                <AppFormInput type="text" name="firstName" label="First Name" />
-                <AppFormInput type="text" name="lastName" label="Last Name" />
                 <AppFormInput
                   type="text"
                   name="empNo"
                   label="Employee Number"
                 />
-              </Flex>
-              <Flex flexDirection={["column", null, "row"]} gap={4}>
+                <AppFormInput type="text" name="firstName" label="First Name" />
+                <AppFormInput type="text" name="lastName" label="Last Name" />
                 <AppFormInput type="text" name="jobTitle" label="Job Title" />
                 <AppFormInput
                   type="select"
@@ -125,13 +126,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
                     label: department.departmentName,
                   }))}
                 />
-              </Flex>
-              <Flex flexDirection={["column", null, "row"]} gap={4}>
                 <AppFormInput type="text" name="telephone" label="Telephone" />
                 <AppFormInput type="email" name="email" label="Email" />
-              </Flex>
+              </Grid>
+            </GridItem>
+            <GridItem colSpan={{ base: 1, md: 1 }}>
               {!!!showUpload ? (
-                <Flex flexDirection="column">
+                <Box>
                   <Image
                     src={
                       process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
@@ -140,16 +141,19 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
                     }
                     alt="Profile"
                   />
-                  <Button
-                    mt={2}
-                    onClick={() => {
-                      formik.setFieldValue("profilePicture", null);
-                      setShowUpload(true);
-                    }}
-                  >
-                    Change Profile Picture
-                  </Button>
-                </Flex>
+                  <Box display="flex" justifyContent="center" mt={2}>
+                    <Button
+                      variant="blue"
+                      onClick={() => {
+                        formik.setFieldValue("profilePicture", null);
+                        setShowUpload(true);
+                      }}
+                      width="auto"
+                    >
+                      Change Profile Picture
+                    </Button>
+                  </Box>
+                </Box>
               ) : (
                 <FormControl
                   isInvalid={
@@ -170,26 +174,26 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
                   </FormErrorMessage>
                 </FormControl>
               )}
-              <HStack mt={4} gap={[0, 4]} flex={1}>
-                <Button
-                  flex={1}
-                  variant={"orange"}
-                  onClick={() => handleModalClose(formik.resetForm)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant={"green"}
-                  type="submit"
-                  isLoading={formik.isSubmitting}
-                  flex={1}
-                >
-                  Submit
-                </Button>
-              </HStack>
-            </Flex>
-          </Form>
-        </>
+            </GridItem>
+          </Grid>
+          <Flex gap={4} p={4}>
+            <Button
+              flex={1}
+              variant="green"
+              type="submit"
+              isLoading={formik.isSubmitting}
+            >
+              Submit
+            </Button>
+            <Button
+              variant="orange"
+              onClick={() => handleModalClose(formik.resetForm)}
+              flex={1}
+            >
+              Cancel
+            </Button>
+          </Flex>
+        </Form>
       )}
     </Formik>
   );
