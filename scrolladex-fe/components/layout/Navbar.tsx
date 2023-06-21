@@ -46,9 +46,6 @@ const Navbar: React.FC = () => {
   return (
     <>
       <Flex
-        as="nav"
-        align="center"
-        justify="space-between"
         padding="1rem"
         bg="pictonBlue"
         color="white"
