@@ -80,7 +80,6 @@ const Navbar: React.FC = () => {
             <Button variant="green" onClick={addDepartmentOnOpen}>
               Add Department
             </Button>
-
             <Button
               onClick={() => {
                 logoutUserAPI();
