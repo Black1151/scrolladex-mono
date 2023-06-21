@@ -107,10 +107,6 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
       backgroundColor={drag ? "lightPBlue" : "#fff"}
       p="20px"
       textAlign="center"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
       gap={4}
       {...props}
     >
