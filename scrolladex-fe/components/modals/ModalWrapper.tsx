@@ -14,6 +14,8 @@ interface Props {
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
+  fitContent?: boolean;
+  bg?: string;
 }
 
 const ModalWrapper: React.FC<Props> = ({
@@ -21,12 +23,16 @@ const ModalWrapper: React.FC<Props> = ({
   children,
   isOpen,
   onClose,
+  fitContent = false,
+  bg = "white",
 }) => {
+  const modalContentProps = fitContent ? {} : { maxW: 1000 };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW={1000} w="100%" borderTopRadius="lg">
+        <ModalContent {...modalContentProps} borderTopRadius="lg">
           <Flex
             bg="emerald"
             borderTopRadius="md"
@@ -49,7 +55,7 @@ const ModalWrapper: React.FC<Props> = ({
               <FaTimes size={30} />
             </Button>
           </Flex>
-          <ModalBody>{children}</ModalBody>
+          <ModalBody bg={bg}>{children}</ModalBody>
         </ModalContent>
       </Modal>
     </>
