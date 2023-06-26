@@ -52,6 +52,15 @@ const theme = extendTheme({
         },
         orange: {
           color: "white",
+          borderColor: "xanthous",
+          backgroundColor: "xanthous",
+          _hover: {
+            color: "xanthous",
+            backgroundColor: "white",
+          },
+        },
+        red: {
+          color: "white",
           borderColor: "bittersweet",
           backgroundColor: "bittersweet",
           _hover: {
