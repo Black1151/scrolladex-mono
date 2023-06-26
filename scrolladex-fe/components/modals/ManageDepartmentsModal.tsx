@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ModalWrapper from "./ModalWrapper";
 import { VStack, Box, HStack, IconButton } from "@chakra-ui/react";
 import { useAsyncAction } from "@/hooks/async";
-import { fetchDepartmentDropdownList } from "@/store/departmentSlice";
+import {
+  fetchDepartment,
+  fetchDepartmentDropdownList,
+} from "@/store/departmentSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@chakra-ui/react";
+import UpdateDepartmentModal from "./UpdateDepartmentModal";
+import { useDisclosure } from "@chakra-ui/react";
 
 interface Props {
   isOpen: boolean;
@@ -15,22 +20,51 @@ interface Props {
 }
 
 const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
-  const fetchDeparments = useAsyncAction({
+  const {
+    isOpen: updateDepartmentIsOpen,
+    onOpen: updateDepartmentOnOpen,
+    onClose: updateDepartmentOnClose,
+  } = useDisclosure();
+
+  const getDepartments = useAsyncAction({
     action: fetchDepartmentDropdownList,
     errorMessage: "Failed to fetch department list",
   });
+
+  const getDepartmentDetails = useAsyncAction({
+    action: fetchDepartment,
+    errorMessage: "Failed to fetch department details",
+  });
+
+  // const getDepartmentDetails = async (departmentId: number) => {
+  //   await fetchDepartmentDetails(departmentId);
+  // };
+
+  // const handleViewDepartment = async (departmentId: number) => {
+  //   await getDepartmentDetails(departmentId);
+  //   /// logic to open add department modal
+  // };
+
+  const selectedDepartment = useSelector(
+    (state: RootState) => state.department.departmentDetail.data
+  );
 
   const departments = useSelector(
     (state: RootState) => state.department.departmentDropdownList.data
   );
 
   useEffect(() => {
-    fetchDeparments();
+    getDepartments();
   }, []);
 
-  const handleEdit = (departmentId: number) => {
-    // Handle the edit action here
-    console.log("Edit:", departmentId);
+  useEffect(() => {
+    if (selectedDepartment) {
+      updateDepartmentOnOpen();
+    }
+  }, [selectedDepartment]);
+
+  const handleEditDepartmentModalOpen = async (departmentId: number) => {
+    await getDepartmentDetails(departmentId);
   };
 
   const handleDelete = (departmentId: number) => {
@@ -78,7 +112,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 variant="orange"
                 icon={<FontAwesomeIcon icon={faEdit} />}
                 aria-label="Edit"
-                onClick={() => handleEdit(department.id)}
+                onClick={() => handleEditDepartmentModalOpen(department.id)}
               />
               <IconButton
                 variant="red"
@@ -89,6 +123,12 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
             </HStack>
           ))}
       </VStack>
+      {selectedDepartment && (
+        <UpdateDepartmentModal
+          isOpen={updateDepartmentIsOpen}
+          onClose={updateDepartmentOnClose}
+        />
+      )}
     </ModalWrapper>
   );
 };
