@@ -8,7 +8,7 @@ export default class DepartmentsController {
   }
 
   public async dropdown ({ response }: HttpContextContract) {
-    const departments = await Department.query().select('id', 'department_name')
+    const departments = await Department.query().select('id', 'department_name').orderBy('department_name', "asc")
     return response.json(departments)
   }  
 
