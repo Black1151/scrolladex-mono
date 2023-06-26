@@ -18,10 +18,10 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import AddEmployeeModal from "../modals/AddEmployeeModal";
-import AddDepartmentModal from "../modals/AddDepartmentModal";
 import { logoutUserAPI } from "@/api/authAPI";
 import { useRouter } from "next/router";
 import { useAuth } from "@/providers/AuthProvider";
+import ManageDepartmentsModal from "../modals/ManageDepartmentsModal";
 
 const Navbar: React.FC = () => {
   const {
@@ -30,9 +30,9 @@ const Navbar: React.FC = () => {
     onClose: addEmployeeOnClose,
   } = useDisclosure();
   const {
-    onOpen: addDepartmentOnOpen,
-    isOpen: addDepartmentIsOpen,
-    onClose: addDepartmentOnClose,
+    onOpen: manageDepartmentsOnOpen,
+    isOpen: manageDepartmentsIsOpen,
+    onClose: manageDepartmentsOnClose,
   } = useDisclosure();
 
   const {
@@ -60,22 +60,21 @@ const Navbar: React.FC = () => {
           </Text>
         </VStack>
         <Spacer />
-
         {authenticated && (
           <HStack display={{ base: "none", md: "flex" }}>
             <AddEmployeeModal
               isOpen={addEmployeeIsOpen}
               onClose={addEmployeeOnClose}
             />
-            <AddDepartmentModal
-              isOpen={addDepartmentIsOpen}
-              onClose={addDepartmentOnClose}
+            <ManageDepartmentsModal
+              isOpen={manageDepartmentsIsOpen}
+              onClose={manageDepartmentsOnClose}
             />
             <Button variant="green" onClick={addEmployeeOnOpen}>
               Add Employee
             </Button>
-            <Button variant="green" onClick={addDepartmentOnOpen}>
-              Add Department
+            <Button variant="green" onClick={manageDepartmentsOnOpen}>
+              Manage Departments
             </Button>
             <Button
               onClick={() => {
@@ -83,7 +82,7 @@ const Navbar: React.FC = () => {
                 setAuthenticated(false);
                 router.replace("/login");
               }}
-              variant="orange"
+              variant="red"
             >
               Logout
             </Button>
@@ -108,9 +107,9 @@ const Navbar: React.FC = () => {
                 <Button variant="green" onClick={addEmployeeOnOpen}>
                   Add Employee
                 </Button>
-                <Button variant="green" onClick={addDepartmentOnOpen}>
+                {/* <Button variant="green" onClick={addDepartmentOnOpen}>
                   Add Department
-                </Button>
+                </Button> */}
               </DrawerBody>
             </DrawerContent>
           </Drawer>
