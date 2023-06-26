@@ -68,7 +68,7 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({
             <HStack mt={4} gap={[0, 4]} flex={1}>
               <Button
                 flex={1}
-                variant={"orange"}
+                variant={"red"}
                 onClick={() => handleModalClose(formik.resetForm)}
               >
                 Cancel

@@ -186,7 +186,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
               Submit
             </Button>
             <Button
-              variant="orange"
+              variant="red"
               onClick={() => handleModalClose(formik.resetForm)}
               flex={1}
             >
