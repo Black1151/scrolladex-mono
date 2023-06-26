@@ -75,8 +75,8 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
   
   export const updateDepartment = createAsyncThunk(
     "departments/updateDepartment",
-    async (data: {id: number, department: Department}, thunkAPI) => {
-      return handleThunkAPI(updateDepartmentAPI(data.id, data.department), thunkAPI);
+    async (data: Department, thunkAPI) => {
+      return handleThunkAPI(updateDepartmentAPI(data), thunkAPI);
     }
   );
   

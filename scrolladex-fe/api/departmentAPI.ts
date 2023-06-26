@@ -43,12 +43,14 @@ export const createDepartmentAPI = async (data: Department): Promise<number | nu
   }
 };
 
-export const updateDepartmentAPI = async (id: number, data: Department): Promise<Department | null> => {
+export const updateDepartmentAPI = async (data: Department): Promise<Department | null> => {
+
+  console.log('updateDepartmentAPI');
   try {
-    const response: AxiosResponse<Department> = await apiClient.put(`/departments/${id}`, data);
+    const response: AxiosResponse<Department> = await apiClient.put(`/departments/${data.id}`, data);
     return response.data;
   } catch (error) {
-    console.error(`Error updating department with id ${id}`, error);
+    console.error(`Error updating department with id ${data.id}`, error);
     throw error;
   }
 };
