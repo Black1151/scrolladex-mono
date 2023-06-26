@@ -61,7 +61,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             {message}
           </Text>
           <HStack mt={4} justifyContent="flex-end">
-            <Button variant="orange" onClick={onClose} flex={1}>
+            <Button variant="red" onClick={onClose} flex={1}>
               Cancel
             </Button>
             <Button
