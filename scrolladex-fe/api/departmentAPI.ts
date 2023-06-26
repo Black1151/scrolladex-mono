@@ -44,8 +44,6 @@ export const createDepartmentAPI = async (data: Department): Promise<number | nu
 };
 
 export const updateDepartmentAPI = async (data: Department): Promise<Department | null> => {
-
-  console.log('updateDepartmentAPI');
   try {
     const response: AxiosResponse<Department> = await apiClient.put(`/departments/${data.id}`, data);
     return response.data;
@@ -55,10 +53,10 @@ export const updateDepartmentAPI = async (data: Department): Promise<Department 
   }
 };
 
-export const deleteDepartmentAPI = async (id: number): Promise<Department | null> => {
+export const deleteDepartmentAPI = async (id: number): Promise<number> => {
   try {
     const response: AxiosResponse<Department> = await apiClient.delete(`/departments/${id}`);
-    return response.data;
+    return response.status;
   } catch (error) {
     console.error(`Error deleting department with id ${id}`, error);
     throw error;

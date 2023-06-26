@@ -13,6 +13,8 @@ import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@chakra-ui/react";
 import UpdateDepartmentModal from "./UpdateDepartmentModal";
 import { useDisclosure } from "@chakra-ui/react";
+import { deleteDepartment } from "@/store/departmentSlice";
+import ConfirmationModal from "./ConfirmationModal";
 
 interface Props {
   isOpen: boolean;
@@ -20,10 +22,24 @@ interface Props {
 }
 
 const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
+  const selectedDepartment = useSelector(
+    (state: RootState) => state.department.departmentDetail.data
+  );
+
+  const departments = useSelector(
+    (state: RootState) => state.department.departmentDropdownList.data
+  );
+
   const {
     isOpen: updateDepartmentIsOpen,
     onOpen: updateDepartmentOnOpen,
     onClose: updateDepartmentOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: deleteConfirmationIsOpen,
+    onOpen: deleteConfirmationOnOpen,
+    onClose: deleteConfirmationOnClose,
   } = useDisclosure();
 
   const getDepartments = useAsyncAction({
@@ -36,6 +52,17 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     errorMessage: "Failed to fetch department details",
   });
 
+  const removeDepartment = useAsyncAction({
+    action: deleteDepartment,
+    errorMessage: "Failed to delete department",
+    successMessage: `${
+      selectedDepartment === null
+        ? "Department"
+        : `${selectedDepartment!.departmentName} department`
+    } deleted successfully`,
+    showSuccess: true,
+  });
+
   // const getDepartmentDetails = async (departmentId: number) => {
   //   await fetchDepartmentDetails(departmentId);
   // };
@@ -45,36 +72,30 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   //   /// logic to open add department modal
   // };
 
-  const selectedDepartment = useSelector(
-    (state: RootState) => state.department.departmentDetail.data
-  );
-
-  const departments = useSelector(
-    (state: RootState) => state.department.departmentDropdownList.data
-  );
-
   useEffect(() => {
     getDepartments();
   }, []);
 
-  useEffect(() => {
-    if (selectedDepartment) {
-      updateDepartmentOnOpen();
-    }
-  }, [selectedDepartment]);
-
   const handleEditDepartmentModalOpen = async (departmentId: number) => {
     await getDepartmentDetails(departmentId);
+    updateDepartmentOnOpen();
   };
 
-  const handleDelete = (departmentId: number) => {
-    // Handle the delete action here
-    console.log("Delete:", departmentId);
+  const handleDeleteConfirmationModalOpen = async (departmentId: number) => {
+    await getDepartmentDetails(departmentId);
+    deleteConfirmationOnOpen();
+  };
+
+  const handleDeleteDepartment = async (departmentId: number) => {
+    const response = await removeDepartment(departmentId);
+    if (!response.error) {
+      getDepartments();
+      deleteConfirmationOnClose();
+    }
   };
 
   const handleView = (departmentId: number) => {
-    // Handle the delete action here
-    console.log("Delete:", departmentId);
+    console.log("View:", departmentId);
   };
 
   const theme = useTheme();
@@ -118,7 +139,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 variant="red"
                 icon={<FontAwesomeIcon icon={faTrashAlt} />}
                 aria-label="Delete"
-                onClick={() => handleDelete(department.id)}
+                onClick={() => handleDeleteConfirmationModalOpen(department.id)}
               />
             </HStack>
           ))}
@@ -129,6 +150,16 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
           onClose={updateDepartmentOnClose}
         />
       )}
+
+      <ConfirmationModal
+        isOpen={deleteConfirmationIsOpen}
+        onClose={deleteConfirmationOnClose}
+        title="Delete Department"
+        message={`Are you sure you want to delete the ${selectedDepartment?.departmentName} department? This action cannot be undone.`}
+        onConfirm={() =>
+          handleDeleteDepartment(selectedDepartment!.id as number)
+        }
+      />
     </ModalWrapper>
   );
 };
