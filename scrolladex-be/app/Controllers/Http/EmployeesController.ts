@@ -111,13 +111,8 @@ export default class EmployeesController {
       emp_no: employee.emp_no,
     }
   
-    console.log(employeeWithDepartmentName)
-  
     return response.json(employeeWithDepartmentName)
   }
-  
-  
-  
 
   public async update({ params, request, response }: HttpContextContract) {
     const profilePicture = request.file('profile_picture', {
