@@ -5,10 +5,18 @@ const theme = extendTheme({
   breakpoints: {
     sm: "480px",
     md: "768px",
-    lg: "1024px",
-    xl: "1280px",
-    "2xl": "1440px",
+    lg: "1125px",
+    xl: "1500px",
+    "2xl": "1850",
   },
+  // breakpoints: {
+  //   sm: "480px",
+  //   md: "768px",
+  //   lg: "1024px",
+  //   xl: "1280px",
+  //   "2xl": "1440px",
+  //   "2xl": "1440px",
+  // },
   colors,
   fonts: {
     heading: "Roboto",

@@ -55,6 +55,8 @@ const Index = () => {
     });
   };
 
+  const columnWidth = 350;
+
   return (
     <MotionBox
       p={5}
@@ -64,9 +66,17 @@ const Index = () => {
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3, xl: 4 }}
+        gridTemplateColumns={[
+          `repeat(1, ${columnWidth}px)`,
+          null,
+          `repeat(2, ${columnWidth}px)`,
+          null,
+          `repeat(4, ${columnWidth}px)`,
+          `repeat(5, ${columnWidth}px)`,
+        ]}
         spacing={5}
         position="relative"
+        justifyContent="center"
       >
         {employees &&
           employees.map((employee, index) => (
