@@ -1,15 +1,10 @@
 // External Dependencies
-import React, { useRef } from "react";
+import React from "react";
 import {
   Box,
   Center,
   Flex,
-  IconButton,
   Image,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
   SimpleGrid,
   Text,
   useDisclosure,
@@ -22,17 +17,16 @@ import {
   FaEnvelope,
   FaIdCard,
   FaPhone,
-  FaTimes,
   FaTrash,
 } from "react-icons/fa";
 
 // Internal Dependencies
 import { Employee } from "@/types";
-import ModalIconButton from "./ModalIconButton";
 import ConfirmationModal from "./ConfirmationModal";
 import { deleteEmployee, fetchEmployeeOverview } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
 import UpdateEmployeeModal from "./UpdateEmployeeModal";
+import ModalWrapper from "./ModalWrapper";
 
 interface Props {
   employee: Employee;
@@ -46,7 +40,6 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   isOpen,
   onClose,
 }) => {
-  const closeButtonRef = useRef(null);
   const confirmationDisclosure = useDisclosure();
   const editEmployeeDisclosure = useDisclosure();
 
@@ -89,6 +82,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
     {
       icon: <FaEdit size={25} />,
       tooltipLabel: "Edit Employee Details",
+      ariaLabel: "Edit Employee Details",
       onClick: () => {
         editEmployeeDisclosure.onOpen();
         onClose();
@@ -97,75 +91,50 @@ const EmployeeDetailsModal: React.FC<Props> = ({
     {
       icon: <FaTrash size={20} />,
       tooltipLabel: "Delete Employee",
+      ariaLabel: "Delete Employee",
       onClick: confirmationDisclosure.onOpen,
     },
-  ].map((button, index) => (
-    <ModalIconButton
-      key={index}
-      icon={button.icon}
-      tooltipLabel={button.tooltipLabel}
-      onClick={button.onClick}
-    />
-  ));
+  ];
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={closeButtonRef}>
-        <ModalOverlay />
-        <ModalContent maxW={650} w="100%" borderTopRadius="lg">
-          <Flex
-            bg="emerald"
-            borderTopRadius="md"
-            justifyContent="space-between"
-            alignItems="center"
-            px={6}
-            py={4}
+      <ModalWrapper
+        title="Employee Details"
+        isOpen={isOpen}
+        onClose={onClose}
+        extraButtons={actionButtons}
+        maxWidth={[350, null, 700]}
+      >
+        <SimpleGrid columns={[1, null, 2]} spacing={10}>
+          <VStack
+            fontSize="xl"
+            align={["center", null, "start", "start"]}
+            spacing={6}
           >
-            <Text fontSize="3xl" color="white">
-              Employee Details
+            <Text whiteSpace="nowrap" fontSize={"4xl"}>
+              {employee?.firstName} {employee?.lastName}
             </Text>
-            <Flex position="relative">
-              {actionButtons}
-              <IconButton
-                aria-label="Close"
-                onClick={onClose}
-                ref={closeButtonRef}
-                icon={<FaTimes size={30} />}
-                bg="emerald"
-                mx={2}
-                border="none"
-                color="white"
-                _hover={{ bg: "emerald" }}
-                _focus={{ outline: 0 }}
-              />
+            <Flex flexDirection="column" gap={4}>
+              {employeeDetails}
             </Flex>
-          </Flex>
-          <ModalBody>
-            <SimpleGrid columns={[1, 2]} spacing={10}>
-              <VStack p={4} fontSize="xl" align="start" gap={6}>
-                <Text whiteSpace="nowrap" fontSize={["2xl", "4xl"]}>
-                  {employee?.firstName} {employee?.lastName}
-                </Text>
-                <Flex flexDirection="column" gap={4}>
-                  {employeeDetails}
-                </Flex>
-              </VStack>
-              <Center>
-                <Image
-                  src={
-                    process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
-                      "/public" +
-                      employee?.profilePictureUrl || ""
-                  }
-                  alt={employee?.firstName + " " + employee?.lastName}
-                  borderRadius="100%"
-                  objectFit="cover"
-                />
-              </Center>
-            </SimpleGrid>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+          </VStack>
+          <Center>
+            <Image
+              src={
+                process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
+                  "/public" +
+                  employee?.profilePictureUrl || ""
+              }
+              alt={employee?.firstName + " " + employee?.lastName}
+              borderRadius="100%"
+              objectFit="cover"
+              maxW={300}
+              maxH={300}
+            />
+          </Center>
+        </SimpleGrid>
+      </ModalWrapper>
+
       <ConfirmationModal
         onConfirm={handleDelete}
         isOpen={confirmationDisclosure.isOpen}
