@@ -2,7 +2,7 @@ import { ButtonProps, Button, Tooltip } from "@chakra-ui/react";
 
 interface ModalIconButtons extends ButtonProps {
   icon: JSX.Element;
-  tooltipLabel: string;
+  tooltipLabel?: string;
   onClick: () => void;
 }
 
