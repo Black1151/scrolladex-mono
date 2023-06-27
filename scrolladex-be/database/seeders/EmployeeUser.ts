@@ -51,12 +51,7 @@ export default class EmployeeSeeder extends BaseSeeder {
     const employees = [...men, ...women];
 
     for (const employee of employees) {
-      
-      const user = new User();
-      user.username = `${employee.first_name[0]}${employee.last_name}`.toLowerCase();
-      user.password = "password";
-      await user.save();
-      
+  
       const employeeEntry = new Employee();
       employeeEntry.title = employee.title;
       employeeEntry.first_name = employee.first_name;
@@ -64,11 +59,16 @@ export default class EmployeeSeeder extends BaseSeeder {
       employeeEntry.emp_no = `EMP-${Math.floor(1000 + Math.random() * 9000)}`;
       employeeEntry.job_title = employee.job_title;
       employeeEntry.department_id = employee.department_id;
-      employeeEntry.user_id = user.id;
       employeeEntry.telephone = `07${Math.floor(100000000 + Math.random() * 900000000)}`; 
       employeeEntry.email = `${employee.first_name}${employee.last_name}@megaco.co.uk`.toLowerCase();
       employeeEntry.profile_picture_url = `/uploads/${employee.first_name}${employee.last_name}.PNG`.toLowerCase();
       await employeeEntry.save();
+      
+      const user = new User();
+      user.username = `${employee.first_name[0]}${employee.last_name}`.toLowerCase();
+      user.password = "password";
+      user.employee_id = employeeEntry.id;
+      await user.save();
     }
   }
 }

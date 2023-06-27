@@ -1,6 +1,6 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class extends BaseSchema {
+export default class Users extends BaseSchema {
   protected tableName = 'users'
 
   public async up() {
@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.string('remember_me_token').nullable()
       table.timestamp('created_at', { useTz: true }).notNullable()
       table.timestamp('updated_at', { useTz: true }).notNullable()
+      table.integer('employee_id').unsigned().references('id').inTable('employees').onDelete('CASCADE');
     })
   }
 
