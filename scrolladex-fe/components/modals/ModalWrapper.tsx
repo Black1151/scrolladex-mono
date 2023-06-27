@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -8,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
+import ModalIconButton from "./ModalIconButton";
 
 interface Props {
   title: string;
@@ -16,6 +18,12 @@ interface Props {
   onClose: () => void;
   fitContent?: boolean;
   bg?: string;
+  maxWidth?: number | string | Array<number | string | null>;
+  extraButtons?: Array<{
+    icon: React.ReactElement;
+    tooltipLabel?: string;
+    onClick: () => void;
+  }>;
 }
 
 const ModalWrapper: React.FC<Props> = ({
@@ -25,8 +33,20 @@ const ModalWrapper: React.FC<Props> = ({
   onClose,
   fitContent = false,
   bg = "white",
+  maxWidth = 1000,
+  extraButtons = [],
 }) => {
-  const modalContentProps = fitContent ? {} : { maxW: 1000 };
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+    }
+  }, [isOpen]);
+
+  const modalContentProps = fitContent ? {} : { maxW: maxWidth };
 
   return (
     <>
@@ -41,21 +61,30 @@ const ModalWrapper: React.FC<Props> = ({
             px={6}
             py={4}
           >
-            <Text fontSize="3xl" color="white">
+            <Text fontSize={["2xl", null, "3xl"]} color="white">
               {title}
             </Text>
-            <Button
-              bg="emerald"
-              border="none"
-              color="white"
-              size="xl"
-              _hover={{ bg: "emerald" }}
-              onClick={onClose}
-            >
-              <FaTimes size={30} />
-            </Button>
+            <Flex>
+              {extraButtons.map((button, index) => (
+                <ModalIconButton {...button} key={index} />
+              ))}
+              <Button
+                ref={closeButtonRef}
+                bg="emerald"
+                border="none"
+                color="white"
+                size="xl"
+                _hover={{ bg: "emerald" }}
+                onClick={onClose}
+                pl={4}
+              >
+                <FaTimes size={30} />
+              </Button>
+            </Flex>
           </Flex>
-          <ModalBody bg={bg}>{children}</ModalBody>
+          <ModalBody py={8} bg={bg}>
+            {children}
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>
