@@ -176,7 +176,14 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
               )}
             </GridItem>
           </Grid>
-          <Flex gap={4} p={4}>
+          <Flex gap={4} pt={4}>
+            <Button
+              variant="red"
+              onClick={() => handleModalClose(formik.resetForm)}
+              flex={1}
+            >
+              Cancel
+            </Button>
             <Button
               flex={1}
               variant="green"
@@ -184,13 +191,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
               isLoading={formik.isSubmitting}
             >
               Submit
-            </Button>
-            <Button
-              variant="red"
-              onClick={() => handleModalClose(formik.resetForm)}
-              flex={1}
-            >
-              Cancel
             </Button>
           </Flex>
         </Form>
