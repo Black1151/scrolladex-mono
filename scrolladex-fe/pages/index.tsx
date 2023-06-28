@@ -104,10 +104,21 @@ const Index = () => {
                 }}
               >
                 <Flex justifyContent="space-between">
-                  <Box whiteSpace="nowrap">
-                    <Heading fontSize="xl">
-                      {employee.firstName} {employee.lastName}
-                    </Heading>
+                  <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    height={16}
+                    background="linear-gradient(to right, #3498db, white)"
+                    zIndex={-1}
+                  ></Box>
+                  <Box whiteSpace="nowrap" zIndex={1}>
+                    <Box width="100%">
+                      <Heading fontSize="xl" pb={6}>
+                        {employee.firstName} {employee.lastName}
+                      </Heading>
+                    </Box>
                     <Text mt={2} fontSize="sm">
                       {employee.jobTitle}
                     </Text>
@@ -115,7 +126,13 @@ const Index = () => {
                       {employee.departmentName}
                     </Text>
                   </Box>
-                  <Box mr={4}>
+                  <Box
+                    mr={4}
+                    zIndex={1}
+                    borderColor="white"
+                    borderWidth="2px"
+                    borderRadius="full"
+                  >
                     <Image
                       borderRadius="full"
                       boxSize="100px"
