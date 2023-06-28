@@ -4,21 +4,25 @@ interface ModalIconButtons extends ButtonProps {
   icon: JSX.Element;
   tooltipLabel?: string;
   onClick: () => void;
+  bg?: string;
+  hover?: object;
 }
 
 const ModalIconButton: React.FC<ModalIconButtons> = ({
   icon,
   tooltipLabel,
   onClick,
+  bg = "emerald",
+  hover = { bg: "emerald" },
   ...props
 }) => {
   return (
     <Tooltip label={tooltipLabel} openDelay={500}>
       <Button
-        bg="emerald"
+        bg={bg}
         border="none"
         color="white"
-        _hover={{ bg: "emerald" }}
+        _hover={hover}
         onClick={onClick}
         {...props}
       >
