@@ -1,23 +1,14 @@
 import React, { useRef } from "react";
-import {
-  Button,
-  Flex,
-  IconButton,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
-  Text,
-  HStack,
-} from "@chakra-ui/react";
+import { Button, Flex, Text, HStack, VStack } from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
+import ModalWrapper from "./ModalWrapper";
 
 interface ConfirmationModalProps {
   onConfirm: () => void;
   isOpen: boolean;
   onClose: () => void;
   title?: string;
-  message?: string;
+  message?: React.ReactNode;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
@@ -27,57 +18,33 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   title = "Confirmation",
   message = "Are you sure?",
 }) => {
-  const closeButtonRef = useRef(null);
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={closeButtonRef}>
-      <ModalOverlay />
-      <ModalContent borderTopRadius="lg">
-        <Flex
-          bg="xanthous"
-          borderTopRadius="md"
-          justifyContent="space-between"
-          alignItems="center"
-          px={6}
-          py={4}
+    <ModalWrapper
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      titleBarColor="xanthous"
+      maxWidth={700}
+    >
+      <VStack spacing={6} pb={4}>
+        {message}
+      </VStack>
+      <HStack mt={4} justifyContent="flex-end">
+        <Button variant="red" onClick={onClose} flex={1}>
+          Cancel
+        </Button>
+        <Button
+          variant="green"
+          onClick={() => {
+            onConfirm();
+            onClose();
+          }}
+          flex={1}
         >
-          <Text fontSize="3xl" color="white">
-            {title}
-          </Text>
-          <IconButton
-            aria-label="Close"
-            onClick={onClose}
-            ref={closeButtonRef}
-            icon={<FaTimes size={30} />}
-            bg="xanthous"
-            border="none"
-            color="white"
-            _hover={{ bg: "xanthous" }}
-            _focus={{ outline: 0, borderColor: "white" }}
-          />
-        </Flex>
-        <ModalBody>
-          <Text fontSize="xl" mb={6}>
-            {message}
-          </Text>
-          <HStack mt={4} justifyContent="flex-end">
-            <Button variant="red" onClick={onClose} flex={1}>
-              Cancel
-            </Button>
-            <Button
-              variant="green"
-              onClick={() => {
-                onConfirm();
-                onClose();
-              }}
-              flex={1}
-            >
-              Confirm
-            </Button>
-          </HStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+          Confirm
+        </Button>
+      </HStack>
+    </ModalWrapper>
   );
 };
 
