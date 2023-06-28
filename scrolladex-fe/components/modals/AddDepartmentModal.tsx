@@ -1,12 +1,12 @@
 import React from "react";
 import { FormikHelpers } from "formik";
-
 import { useSubmitHandler } from "@/hooks/submitHandler";
 import { useAsyncAction } from "@/hooks/async";
-import { fetchEmployeeOverview } from "@/store/employeeSlice";
-import { createDepartment } from "@/store/departmentSlice";
+import {
+  fetchDepartmentDropdownList,
+  createDepartment,
+} from "@/store/departmentSlice";
 import { Department, FormModalProps } from "@/types";
-
 import DepartmentForm from "../forms/DepartmentForm";
 import ModalWrapper from "./ModalWrapper";
 
@@ -20,9 +20,9 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
     onClose: onClose,
   });
 
-  const updateEmployeeOverview = useAsyncAction({
-    action: fetchEmployeeOverview,
-    errorMessage: "Error fetching department overview",
+  const fetchDepartments = useAsyncAction({
+    action: fetchDepartmentDropdownList,
+    errorMessage: "Error fetching department list",
   });
 
   const handleFormSubmit = async (
@@ -31,7 +31,7 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
   ) => {
     const result = await submitForm(values, actions);
     if (result) {
-      updateEmployeeOverview();
+      fetchDepartments();
     }
   };
 
