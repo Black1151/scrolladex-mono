@@ -51,7 +51,7 @@ export type EmployeeCreateUpdate = Omit<Employee, 'profilePictureUrl' | 'id'> & 
     profilePictureUrl?: string;
 };
 
-export type EmployeeOverview = Pick<Employee, 'firstName' | 'lastName' | 'jobTitle' | 'departmentName' | 'profilePictureUrl'> & { id: number };
+export type EmployeeOverview = Pick<Employee, 'firstName' | 'lastName' | 'jobTitle' | 'departmentName' | 'departmentId' | 'profilePictureUrl'> & { id: number };
 
 /// REDUX TYPES
 
