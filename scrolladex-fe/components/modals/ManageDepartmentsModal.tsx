@@ -15,6 +15,9 @@ import UpdateDepartmentModal from "./UpdateDepartmentModal";
 import { useDisclosure } from "@chakra-ui/react";
 import { deleteDepartment } from "@/store/departmentSlice";
 import ConfirmationModal from "./ConfirmationModal";
+import { FaPlusCircle } from "react-icons/fa";
+import AddDepartmentModal from "./AddDepartmentModal";
+import { fetchEmployeeOverview } from "@/store/employeeSlice";
 
 interface Props {
   isOpen: boolean;
@@ -42,6 +45,12 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     onClose: deleteConfirmationOnClose,
   } = useDisclosure();
 
+  const {
+    isOpen: addDepartmentIsOpen,
+    onOpen: addDepartmentOnOpen,
+    onClose: addDepartmentOnClose,
+  } = useDisclosure();
+
   const getDepartments = useAsyncAction({
     action: fetchDepartmentDropdownList,
     errorMessage: "Failed to fetch department list",
@@ -61,6 +70,11 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
         : `${selectedDepartment!.departmentName} department`
     } deleted successfully`,
     showSuccess: true,
+  });
+
+  const getEmployees = useAsyncAction({
+    action: fetchEmployeeOverview,
+    errorMessage: "Error fetching employee overview",
   });
 
   // const getDepartmentDetails = async (departmentId: number) => {
@@ -90,6 +104,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const response = await removeDepartment(departmentId);
     if (!response.error) {
       getDepartments();
+      getEmployees();
       deleteConfirmationOnClose();
     }
   };
@@ -100,6 +115,16 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const theme = useTheme();
 
+  const extraButtons = [
+    {
+      icon: <FaPlusCircle size={25} />,
+      tooltipLabel: "Add department",
+      onClick: () => {
+        addDepartmentOnOpen();
+      },
+    },
+  ];
+
   return (
     <ModalWrapper
       fitContent={true}
@@ -107,6 +132,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={onClose}
       bg={theme.colors.medPBlue}
+      extraButtons={extraButtons}
     >
       <VStack>
         {departments !== null &&
@@ -159,6 +185,10 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
         onConfirm={() =>
           handleDeleteDepartment(selectedDepartment!.id as number)
         }
+      />
+      <AddDepartmentModal
+        isOpen={addDepartmentIsOpen}
+        onClose={addDepartmentOnClose}
       />
     </ModalWrapper>
   );
