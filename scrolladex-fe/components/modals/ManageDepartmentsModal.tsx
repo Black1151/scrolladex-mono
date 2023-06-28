@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
 import ModalWrapper from "./ModalWrapper";
-import { VStack, Box, HStack, IconButton } from "@chakra-ui/react";
+import { VStack, Box, HStack, IconButton, Text } from "@chakra-ui/react";
 import { useAsyncAction } from "@/hooks/async";
-import {
-  fetchDepartment,
-  fetchDepartmentDropdownList,
-} from "@/store/departmentSlice";
+import { fetchDepartmentDropdownList } from "@/store/departmentSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,11 +10,16 @@ import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@chakra-ui/react";
 import UpdateDepartmentModal from "./UpdateDepartmentModal";
 import { useDisclosure } from "@chakra-ui/react";
-import { deleteDepartment } from "@/store/departmentSlice";
+import {
+  deleteDepartment,
+  fetchDepartmentWithEmployees,
+  fetchDepartment,
+} from "@/store/departmentSlice";
 import ConfirmationModal from "./ConfirmationModal";
 import { FaPlusCircle } from "react-icons/fa";
 import AddDepartmentModal from "./AddDepartmentModal";
 import { fetchEmployeeOverview } from "@/store/employeeSlice";
+import DepartmentDetailsModal from "./DepartmentDetailsModal";
 
 interface Props {
   isOpen: boolean;
@@ -31,6 +33,10 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const departments = useSelector(
     (state: RootState) => state.department.departmentDropdownList.data
+  );
+
+  const selectedDepartmentWithEmp = useSelector(
+    (state: RootState) => state.department.departmentWithEmployees.data
   );
 
   const {
@@ -51,6 +57,12 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     onClose: addDepartmentOnClose,
   } = useDisclosure();
 
+  const {
+    isOpen: viewDepartmentIsOpen,
+    onOpen: viewDepartmentOnOpen,
+    onClose: viewDepartmentOnClose,
+  } = useDisclosure();
+
   const getDepartments = useAsyncAction({
     action: fetchDepartmentDropdownList,
     errorMessage: "Failed to fetch department list",
@@ -58,6 +70,11 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const getDepartmentDetails = useAsyncAction({
     action: fetchDepartment,
+    errorMessage: "Failed to fetch department details",
+  });
+
+  const getDepartmentAndEmployees = useAsyncAction({
+    action: fetchDepartmentWithEmployees,
     errorMessage: "Failed to fetch department details",
   });
 
@@ -77,14 +94,10 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     errorMessage: "Error fetching employee overview",
   });
 
-  // const getDepartmentDetails = async (departmentId: number) => {
-  //   await fetchDepartmentDetails(departmentId);
-  // };
-
-  // const handleViewDepartment = async (departmentId: number) => {
-  //   await getDepartmentDetails(departmentId);
-  //   /// logic to open add department modal
-  // };
+  const handleViewDepartmentModalOpen = async (departmentId: number) => {
+    await getDepartmentAndEmployees(departmentId);
+    viewDepartmentOnOpen();
+  };
 
   useEffect(() => {
     getDepartments();
@@ -96,7 +109,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   const handleDeleteConfirmationModalOpen = async (departmentId: number) => {
-    await getDepartmentDetails(departmentId);
+    await getDepartmentAndEmployees(departmentId);
     deleteConfirmationOnOpen();
   };
 
@@ -107,10 +120,6 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
       getEmployees();
       deleteConfirmationOnClose();
     }
-  };
-
-  const handleView = (departmentId: number) => {
-    console.log("View:", departmentId);
   };
 
   const theme = useTheme();
@@ -153,7 +162,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 variant="green"
                 icon={<FontAwesomeIcon icon={faEye} />}
                 aria-label="View"
-                onClick={() => handleView(department.id)}
+                onClick={() => handleViewDepartmentModalOpen(department.id)}
               />
               <IconButton
                 variant="orange"
@@ -176,12 +185,21 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
           onClose={updateDepartmentOnClose}
         />
       )}
-
       <ConfirmationModal
         isOpen={deleteConfirmationIsOpen}
         onClose={deleteConfirmationOnClose}
         title="Delete Department"
-        message={`Are you sure you want to delete the ${selectedDepartment?.departmentName} department? This action cannot be undone.`}
+        message={
+          <>
+            <Text>{`Are you sure you want to delete the ${selectedDepartment?.departmentName} department?`}</Text>
+            <Text>{`This will also delete the ${selectedDepartmentWithEmp?.employees.length} employees working there and their user accounts.`}</Text>
+            <Text
+              fontWeight="bold"
+              color="bittersweet"
+              fontSize={"lg"}
+            >{`This action cannot be undone.`}</Text>
+          </>
+        }
         onConfirm={() =>
           handleDeleteDepartment(selectedDepartment!.id as number)
         }
@@ -189,6 +207,10 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
       <AddDepartmentModal
         isOpen={addDepartmentIsOpen}
         onClose={addDepartmentOnClose}
+      />
+      <DepartmentDetailsModal
+        isOpen={viewDepartmentIsOpen}
+        onClose={viewDepartmentOnClose}
       />
     </ModalWrapper>
   );
