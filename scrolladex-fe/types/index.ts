@@ -20,6 +20,10 @@ export interface Department {
   postcode: string;
 }
 
+export interface DepartmentWithEmployees extends Department {
+  employees: EmployeeDepartmentListItem[];
+}
+
 export type DepartmentListItem = {
     id: number;
     departmentName: string;
@@ -38,6 +42,8 @@ export interface Employee {
     email: string;
     profilePictureUrl: string | null;
   }
+
+export type EmployeeDepartmentListItem = Pick<Employee, 'id' | 'title' | 'firstName' | 'lastName' | 'jobTitle'>;
 
 export type EmployeeCreateUpdate = Omit<Employee, 'profilePictureUrl' | 'id'> & {
     id?: number;
