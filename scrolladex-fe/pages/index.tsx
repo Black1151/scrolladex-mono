@@ -132,7 +132,7 @@ const Index = () => {
                         {employee.firstName} {employee.lastName}
                       </Heading>
                     </Box>
-                    <Text mt={2} fontSize="sm">
+                    <Text mt={2} fontWeight="bold" fontSize="md">
                       {employee.jobTitle}
                     </Text>
                     <Text mt={2} fontSize="sm">
