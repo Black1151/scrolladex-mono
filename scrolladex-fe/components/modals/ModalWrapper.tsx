@@ -61,7 +61,7 @@ const ModalWrapper: React.FC<Props> = ({
             px={6}
             py={4}
           >
-            <Text fontSize={["2xl", null, "3xl"]} color="white">
+            <Text fontSize="2xl" color="white">
               {title}
             </Text>
             <Flex>
