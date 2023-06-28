@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
-import { Button, Flex, Text, HStack, VStack } from "@chakra-ui/react";
-import { FaTimes } from "react-icons/fa";
+import React from "react";
+import { Button, HStack, VStack } from "@chakra-ui/react";
 import ModalWrapper from "./ModalWrapper";
 
 interface ConfirmationModalProps {
