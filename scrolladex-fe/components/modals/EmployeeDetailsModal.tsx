@@ -82,7 +82,6 @@ const EmployeeDetailsModal: React.FC<Props> = ({
     {
       icon: <FaEdit size={25} />,
       tooltipLabel: "Edit Employee Details",
-      ariaLabel: "Edit Employee Details",
       onClick: () => {
         editEmployeeDisclosure.onOpen();
         onClose();
@@ -91,7 +90,6 @@ const EmployeeDetailsModal: React.FC<Props> = ({
     {
       icon: <FaTrash size={20} />,
       tooltipLabel: "Delete Employee",
-      ariaLabel: "Delete Employee",
       onClick: confirmationDisclosure.onOpen,
     },
   ];
