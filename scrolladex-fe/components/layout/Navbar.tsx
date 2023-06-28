@@ -15,6 +15,7 @@ import {
   VStack,
   HStack,
   Button,
+  Tooltip,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import AddEmployeeModal from "../modals/AddEmployeeModal";
@@ -22,6 +23,13 @@ import { logoutUserAPI } from "@/api/authAPI";
 import { useRouter } from "next/router";
 import { useAuth } from "@/providers/AuthProvider";
 import ManageDepartmentsModal from "../modals/ManageDepartmentsModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUserPlus,
+  faBuilding,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import ModalIconButton from "../modals/ModalIconButton";
 
 const Navbar: React.FC = () => {
   const {
@@ -46,7 +54,11 @@ const Navbar: React.FC = () => {
   return (
     <>
       <Flex
-        padding="1rem"
+        position="fixed"
+        top="0"
+        width="100%"
+        zIndex="1000"
+        py={1}
         bg="pictonBlue"
         color="white"
         px={[2, null, 8, null, 24]}
@@ -54,9 +66,6 @@ const Navbar: React.FC = () => {
         <VStack alignItems="flex-start">
           <Text fontSize={["xl", null, "2xl", "4xl"]} color="white">
             Scroll-a-dex!
-          </Text>
-          <Text fontSize="xl" color="white" whiteSpace="nowrap">
-            Your complete personnel directory
           </Text>
         </VStack>
         <Spacer />
@@ -70,22 +79,29 @@ const Navbar: React.FC = () => {
               isOpen={manageDepartmentsIsOpen}
               onClose={manageDepartmentsOnClose}
             />
-            <Button variant="green" onClick={addEmployeeOnOpen}>
-              Add Employee
-            </Button>
-            <Button variant="green" onClick={manageDepartmentsOnOpen}>
-              Manage Departments
-            </Button>
-            <Button
+            <ModalIconButton
+              icon={<FontAwesomeIcon icon={faUserPlus} />}
+              tooltipLabel="Add Employee"
+              onClick={addEmployeeOnOpen}
+              hover={{ color: "emerald", backgroundColor: "white" }}
+            />
+            <ModalIconButton
+              icon={<FontAwesomeIcon icon={faBuilding} />}
+              tooltipLabel="Manage Departments"
+              onClick={manageDepartmentsOnOpen}
+              hover={{ color: "emerald", backgroundColor: "white" }}
+            />
+            <ModalIconButton
+              icon={<FontAwesomeIcon icon={faSignOutAlt} />}
+              tooltipLabel="Logout"
+              bg="bittersweet"
+              hover={{ color: "bittersweet", backgroundColor: "white" }}
               onClick={() => {
                 logoutUserAPI();
                 setAuthenticated(false);
                 router.replace("/login");
               }}
-              variant="red"
-            >
-              Logout
-            </Button>
+            />
           </HStack>
         )}
         <Box display={{ base: "block", md: "none" }}>
