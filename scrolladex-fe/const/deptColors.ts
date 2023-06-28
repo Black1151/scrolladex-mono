@@ -1,0 +1,1 @@
+export const deptColors = [ "#0081A7","#A8FF99" , "#FFF275", "#FFB997", "#BEB7DF", "#F07167", "#FFB997","#843B62", "#99C1B9", "#74546A"]
