@@ -4,15 +4,20 @@ import { camelCase, snakeCase, isObject } from "lodash";
 const convertKeys = (data: any, converter: (key: string) => string): any => {
   if (Array.isArray(data)) {
     return data.map(item => convertKeys(item, converter));
-  } else if (isObject(data)) {
+  } else if (isObject(data) && !isFile(data)) {
     return Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [converter(key), convertKeys(value, converter)])
+      Object.entries(data).map(([key, value]) => {
+        if (key === 'profilePicture') {
+          return [converter(key), value];
+        }
+        return [converter(key), isObject(value) ? convertKeys(value, converter) : value];
+      })
     );
   } else {
+    console.log('data', data);
     return data;
   }
 };
-
 
 const isFile = (item: any): item is File => item instanceof File;
 const isBlob = (item: any): item is Blob => item instanceof Blob;
@@ -60,7 +65,6 @@ const handleFormData = async (request: any) => {
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_ADDRESS + '/api',
 });
-
 
 
 apiClient.interceptors.request.use(handleFormData);
