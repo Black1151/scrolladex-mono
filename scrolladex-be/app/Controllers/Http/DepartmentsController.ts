@@ -7,6 +7,21 @@ export default class DepartmentsController {
     return response.json(departments)
   }
 
+  public async showWithEmployees({ params, response }: HttpContextContract) {
+    try {
+      const department = await Department.query()
+        .where('id', params.id)
+        .preload('employees', (query) => {
+          query.select('id', 'title', 'first_name', 'last_name', 'job_title')
+        })
+        .firstOrFail()
+
+      return response.json(department)
+    } catch (error) {
+      return response.status(404).json({ message: 'Department not found' })
+    }
+  }
+
   public async dropdown ({ response }: HttpContextContract) {
     const departments = await Department.query().select('id', 'department_name').orderBy('department_name', "asc")
     return response.json(departments)

@@ -22,6 +22,8 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
 Route.get('/employees/overview', 'EmployeesController.overview')
 Route.get('/departments/dropdown', 'DepartmentsController.dropdown')
+Route.get('/departments/:id/with-employees', 'DepartmentsController.showWithEmployees')
+
 
 Route.resource('/employees', 'EmployeesController').apiOnly()
 Route.resource('/departments', 'DepartmentsController').apiOnly()

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Department, RequestState } from "@/types";
+import { Department, RequestState, DepartmentWithEmployees } from "@/types";
 import handleAsyncReducers from "@/utils/handleAsyncReducers";
 import { 
   getDepartmentsAPI, 
@@ -7,7 +7,8 @@ import {
   getDepartmentAPI, 
   updateDepartmentAPI, 
   deleteDepartmentAPI,
-  getDepartmentDropDownListAPI 
+  getDepartmentDropDownListAPI,
+  getDepartmentWithEmployeesAPI 
 } from "@/api/departmentAPI";
 
 const initialRequestState = <T>(): RequestState<T> => ({
@@ -18,6 +19,7 @@ const initialRequestState = <T>(): RequestState<T> => ({
 
 type DepartmentsState = {
   departmentEntities: RequestState<Department[]>;
+  departmentWithEmployees: RequestState<DepartmentWithEmployees>;
   departmentDetail: RequestState<Department>;
   createDepartment: RequestState<number>;
   updateDepartment: RequestState<Department>;
@@ -27,6 +29,7 @@ type DepartmentsState = {
 
 const initialState: DepartmentsState = { 
   departmentEntities: initialRequestState<Department[]>(),
+  departmentWithEmployees: initialRequestState<DepartmentWithEmployees>(),
   departmentDetail: initialRequestState<Department>(),
   createDepartment: initialRequestState<number>(),
   updateDepartment: initialRequestState<Department>(),
@@ -49,6 +52,13 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
     "departments/fetchDepartmentDropdownList",
     async (_, thunkAPI) => {
       return handleThunkAPI(getDepartmentDropDownListAPI(), thunkAPI);
+    }
+  );
+
+  export const fetchDepartmentWithEmployees = createAsyncThunk(
+    "departments/fetchDepartmentWithEmployees",
+    async (id: number, thunkAPI) => {
+      return handleThunkAPI(getDepartmentWithEmployeesAPI(id), thunkAPI);
     }
   );
   
@@ -98,6 +108,7 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
       handleAsyncReducers(builder, updateDepartment, 'updateDepartment');
       handleAsyncReducers(builder, deleteDepartment, 'deleteDepartment');
       handleAsyncReducers(builder, fetchDepartmentDropdownList, 'departmentDropdownList');
+      handleAsyncReducers(builder, fetchDepartmentWithEmployees, 'departmentWithEmployees');
     },
   });
 
