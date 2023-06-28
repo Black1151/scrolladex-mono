@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { fetchEmployeeOverview, fetchEmployee } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
+import { deptColors } from "../const/deptColors";
 
 const MotionBox = motion(Box);
 
@@ -53,6 +54,10 @@ const Index = () => {
     fetchEmployeeDetails(id).then(() => {
       onOpen();
     });
+  };
+
+  const getDepartmentColor = (id: string) => {
+    return deptColors[(parseInt(id) - 1) % deptColors.length];
   };
 
   const columnWidth = 350;
@@ -110,7 +115,18 @@ const Index = () => {
                     left={0}
                     right={0}
                     height={16}
-                    background="linear-gradient(to right, #3498db, white)"
+                    background={`linear-gradient(to right, #3498db, white)`}
+                    zIndex={-1}
+                  ></Box>
+                  <Box
+                    position="absolute"
+                    top={16}
+                    left={0}
+                    right={0}
+                    height={1}
+                    background={`linear-gradient(to right, ${getDepartmentColor(
+                      employee.departmentId
+                    )}, white)`}
                     zIndex={-1}
                   ></Box>
                   <Box whiteSpace="nowrap" zIndex={1}>
