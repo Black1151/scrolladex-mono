@@ -24,6 +24,7 @@ interface Props {
     tooltipLabel?: string;
     onClick: () => void;
   }>;
+  titleBarColor?: string;
 }
 
 const ModalWrapper: React.FC<Props> = ({
@@ -35,6 +36,7 @@ const ModalWrapper: React.FC<Props> = ({
   bg = "white",
   maxWidth = 1000,
   extraButtons = [],
+  titleBarColor = "emerald",
 }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -54,7 +56,7 @@ const ModalWrapper: React.FC<Props> = ({
         <ModalOverlay />
         <ModalContent {...modalContentProps} borderTopRadius="lg">
           <Flex
-            bg="emerald"
+            bg={titleBarColor}
             borderTopRadius="md"
             justifyContent="space-between"
             alignItems="center"
@@ -70,11 +72,11 @@ const ModalWrapper: React.FC<Props> = ({
               ))}
               <Button
                 ref={closeButtonRef}
-                bg="emerald"
+                bg={titleBarColor}
                 border="none"
                 color="white"
                 size="xl"
-                _hover={{ bg: "emerald" }}
+                _hover={{ bg: titleBarColor }}
                 onClick={onClose}
                 pl={4}
               >
@@ -82,7 +84,7 @@ const ModalWrapper: React.FC<Props> = ({
               </Button>
             </Flex>
           </Flex>
-          <ModalBody py={8} bg={bg}>
+          <ModalBody pt={8} pb={4} bg={bg}>
             {children}
           </ModalBody>
         </ModalContent>
