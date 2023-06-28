@@ -14,12 +14,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { fetchEmployeeOverview, fetchEmployee } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
-import { deptColors } from "../const/deptColors";
+import useDepartmentColor from "@/hooks/useDepartmentColor";
 
 const MotionBox = motion(Box);
 
 const Index = () => {
   const employeeState = useSelector((state: RootState) => state.employee);
+  const { getDepartmentColor } = useDepartmentColor();
   const employees = employeeState.employeeEntities.data;
   const [loaded, setLoaded] = useState<boolean[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,10 +55,6 @@ const Index = () => {
     fetchEmployeeDetails(id).then(() => {
       onOpen();
     });
-  };
-
-  const getDepartmentColor = (id: string) => {
-    return deptColors[(parseInt(id) - 1) % deptColors.length];
   };
 
   const columnWidth = 350;
