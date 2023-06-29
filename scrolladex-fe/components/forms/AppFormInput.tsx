@@ -7,6 +7,7 @@ import {
   Select,
   FormErrorMessage,
 } from "@chakra-ui/react";
+import { InputGroup, InputLeftElement } from "@chakra-ui/react";
 
 interface Option {
   label: string;
@@ -14,10 +15,11 @@ interface Option {
 }
 
 interface AppFormInputProps {
-  label: string;
+  label?: string;
   name: string;
   type: "text" | "email" | "select" | "number" | "password";
   options?: Option[];
+  icon?: JSX.Element;
 }
 
 const AppFormInput: React.FC<AppFormInputProps> = ({
@@ -25,6 +27,7 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
   name,
   type,
   options,
+  icon,
 }) => {
   const [field, meta] = useField(name);
 
@@ -45,7 +48,12 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
     case "email":
     case "number":
     case "password":
-      inputElement = <Input {...field} id={name} type={type} />;
+      inputElement = (
+        <InputGroup>
+          {icon && <InputLeftElement pointerEvents="none" children={icon} />}
+          <Input {...field} id={name} type={type} />
+        </InputGroup>
+      );
       break;
   }
 
