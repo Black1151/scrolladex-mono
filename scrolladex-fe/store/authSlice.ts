@@ -10,13 +10,13 @@ const initialRequestState = <T>(): RequestState<T> => ({
 });
 
 type AuthState = {
-  isAuthenticated: boolean;
+  isAuthenticated:  RequestState<boolean>;
   login: RequestState<void>;
   logout: RequestState<void>;
 };
 
 const initialState: AuthState = { 
-  isAuthenticated: false,
+  isAuthenticated: initialRequestState<boolean>(),
   login: initialRequestState<void>(),
   logout: initialRequestState<void>(),
 };
@@ -74,7 +74,7 @@ const authSlice = createSlice({
     handleAsyncReducers({
       builder,
       asyncThunk: checkSession,
-      stateKey: 'checkSession',
+      stateKey: 'isAuthenticated',
       onFulfilled: (state, action) => {
         state.isAuthenticated = action.payload.isAuthenticated; 
       }
