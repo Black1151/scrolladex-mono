@@ -6,9 +6,12 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { useSubmitHandler } from "@/hooks/submitHandler";
 import { loginUser } from "@/store/authSlice";
+import { FaUser, FaLock } from "react-icons/fa";
+import { useTheme } from "@chakra-ui/react";
 
 const LoginPage = () => {
   const router = useRouter();
+  const theme = useTheme();
 
   const submitForm = useSubmitHandler({
     apiFunction: loginUser,
@@ -23,38 +26,74 @@ const LoginPage = () => {
     actions: FormikHelpers<{ username: string; password: string }>
   ) => {
     const result = await submitForm(values, actions);
-
     if (result && result.status === 200) {
       router.push("/");
     }
   };
 
   return (
-    <Box width="100%" maxW="md" mx="auto" mt="8">
-      <Text pb={8} fontSize="3xl">
-        Please sign in
-      </Text>
-      <Formik
-        initialValues={{
-          username: "",
-          password: "",
-        }}
-        validationSchema={Yup.object({
-          username: Yup.string().required("Required"),
-          password: Yup.string().required("Required"),
-        })}
-        onSubmit={handleFormSubmit}
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      bgImage="url('/images/loginBG.jpg')"
+      bgPosition="center"
+      bgSize="cover"
+      bgRepeat="no-repeat"
+      width="100%"
+      height="100vh"
+      overflowY="hidden"
+    >
+      <Box
+        maxW="md"
+        bg="white"
+        boxShadow="xl"
+        borderRadius="lg"
+        borderColor="medPBlue"
+        borderWidth={3}
       >
-        <Form>
-          <VStack spacing="6">
-            <AppFormInput label="Username" name="username" type="text" />
-            <AppFormInput label="Password" name="password" type="password" />
-            <Button variant="green" type="submit">
-              Log In
-            </Button>
-          </VStack>
-        </Form>
-      </Formik>
+        <Text
+          borderTopRadius="md"
+          fontSize="3xl"
+          py={2}
+          bg="pictonBlue"
+          color="white"
+          textAlign="center"
+        >
+          Scroll-a-dex!
+        </Text>
+        <Formik
+          initialValues={{
+            username: "",
+            password: "",
+          }}
+          validationSchema={Yup.object({
+            username: Yup.string().required("Required"),
+            password: Yup.string().required("Required"),
+          })}
+          onSubmit={handleFormSubmit}
+        >
+          <Form>
+            <Box p={6}>
+              <VStack spacing="4">
+                <AppFormInput
+                  name="username"
+                  type="text"
+                  icon={<FaUser color={theme.colors.pictonBlue} />}
+                />
+                <AppFormInput
+                  name="password"
+                  type="password"
+                  icon={<FaLock color={theme.colors.pictonBlue} />}
+                />
+              </VStack>
+              <Button mt={8} variant="green" type="submit">
+                Log In
+              </Button>
+            </Box>
+          </Form>
+        </Formik>
+      </Box>
     </Box>
   );
 };
