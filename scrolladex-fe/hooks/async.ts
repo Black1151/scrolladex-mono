@@ -21,6 +21,8 @@ export const useAsyncAction = (options: UseAsyncActionOptions): ExecuteAction =>
   const showSuccessToast = useSuccessToast();
 
   const executeAction: ExecuteAction = async (arg?: any) => {
+    // console.log(action)
+
     try {
       const resultAction = await dispatch(action(arg));
       const result = unwrapResult(resultAction);
@@ -29,6 +31,9 @@ export const useAsyncAction = (options: UseAsyncActionOptions): ExecuteAction =>
       }
       return result;
     } catch (error: any) {
+      // console.log('Error occurred when dispatching action:', action.type, action); // log the action in case of error
+      // console.log(error);
+
       if (error.payload) {
         showErrorToast(`${errorMessage}: ${error.payload}`);
       } else {
