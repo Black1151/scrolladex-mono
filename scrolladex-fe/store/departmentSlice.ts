@@ -102,14 +102,49 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-      handleAsyncReducers(builder, fetchDepartments, 'departmentEntities');
-      handleAsyncReducers(builder, fetchDepartment, 'departmentDetail');
-      handleAsyncReducers(builder, createDepartment, 'createDepartment');
-      handleAsyncReducers(builder, updateDepartment, 'updateDepartment');
-      handleAsyncReducers(builder, deleteDepartment, 'deleteDepartment');
-      handleAsyncReducers(builder, fetchDepartmentDropdownList, 'departmentDropdownList');
-      handleAsyncReducers(builder, fetchDepartmentWithEmployees, 'departmentWithEmployees');
+      handleAsyncReducers({
+        builder,
+        asyncThunk: fetchDepartments,
+        stateKey: 'departmentEntities'
+      });
+      
+      handleAsyncReducers({
+        builder,
+        asyncThunk: fetchDepartment,
+        stateKey: 'departmentDetail'
+      });
+      
+      handleAsyncReducers({
+        builder,
+        asyncThunk: createDepartment,
+        stateKey: 'createDepartment'
+      });
+      
+      handleAsyncReducers({
+        builder,
+        asyncThunk: updateDepartment,
+        stateKey: 'updateDepartment'
+      });
+      
+      handleAsyncReducers({
+        builder,
+        asyncThunk: deleteDepartment,
+        stateKey: 'deleteDepartment'
+      });
+      
+      handleAsyncReducers({
+        builder,
+        asyncThunk: fetchDepartmentDropdownList,
+        stateKey: 'departmentDropdownList'
+      });
+      
+      handleAsyncReducers({
+        builder,
+        asyncThunk: fetchDepartmentWithEmployees,
+        stateKey: 'departmentWithEmployees'
+      });
     },
   });
+  
 
 export default departmentsSlice.reducer;

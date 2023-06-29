@@ -52,10 +52,32 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    handleAsyncReducers(builder, loginUser, 'login');
-    handleAsyncReducers(builder, logoutUser, 'logout');
-    builder.addCase(checkSession.fulfilled, (state, action) => {
-      state.isAuthenticated = action.payload.isAuthenticated; 
+    
+    handleAsyncReducers({
+      builder,
+      asyncThunk: loginUser,
+      stateKey: 'login',
+      onFulfilled: (state) => {
+        state.isAuthenticated = true;
+      }
+    });
+
+    handleAsyncReducers({
+      builder,
+      asyncThunk: logoutUser,
+      stateKey: 'logout',
+      onFulfilled: (state) => {
+        state.isAuthenticated = false;
+      }
+    });
+
+    handleAsyncReducers({
+      builder,
+      asyncThunk: checkSession,
+      stateKey: 'checkSession',
+      onFulfilled: (state, action) => {
+        state.isAuthenticated = action.payload.isAuthenticated; 
+      }
     });
   },
 });

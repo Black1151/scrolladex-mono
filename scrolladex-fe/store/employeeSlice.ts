@@ -72,13 +72,38 @@ const employeesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    handleAsyncReducers(builder, fetchEmployeeOverview, 'employeeEntities');
-    handleAsyncReducers(builder, fetchEmployee, 'employeeDetail');
-    handleAsyncReducers(builder, createEmployee, 'createEmployee');
-    handleAsyncReducers(builder, updateEmployee, 'updateEmployee');
-    handleAsyncReducers(builder, deleteEmployee, 'deleteEmployee');
+    handleAsyncReducers({
+      builder,
+      asyncThunk: fetchEmployeeOverview,
+      stateKey: 'employeeEntities'
+    });
+    
+    handleAsyncReducers({
+      builder,
+      asyncThunk: fetchEmployee,
+      stateKey: 'employeeDetail'
+    });
+    
+    handleAsyncReducers({
+      builder,
+      asyncThunk: createEmployee,
+      stateKey: 'createEmployee'
+    });
+    
+    handleAsyncReducers({
+      builder,
+      asyncThunk: updateEmployee,
+      stateKey: 'updateEmployee'
+    });
+    
+    handleAsyncReducers({
+      builder,
+      asyncThunk: deleteEmployee,
+      stateKey: 'deleteEmployee'
+    });
   },
 });
+
 
 
 export default employeesSlice.reducer;
