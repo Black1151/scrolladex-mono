@@ -1,56 +1,31 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  VStack,
-  useToast,
-  Text,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { loginUserAPI } from "@/api/authAPI";
+import React from "react";
+import { Box, Button, VStack, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useAuth } from "@/providers/AuthProvider";
+import AppFormInput from "@/components/forms/AppFormInput";
+import { Formik, Form, FormikHelpers } from "formik";
+import * as Yup from "yup";
+import { useSubmitHandler } from "@/hooks/submitHandler";
+import { loginUser } from "@/store/authSlice";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const toast = useToast();
   const router = useRouter();
-  const { setAuthenticated } = useAuth();
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const submitForm = useSubmitHandler({
+    apiFunction: loginUser,
+    successMessage: "Logged in successfully",
+    errorMessage: "An error occurred while logging in.",
+    showSuccess: true,
+    resetForm: true,
+  });
 
-    try {
-      await loginUserAPI({ username, password });
-      setAuthenticated(true);
+  const handleFormSubmit = async (
+    values: { username: string; password: string },
+    actions: FormikHelpers<{ username: string; password: string }>
+  ) => {
+    const result = await submitForm(values, actions);
+
+    if (result && result.status === 200) {
       router.push("/");
-      toast({
-        title: "Logged in successfully",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        toast({
-          title: "Login failed",
-          description: error.message,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "Login failed",
-          description: "An unknown error occurred.",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
     }
   };
 
@@ -59,29 +34,27 @@ const LoginPage = () => {
       <Text pb={8} fontSize="3xl">
         Please sign in
       </Text>
-      <form onSubmit={handleSubmit}>
-        <VStack spacing="6">
-          <FormControl id="username">
-            <FormLabel>Username</FormLabel>
-            <Input
-              type="text"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-            />
-          </FormControl>
-          <FormControl id="password">
-            <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </FormControl>
-          <Button variant="green" type="submit">
-            Log In
-          </Button>
-        </VStack>
-      </form>
+      <Formik
+        initialValues={{
+          username: "",
+          password: "",
+        }}
+        validationSchema={Yup.object({
+          username: Yup.string().required("Required"),
+          password: Yup.string().required("Required"),
+        })}
+        onSubmit={handleFormSubmit}
+      >
+        <Form>
+          <VStack spacing="6">
+            <AppFormInput label="Username" name="username" type="text" />
+            <AppFormInput label="Password" name="password" type="password" />
+            <Button variant="green" type="submit">
+              Log In
+            </Button>
+          </VStack>
+        </Form>
+      </Formik>
     </Box>
   );
 };

@@ -11,6 +11,12 @@ interface AuthenticatedResponse {
   authenticated: boolean;
 }
 
+type ApiResponse<T> = {
+  status: number;
+  data: T;
+};
+
+
 export const registerUserAPI = async (data: User): Promise<number | null> => {
   try {
     const response: AxiosResponse<User> = await apiClient.post('/register', data);
@@ -21,10 +27,13 @@ export const registerUserAPI = async (data: User): Promise<number | null> => {
   }
 };
 
-export const loginUserAPI = async (data: User): Promise<User | null> => {
+export const loginUserAPI = async (data: User): Promise<ApiResponse<User>> => {
   try {
     const response: AxiosResponse<User> = await apiClient.post('/login', data);
-    return response.data;
+    return {
+      status: response.status,
+      data: response.data
+    };
   } catch (error) {
     console.error('Error logging in user', error);
     throw error;

@@ -15,6 +15,7 @@ import { RootState } from "@/store/store";
 import { fetchEmployeeOverview, fetchEmployee } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
 import useDepartmentColor from "@/hooks/useDepartmentColor";
+import withAuth from "@/components/auth/withAuth";
 
 const MotionBox = motion(Box);
 
@@ -66,7 +67,6 @@ const Index = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      mt={61}
     >
       <SimpleGrid
         gridTemplateColumns={[
@@ -175,4 +175,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

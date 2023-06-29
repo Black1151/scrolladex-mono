@@ -11,8 +11,7 @@ interface UseSubmitHandlerOptions<Values> {
     onClose?: () => void;
   }
 
-type SubmitHandlerResult = boolean;
-
+type SubmitHandlerResult = any;
 
 export const useSubmitHandler = <Values = any>(
     options: UseSubmitHandlerOptions<Values>
@@ -29,17 +28,17 @@ export const useSubmitHandler = <Values = any>(
     return async (
       values: Values,
       actions: FormikHelpers<Values>
-    ): Promise<SubmitHandlerResult> => {
+    ) => {
       try {
-        await executeAction(values);
+        const response = await executeAction(values);
         actions.setSubmitting(false);
         if (resetForm) actions.resetForm();
         if (onClose) onClose();
-        return true;
+        return response;
       } catch (error) {
         console.error(error);
         actions.setSubmitting(false);
-        return false ;
+        return null;
       }
     };
   };

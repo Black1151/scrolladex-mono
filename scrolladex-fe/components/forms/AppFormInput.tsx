@@ -16,7 +16,7 @@ interface Option {
 interface AppFormInputProps {
   label: string;
   name: string;
-  type: "text" | "email" | "select" | "number";
+  type: "text" | "email" | "select" | "number" | "password";
   options?: Option[];
 }
 
@@ -44,7 +44,7 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
     case "text":
     case "email":
     case "number":
-    default:
+    case "password":
       inputElement = <Input {...field} id={name} type={type} />;
       break;
   }

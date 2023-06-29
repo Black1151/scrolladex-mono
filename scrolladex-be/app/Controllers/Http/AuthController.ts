@@ -13,14 +13,13 @@ export default class AuthController {
   }
   
   public async login({ request, auth, response }: HttpContextContract) {
-    const user = request.only(['username', 'password'])
-    
-    try {
-      await auth.use('web').attempt(user.username, user.password)
-      response.send({ message: 'Logged in successfully' })
-    } catch {
-      response.unauthorized('Invalid credentials')
-    }
+  const user = request.only(['username', 'password']);
+  try {
+    await auth.use('web').attempt(user.username, user.password);
+    response.status(200).send({ message: 'Logged in successfully' });
+  } catch {
+    response.status(401).send({ message: 'Invalid credentials' }); 
+  }
   }
   
 
@@ -40,9 +39,9 @@ export default class AuthController {
 
   public async checkSession({ auth, response }: HttpContextContract) {
     if (auth.isLoggedIn) {
-      return { authenticated: true }
+      return { isAuthenticated: true }
     } else {
-      return response.unauthorized({ authenticated: false})
+      return response.unauthorized({ isAuthenticated: false})
     }
 }
 
