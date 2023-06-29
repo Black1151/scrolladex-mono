@@ -10,7 +10,6 @@ const Layout = ({ Component, pageProps, router }: AppProps) => {
   );
   return (
     <>
-      {console.log("Layout.tsx: loggedIn: ", loggedIn)}
       {loggedIn && <Navbar />}
       <Component {...pageProps} router={router} />
     </>
