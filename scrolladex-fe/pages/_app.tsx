@@ -1,19 +1,16 @@
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../theme/theme";
-import Navbar from "@/components/layout/Navbar";
-import { AuthProvider } from "@/providers/AuthProvider";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 
-export default function App({ Component, pageProps }: AppProps) {
+import Layout from "@/components/layout/Layout";
+
+export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <Provider store={store}>
       <ChakraProvider theme={theme}>
-        <AuthProvider>
-          <Navbar />
-          <Component {...pageProps} />
-        </AuthProvider>
+        <Layout Component={Component} pageProps={pageProps} router={router} />
       </ChakraProvider>
     </Provider>
   );
