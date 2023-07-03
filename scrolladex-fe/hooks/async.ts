@@ -10,19 +10,17 @@ interface ExecuteAction {
 interface UseAsyncActionOptions {
   action: AsyncThunk<any, any, any>;
   successMessage?: string;
-  errorMessage?: string;
+  errorMessage?: string | null;
   showSuccess?: boolean;
 }
 
 export const useAsyncAction = (options: UseAsyncActionOptions): ExecuteAction => {
-  const { action, successMessage = "Action executed successfully", errorMessage = "Failed to execute action", showSuccess = false } = options;
+  const { action, successMessage = "Action executed successfully", errorMessage = null, showSuccess = false } = options;
   const dispatch: AppDispatch = useDispatch();
   const showErrorToast = useErrorToast();
   const showSuccessToast = useSuccessToast();
 
   const executeAction: ExecuteAction = async (arg?: any) => {
-    // console.log(action)
-
     try {
       const resultAction = await dispatch(action(arg));
       const result = unwrapResult(resultAction);
@@ -31,13 +29,12 @@ export const useAsyncAction = (options: UseAsyncActionOptions): ExecuteAction =>
       }
       return result;
     } catch (error: any) {
-      // console.log('Error occurred when dispatching action:', action.type, action); // log the action in case of error
-      // console.log(error);
-
-      if (error.payload) {
-        showErrorToast(`${errorMessage}: ${error.payload}`);
-      } else {
-        showErrorToast(errorMessage);
+      if (errorMessage) {
+        if (error.payload) {
+          showErrorToast(`${errorMessage}: ${error.payload}`);
+        } else {
+          showErrorToast(errorMessage);
+        }
       }
     }
   };
