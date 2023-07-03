@@ -5,12 +5,15 @@ import { Provider } from "react-redux";
 import { store } from "@/store/store";
 
 import Layout from "@/components/layout/Layout";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <Provider store={store}>
       <ChakraProvider theme={theme}>
-        <Layout Component={Component} pageProps={pageProps} router={router} />
+        <AuthProvider>
+          <Layout Component={Component} pageProps={pageProps} router={router} />
+        </AuthProvider>
       </ChakraProvider>
     </Provider>
   );

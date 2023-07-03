@@ -58,7 +58,7 @@ const authSlice = createSlice({
       asyncThunk: loginUser,
       stateKey: 'login',
       onFulfilled: (state) => {
-        state.isAuthenticated = true;
+        state.isAuthenticated.data = true;
       }
     });
 
@@ -67,7 +67,7 @@ const authSlice = createSlice({
       asyncThunk: logoutUser,
       stateKey: 'logout',
       onFulfilled: (state) => {
-        state.isAuthenticated = false;
+        state.isAuthenticated.data = false;
       }
     });
 
@@ -76,7 +76,7 @@ const authSlice = createSlice({
       asyncThunk: checkSession,
       stateKey: 'isAuthenticated',
       onFulfilled: (state, action) => {
-        state.isAuthenticated = action.payload.isAuthenticated; 
+        state.isAuthenticated.data = action.payload.isAuthenticated;
       }
     });
   },

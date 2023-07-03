@@ -1,55 +1,46 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+// AuthProvider.js
+import React, { createContext, useContext, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { checkSessionAPI } from "@/api/authAPI";
+import { checkSession } from "@/store/authSlice";
+import { RootState } from "@/store/store";
+import { AppDispatch } from "@/store/store";
 
-interface AuthContextData {
-  authenticated: boolean;
-  isLoading: boolean;
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+interface AuthContextType {
+  isAuthenticated: boolean | null;
 }
 
-export const AuthContext = createContext<AuthContextData>({
-  authenticated: false,
-  isLoading: true,
-  setAuthenticated: () => {},
-});
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-interface AuthProviderProps {
+interface Props {
   children: React.ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+export const AuthProvider: React.FC<Props> = ({ children }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated.data
+  );
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const authResponse = await checkSessionAPI();
-        setAuthenticated(authResponse.authenticated);
-        if (!authResponse.authenticated) {
-          router.replace("/login");
-        }
-      } catch (error) {
-        console.error("Session check failed", error);
-        router.replace("/login");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    dispatch(checkSession());
+  }, [dispatch]);
 
-    checkSession();
-  }, []);
+  useEffect(() => {
+    console.log(isAuthenticated);
+
+    if (isAuthenticated === false && router.pathname !== "/login") {
+      router.replace("/login");
+    }
+  }, [isAuthenticated, router]);
 
   return (
-    <AuthContext.Provider
-      value={{ authenticated, isLoading, setAuthenticated }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

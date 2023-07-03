@@ -15,7 +15,8 @@ import { RootState } from "@/store/store";
 import { fetchEmployeeOverview, fetchEmployee } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
 import useDepartmentColor from "@/hooks/useDepartmentColor";
-import withAuth from "@/components/auth/withAuth";
+import { GetServerSidePropsContext } from "next";
+import { checkUserAuthentication } from "@/utils/checkUserAuthentication";
 
 const MotionBox = motion(Box);
 
@@ -175,4 +176,8 @@ const Index = () => {
   );
 };
 
-export default withAuth(Index);
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return checkUserAuthentication(context);
+}
+
+export default Index;
