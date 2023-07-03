@@ -66,7 +66,6 @@ const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_ADDRESS + '/api',
 });
 
-
 apiClient.interceptors.request.use(handleFormData);
 
 apiClient.interceptors.response.use(
