@@ -84,7 +84,7 @@ const ModalWrapper: React.FC<Props> = ({
               </Button>
             </Flex>
           </Flex>
-          <ModalBody pt={8} pb={4} bg={bg}>
+          <ModalBody py={4} bg={bg} borderTopRadius="lg">
             {children}
           </ModalBody>
         </ModalContent>
