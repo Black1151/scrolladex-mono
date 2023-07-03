@@ -8,7 +8,7 @@ interface User {
 }
 
 interface AuthenticatedResponse {
-  authenticated: boolean;
+  isAuthenticated: boolean;
 }
 
 type ApiResponse<T> = {
