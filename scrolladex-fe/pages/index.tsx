@@ -68,6 +68,7 @@ const Index = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
+      pt={78}
     >
       <SimpleGrid
         gridTemplateColumns={[
@@ -116,7 +117,7 @@ const Index = () => {
                     height={16}
                     background={`linear-gradient(to right, #3498db, white)`}
                     zIndex={-1}
-                  ></Box>
+                  />
                   <Box
                     position="absolute"
                     top={16}
@@ -127,7 +128,7 @@ const Index = () => {
                       employee.departmentId
                     )}, white)`}
                     zIndex={-1}
-                  ></Box>
+                  />
                   <Box whiteSpace="nowrap" zIndex={1}>
                     <Box width="100%">
                       <Heading fontSize="xl" pb={6}>
