@@ -27,6 +27,7 @@ import { deleteEmployee, fetchEmployeeOverview } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
 import UpdateEmployeeModal from "./UpdateEmployeeModal";
 import ModalWrapper from "./ModalWrapper";
+import useDepartmentColor from "@/hooks/useDepartmentColor";
 
 interface Props {
   employee: Employee;
@@ -42,6 +43,8 @@ const EmployeeDetailsModal: React.FC<Props> = ({
 }) => {
   const confirmationDisclosure = useDisclosure();
   const editEmployeeDisclosure = useDisclosure();
+
+  const { getDepartmentColor } = useDepartmentColor();
 
   const fetchEmployees = useAsyncAction({
     action: fetchEmployeeOverview,
@@ -72,7 +75,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   ].map(({ icon, key }) => (
     <Flex gap={2} alignItems="center" key={key}>
       <Box color="pictonBlue">{icon}</Box>
-      <Text fontSize={["md", "md", "xl"]} whiteSpace="nowrap">
+      <Text pl={6} fontSize={["md", "md", "xl"]} whiteSpace="nowrap">
         {employee?.[key as keyof Employee]}
       </Text>
     </Flex>
@@ -95,40 +98,66 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   ];
 
   return (
-    <>
+    <Box position="relative" zIndex={0}>
       <ModalWrapper
         title="Employee Details"
         isOpen={isOpen}
         onClose={onClose}
         extraButtons={actionButtons}
         maxWidth={[350, null, 700]}
+        bg="transparent"
       >
-        <SimpleGrid columns={[1, null, 2]} spacing={10}>
-          <VStack
-            fontSize="xl"
-            align={["center", null, "start", "start"]}
-            spacing={6}
-          >
-            <Text whiteSpace="nowrap" fontSize={"4xl"}>
+        <SimpleGrid
+          columns={[1, null, 2]}
+          spacing={10}
+          borderTopRadius="lg"
+          mb={3}
+        >
+          <VStack fontSize="xl" align={["center", null, "start", "start"]}>
+            <Box>
+              <Box
+                position="absolute"
+                top={10}
+                left={0}
+                right={0}
+                height={[160, null, 130]}
+                background={`linear-gradient(to right, #3498db, white)`}
+                zIndex={-1}
+              />
+              <Box
+                position="absolute"
+                top={[200, null, 170]}
+                left={0}
+                right={0}
+                height={1}
+                background={`linear-gradient(to right, ${getDepartmentColor(
+                  employee.departmentId
+                )}, white)`}
+                zIndex={-1}
+              />
+            </Box>
+            <Text whiteSpace="nowrap" fontSize={"4xl"} pb={10}>
               {employee?.firstName} {employee?.lastName}
             </Text>
             <Flex flexDirection="column" gap={4}>
               {employeeDetails}
             </Flex>
           </VStack>
-          <Center>
-            <Image
-              src={
-                process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
-                  "/public" +
-                  employee?.profilePictureUrl || ""
-              }
-              alt={employee?.firstName + " " + employee?.lastName}
-              borderRadius="100%"
-              objectFit="cover"
-              maxW={300}
-              maxH={300}
-            />
+          <Center background="transparent">
+            <Box borderRadius="100%" borderColor="white" borderWidth="4px">
+              <Image
+                src={
+                  process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
+                    "/public" +
+                    employee?.profilePictureUrl || ""
+                }
+                alt={employee?.firstName + " " + employee?.lastName}
+                borderRadius="100%"
+                objectFit="cover"
+                maxW={300}
+                maxH={300}
+              />
+            </Box>
           </Center>
         </SimpleGrid>
       </ModalWrapper>
@@ -145,7 +174,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
         onOpen={editEmployeeDisclosure.onOpen}
         onClose={editEmployeeDisclosure.onClose}
       />
-    </>
+    </Box>
   );
 };
 
