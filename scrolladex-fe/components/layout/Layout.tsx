@@ -6,8 +6,11 @@ import { AppProps } from "next/app";
 
 const Layout = ({ Component, pageProps, router }: AppProps) => {
   const loggedIn = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
+    (state: RootState) => state.auth.isAuthenticated.data
   );
+
+  console.log("Layout.tsx: loggedIn: ", loggedIn);
+
   return (
     <>
       {loggedIn && <Navbar />}
