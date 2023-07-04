@@ -20,6 +20,7 @@ interface AppFormInputProps {
   type: "text" | "email" | "select" | "number" | "password";
   options?: Option[];
   icon?: JSX.Element;
+  placeholder?: string;
 }
 
 const AppFormInput: React.FC<AppFormInputProps> = ({
@@ -28,6 +29,7 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
   type,
   options,
   icon,
+  placeholder,
 }) => {
   const [field, meta] = useField(name);
 
@@ -35,7 +37,11 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
   switch (type) {
     case "select":
       inputElement = (
-        <Select {...field} id={name} placeholder="Select option">
+        <Select
+          {...field}
+          id={name}
+          placeholder={placeholder || "Select option"}
+        >
           {options?.map((option, index) => (
             <option key={index} value={option.value}>
               {option.label}
@@ -51,7 +57,7 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
       inputElement = (
         <InputGroup>
           {icon && <InputLeftElement pointerEvents="none" children={icon} />}
-          <Input {...field} id={name} type={type} />
+          <Input {...field} id={name} type={type} placeholder={placeholder} />
         </InputGroup>
       );
       break;
