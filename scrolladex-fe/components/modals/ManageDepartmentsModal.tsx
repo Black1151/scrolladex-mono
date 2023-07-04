@@ -20,6 +20,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import AddDepartmentModal from "./AddDepartmentModal";
 import { fetchEmployeeOverview } from "@/store/employeeSlice";
 import DepartmentDetailsModal from "./DepartmentDetailsModal";
+import useDepartmentColor from "@/hooks/useDepartmentColor";
 
 interface Props {
   isOpen: boolean;
@@ -27,6 +28,9 @@ interface Props {
 }
 
 const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
+  const theme = useTheme();
+  const { getDepartmentColor } = useDepartmentColor();
+
   const selectedDepartment = useSelector(
     (state: RootState) => state.department.departmentDetail.data
   );
@@ -122,8 +126,6 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   };
 
-  const theme = useTheme();
-
   const extraButtons = [
     {
       icon: <FaPlusCircle size={25} />,
@@ -136,7 +138,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   return (
     <ModalWrapper
-      fitContent={true}
+      maxWidth={500}
       title="Manage Departments"
       isOpen={isOpen}
       onClose={onClose}
@@ -146,37 +148,47 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
       <VStack>
         {departments !== null &&
           departments.map((department) => (
-            <HStack
-              borderRadius={10}
-              bg={"pictonBlue"}
-              key={department.id}
-              spacing={4}
-              p={4}
-              color="white"
-              mx={4}
-            >
-              <Box fontSize="xl" borderRadius={20} bg={"pictonBlue"} w={60}>
-                {department.departmentName}
-              </Box>
-              <IconButton
-                variant="green"
-                icon={<FontAwesomeIcon icon={faEye} />}
-                aria-label="View"
-                onClick={() => handleViewDepartmentModalOpen(department.id)}
+            <Box>
+              <HStack
+                bg="transparent"
+                key={department.id}
+                spacing={4}
+                py={3}
+                px={8}
+                color="white"
+                background="#3498db"
+                zIndex={0}
+              >
+                <Box fontSize="xl" borderRadius={20} w={60}>
+                  {department.departmentName}
+                </Box>
+                <IconButton
+                  variant="green"
+                  icon={<FontAwesomeIcon icon={faEye} />}
+                  aria-label="View"
+                  onClick={() => handleViewDepartmentModalOpen(department.id)}
+                />
+                <IconButton
+                  variant="orange"
+                  icon={<FontAwesomeIcon icon={faEdit} />}
+                  aria-label="Edit"
+                  onClick={() => handleEditDepartmentModalOpen(department.id)}
+                />
+                <IconButton
+                  variant="red"
+                  icon={<FontAwesomeIcon icon={faTrashAlt} />}
+                  aria-label="Delete"
+                  onClick={() =>
+                    handleDeleteConfirmationModalOpen(department.id)
+                  }
+                />
+              </HStack>
+              <Box
+                top={0}
+                height={1}
+                background={getDepartmentColor(String(department.id))}
               />
-              <IconButton
-                variant="orange"
-                icon={<FontAwesomeIcon icon={faEdit} />}
-                aria-label="Edit"
-                onClick={() => handleEditDepartmentModalOpen(department.id)}
-              />
-              <IconButton
-                variant="red"
-                icon={<FontAwesomeIcon icon={faTrashAlt} />}
-                aria-label="Delete"
-                onClick={() => handleDeleteConfirmationModalOpen(department.id)}
-              />
-            </HStack>
+            </Box>
           ))}
       </VStack>
       {selectedDepartment && (
