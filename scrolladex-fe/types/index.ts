@@ -10,6 +10,12 @@ export interface FormModalProps {
     onClose: () => void;
 }
 
+export interface SearchCriteria {
+  searchField?: string;
+  searchValue?: string;
+}
+
+
 export interface Department {
   id?: number;
   departmentName: string;

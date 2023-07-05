@@ -69,6 +69,7 @@ const Index = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
       pt={78}
+      height="100vh"
     >
       <SimpleGrid
         gridTemplateColumns={[
@@ -86,7 +87,7 @@ const Index = () => {
         {employees &&
           employees.map((employee, index) => (
             <MotionBox
-              key={employee.id + index}
+              key={employee.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: loaded[index] ? 1 : 0 }}
               transition={{ duration: Math.random() * 1 }}
@@ -170,7 +171,6 @@ const Index = () => {
           isOpen={isOpen}
           onClose={onClose}
           employee={employee}
-          fetchEmployees={fetchEmployeeOverview}
         />
       )}
     </MotionBox>

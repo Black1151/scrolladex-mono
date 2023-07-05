@@ -2,9 +2,11 @@ import apiClient from './apiClient';
 import { Employee, EmployeeOverview, EmployeeCreateUpdate } from '../types';
 
 
-export const getEmployeesOverviewAPI = async (): Promise<EmployeeOverview[]> => {
+export const getEmployeesOverviewAPI = async (searchCriteria = {}): Promise<EmployeeOverview[]> => {
   try {
-    const response = await apiClient.get<EmployeeOverview[]>('/employees/overview');
+    const response = await apiClient.get<EmployeeOverview[]>('/employees/overview', {
+      params: searchCriteria
+    });
     return response.data;
   } catch (error) {
     console.error('Error getting employees overview', error);

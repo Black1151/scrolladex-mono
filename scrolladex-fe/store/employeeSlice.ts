@@ -6,7 +6,7 @@ import {
   updateEmployeeAPI, 
   deleteEmployeeAPI 
 } from "@/api/employeeApi";
-import { EmployeeOverview, EmployeeCreateUpdate, Employee, RequestState } from "@/types";
+import { EmployeeOverview, EmployeeCreateUpdate, Employee, RequestState, SearchCriteria } from "@/types";
 import handleAsyncReducers from "@/utils/handleAsyncReducers";
 
 const initialRequestState = <T>(): RequestState<T> => ({
@@ -44,7 +44,9 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
 
 export const fetchEmployeeOverview = createAsyncThunk(
   "employees/fetchEmployees",
-  (_, thunkAPI) => handleThunkAPI(getEmployeesOverviewAPI(), thunkAPI)
+  (searchCriteria : SearchCriteria, thunkAPI) => {
+    return handleThunkAPI(getEmployeesOverviewAPI(searchCriteria), thunkAPI);
+  }
 );
 
 export const fetchEmployee = createAsyncThunk(

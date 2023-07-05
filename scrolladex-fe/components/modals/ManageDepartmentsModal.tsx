@@ -148,10 +148,9 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
       <VStack>
         {departments !== null &&
           departments.map((department) => (
-            <Box>
+            <Box key={department.id}>
               <HStack
                 bg="transparent"
-                key={department.id}
                 spacing={4}
                 py={3}
                 px={8}

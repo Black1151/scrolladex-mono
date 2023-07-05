@@ -48,12 +48,13 @@ const containsFileOrBlob = (data: any): boolean => {
 const handleFormData = async (request: any) => {
   try {
     if (request.data) {
-      const data = convertKeys(request.data, snakeCase);
-      if (containsFileOrBlob(data)) {
-        request.data = convertToFormData(data);
-      } else {
-        request.data = data;
+      request.data = convertKeys(request.data, snakeCase);
+      if (containsFileOrBlob(request.data)) {
+        request.data = convertToFormData(request.data);
       }
+    }
+    if (request.params) {
+      request.params = convertKeys(request.params, snakeCase);
     }
     return request;
   } catch (error) {
@@ -61,6 +62,7 @@ const handleFormData = async (request: any) => {
     throw error; 
   }
 }
+
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_ADDRESS + '/api',

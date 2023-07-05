@@ -16,10 +16,8 @@ import {
   HStack,
   Button,
   Select,
-  Slide,
-  Grid,
 } from "@chakra-ui/react";
-import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import AddEmployeeModal from "../modals/AddEmployeeModal";
 import { useRouter } from "next/router";
 import ManageDepartmentsModal from "../modals/ManageDepartmentsModal";
@@ -33,17 +31,29 @@ import {
 import ModalIconButton from "../modals/ModalIconButton";
 import { useAsyncAction } from "@/hooks/async";
 import { logoutUser } from "@/store/authSlice";
-import { useTheme } from "@chakra-ui/react";
-import AppFormInput from "../forms/AppFormInput";
-import { Formik, Form } from "formik";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import SearchPanel from "../other/SearchPanel";
 
 const Navbar: React.FC = () => {
   const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
-  const toggleSearchPanel = () => setIsSearchPanelOpen(!isSearchPanelOpen);
+  const [justClosed, setJustClosed] = useState(false);
 
-  const theme = useTheme();
+  const onClose = () => {
+    setJustClosed(true);
+    setIsSearchPanelOpen(false);
+    setTimeout(() => {
+      setJustClosed(false);
+    }, 100);
+  };
+
+  const toggleSearchPanel = () => {
+    if (justClosed) {
+      setJustClosed(false);
+      return;
+    }
+    setIsSearchPanelOpen(!isSearchPanelOpen);
+  };
 
   const router = useRouter();
 
@@ -103,10 +113,10 @@ const Navbar: React.FC = () => {
             bg="white"
             color="black"
           >
-            <option value="all">All departments</option>
+            <option value="">All departments</option>
             {departmentList !== null &&
               departmentList.map((department) => (
-                <option value={department.id}>
+                <option key={department.departmentName} value={department.id}>
                   {department.departmentName}
                 </option>
               ))}
@@ -169,64 +179,7 @@ const Navbar: React.FC = () => {
           </Drawer>
         </Box>
       </Flex>
-      <Box
-        position="fixed"
-        right="0"
-        zIndex="999"
-        width={["100%", null, null, "50%"]}
-      >
-        <Slide
-          direction="top"
-          in={isSearchPanelOpen}
-          style={{
-            position: "relative",
-            top: "60px",
-          }}
-        >
-          <Box bg="lightPBlue" p={4} color="black" shadow="md">
-            <Formik
-              initialValues={{
-                searchField: "",
-                searchValue: "",
-              }}
-              onSubmit={(values) => {
-                // Handle form submission
-                console.log(values);
-              }}
-            >
-              {(formik) => (
-                <Form onSubmit={formik.handleSubmit}>
-                  <Grid
-                    templateColumns={{ base: "1fr", md: "1fr 2fr auto" }}
-                    gap={4}
-                    alignItems="center"
-                  >
-                    <AppFormInput
-                      placeholder="Search field"
-                      name="searchField"
-                      type="select"
-                      options={[
-                        { label: "First name", value: "firstName" },
-                        { label: "Last name", value: "lastName" },
-                        { label: "Job title", value: "jobTitle" },
-                      ]}
-                    />
-                    <AppFormInput
-                      placeholder="Search..."
-                      icon={<SearchIcon color="gray.500" />}
-                      name="searchValue"
-                      type="text"
-                    />
-                    <Button mt={2} type="submit" variant="green">
-                      Search
-                    </Button>
-                  </Grid>
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </Slide>
-      </Box>
+      <SearchPanel isOpen={isSearchPanelOpen} onClose={onClose} />
     </>
   );
 };

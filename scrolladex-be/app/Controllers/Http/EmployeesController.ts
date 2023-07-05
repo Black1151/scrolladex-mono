@@ -33,21 +33,29 @@ export default class EmployeesController {
     return response.json(employeesWithProfilePictures);
   }
 
-  public async overview ({ response }: HttpContextContract) {
-    const employees = await Employee.query()
-      .select('id', 'title', 'first_name', 'last_name', 'job_title', 'department_id', "profile_picture_url")
-      .preload('department', query => query.select('id', 'department_name'));
+  public async overview({ request, response }: HttpContextContract) {
+    const searchField = request.input('search_field');
+    const searchValue = request.input('search_value');
+    let query = Employee.query()
+        .select('id', 'title', 'first_name', 'last_name', 'job_title', 'department_id', "profile_picture_url")
+        .preload('department', (query) => query.select('id', 'department_name'))
+        .orderBy('last_name', 'asc');
+  
+    if (searchField && searchValue) {
+        query = query.where(searchField, 'like', `%${searchValue}%`);
+    }
+    const employees = await query;
     const employeesWithDepartment = employees.map((employee) => {
-      return {
-        id: employee.id,
-        title: employee.title,
-        first_name: employee.first_name,
-        last_name: employee.last_name,
-        job_title: employee.job_title,
-        department_id: employee.department_id,
-        profile_picture_url: employee.profile_picture_url,
-        department_name: employee.department.department_name,
-      };
+        return {
+            id: employee.id,
+            title: employee.title,
+            first_name: employee.first_name,
+            last_name: employee.last_name,
+            job_title: employee.job_title,
+            department_id: employee.department_id,
+            profile_picture_url: employee.profile_picture_url,
+            department_name: employee.department.department_name,
+        };
     });
     return response.json(employeesWithDepartment);
   }

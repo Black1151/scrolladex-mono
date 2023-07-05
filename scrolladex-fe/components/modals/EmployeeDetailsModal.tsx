@@ -33,7 +33,6 @@ interface Props {
   employee: Employee;
   isOpen: boolean;
   onClose: () => void;
-  fetchEmployees: () => void;
 }
 
 const EmployeeDetailsModal: React.FC<Props> = ({
