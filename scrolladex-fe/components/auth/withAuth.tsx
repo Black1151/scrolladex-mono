@@ -5,7 +5,7 @@ import { useAsyncAction } from "@/hooks/async";
 import { checkSession } from "@/store/authSlice";
 
 const withAuth = (WrappedComponent: React.ComponentType<any>) => {
-  const WithAuthComponent = (props: any) => {
+  return (props: any) => {
     const router = useRouter();
     const isAuthenticated = useSelector(
       (state: any) => state.auth.isAuthenticated
@@ -23,7 +23,7 @@ const withAuth = (WrappedComponent: React.ComponentType<any>) => {
         await executeCheckSession();
         setIsLoading(false);
       })();
-    }, [executeCheckSession]);
+    }, []);
 
     useEffect(() => {
       if (!isLoading && isAuthenticated === false) {
@@ -33,16 +33,6 @@ const withAuth = (WrappedComponent: React.ComponentType<any>) => {
 
     return isLoading ? null : <WrappedComponent {...props} />;
   };
-
-  WithAuthComponent.displayName = `WithAuth(${getDisplayName(
-    WrappedComponent
-  )})`;
-
-  return WithAuthComponent;
 };
-
-function getDisplayName(WrappedComponent: React.ComponentType<any>) {
-  return WrappedComponent.displayName || WrappedComponent.name || "Component";
-}
 
 export default withAuth;
