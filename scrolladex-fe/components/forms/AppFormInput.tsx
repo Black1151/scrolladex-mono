@@ -56,7 +56,9 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
     case "password":
       inputElement = (
         <InputGroup>
-          {icon && <InputLeftElement pointerEvents="none" children={icon} />}
+          {icon && (
+            <InputLeftElement pointerEvents="none">{icon}</InputLeftElement>
+          )}
           <Input {...field} id={name} type={type} placeholder={placeholder} />
         </InputGroup>
       );

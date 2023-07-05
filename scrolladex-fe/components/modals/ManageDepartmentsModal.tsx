@@ -105,7 +105,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     getDepartments();
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEditDepartmentModalOpen = async (departmentId: number) => {
     await getDepartmentDetails(departmentId);

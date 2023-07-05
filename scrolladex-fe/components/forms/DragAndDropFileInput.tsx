@@ -48,17 +48,6 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
     []
   );
 
-  const dropHandler = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setDrag(false);
-
-    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-      handleFile(event.dataTransfer.files[0]);
-      event.dataTransfer.clearData();
-    }
-  }, []);
-
   const handleFile = useCallback(
     (file: File) => {
       if (!file.type.startsWith("image/")) {
@@ -74,6 +63,20 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
       reader.readAsDataURL(file);
     },
     [onFile]
+  );
+
+  const dropHandler = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setDrag(false);
+
+      if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+        handleFile(event.dataTransfer.files[0]);
+        event.dataTransfer.clearData();
+      }
+    },
+    [] //eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const fileChangeHandler = useCallback(

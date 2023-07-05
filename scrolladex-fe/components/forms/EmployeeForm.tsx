@@ -66,7 +66,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
     } else {
       setShowUpload(true);
     }
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     fetchDropdownData();

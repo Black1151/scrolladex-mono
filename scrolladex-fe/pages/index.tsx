@@ -43,7 +43,7 @@ const Index = () => {
 
   useEffect(() => {
     fetchEmployees();
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   const handleImageLoad = (index: number) => {
     setLoaded((prev) => {

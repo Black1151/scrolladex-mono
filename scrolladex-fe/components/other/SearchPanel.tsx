@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Box, Slide, Grid, Button } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-import { Formik, Form } from "formik";
+import { Formik, Form, useFormikContext } from "formik";
 import AppFormInput from "../forms/AppFormInput";
 import { fetchEmployeeOverview } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
@@ -10,6 +10,18 @@ interface SearchPanelProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const ResetFormOnClose: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
+  const formik = useFormikContext();
+
+  useEffect(() => {
+    if (!isOpen) {
+      formik.resetForm();
+    }
+  }, [isOpen, formik]);
+
+  return null;
+};
 
 const SearchPanel: React.FC<SearchPanelProps> = ({ isOpen, onClose }) => {
   const slideRef = useRef<HTMLDivElement>(null);
@@ -68,44 +80,34 @@ const SearchPanel: React.FC<SearchPanelProps> = ({ isOpen, onClose }) => {
               getEmployees(values);
             }}
           >
-            {(formik) => (
-              <>
-                {/* New useEffect here */}
-                {useEffect(() => {
-                  if (!isOpen) {
-                    formik.resetForm();
-                  }
-                }, [isOpen])}
-
-                <Form onSubmit={formik.handleSubmit}>
-                  <Grid
-                    templateColumns={{ base: "1fr", md: "1fr 2fr auto" }}
-                    gap={4}
-                    alignItems="center"
-                  >
-                    <AppFormInput
-                      placeholder="Search field"
-                      name="searchField"
-                      type="select"
-                      options={[
-                        { label: "First name", value: "first_name" },
-                        { label: "Last name", value: "last_name" },
-                        { label: "Job title", value: "job_title" },
-                      ]}
-                    />
-                    <AppFormInput
-                      placeholder="Search..."
-                      icon={<SearchIcon color="gray.500" />}
-                      name="searchValue"
-                      type="text"
-                    />
-                    <Button mt={2} type="submit" variant="green">
-                      Search
-                    </Button>
-                  </Grid>
-                </Form>
-              </>
-            )}
+            <Form>
+              <ResetFormOnClose isOpen={isOpen} />
+              <Grid
+                templateColumns={{ base: "1fr", md: "1fr 2fr auto" }}
+                gap={4}
+                alignItems="center"
+              >
+                <AppFormInput
+                  placeholder="Search field"
+                  name="searchField"
+                  type="select"
+                  options={[
+                    { label: "First name", value: "first_name" },
+                    { label: "Last name", value: "last_name" },
+                    { label: "Job title", value: "job_title" },
+                  ]}
+                />
+                <AppFormInput
+                  placeholder="Search..."
+                  icon={<SearchIcon color="gray.500" />}
+                  name="searchValue"
+                  type="text"
+                />
+                <Button mt={2} type="submit" variant="green">
+                  Search
+                </Button>
+              </Grid>
+            </Form>
           </Formik>
         </Box>
       </Slide>
