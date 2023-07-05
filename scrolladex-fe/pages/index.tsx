@@ -69,7 +69,8 @@ const Index = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
       pt={78}
-      height="100vh"
+      height="100%"
+      minHeight="100vh"
     >
       <SimpleGrid
         gridTemplateColumns={[
