@@ -69,33 +69,42 @@ const SearchPanel: React.FC<SearchPanelProps> = ({ isOpen, onClose }) => {
             }}
           >
             {(formik) => (
-              <Form onSubmit={formik.handleSubmit}>
-                <Grid
-                  templateColumns={{ base: "1fr", md: "1fr 2fr auto" }}
-                  gap={4}
-                  alignItems="center"
-                >
-                  <AppFormInput
-                    placeholder="Search field"
-                    name="searchField"
-                    type="select"
-                    options={[
-                      { label: "First name", value: "first_name" },
-                      { label: "Last name", value: "last_name" },
-                      { label: "Job title", value: "job_title" },
-                    ]}
-                  />
-                  <AppFormInput
-                    placeholder="Search..."
-                    icon={<SearchIcon color="gray.500" />}
-                    name="searchValue"
-                    type="text"
-                  />
-                  <Button mt={2} type="submit" variant="green">
-                    Search
-                  </Button>
-                </Grid>
-              </Form>
+              <>
+                {/* New useEffect here */}
+                {useEffect(() => {
+                  if (!isOpen) {
+                    formik.resetForm();
+                  }
+                }, [isOpen])}
+
+                <Form onSubmit={formik.handleSubmit}>
+                  <Grid
+                    templateColumns={{ base: "1fr", md: "1fr 2fr auto" }}
+                    gap={4}
+                    alignItems="center"
+                  >
+                    <AppFormInput
+                      placeholder="Search field"
+                      name="searchField"
+                      type="select"
+                      options={[
+                        { label: "First name", value: "first_name" },
+                        { label: "Last name", value: "last_name" },
+                        { label: "Job title", value: "job_title" },
+                      ]}
+                    />
+                    <AppFormInput
+                      placeholder="Search..."
+                      icon={<SearchIcon color="gray.500" />}
+                      name="searchValue"
+                      type="text"
+                    />
+                    <Button mt={2} type="submit" variant="green">
+                      Search
+                    </Button>
+                  </Grid>
+                </Form>
+              </>
             )}
           </Formik>
         </Box>
