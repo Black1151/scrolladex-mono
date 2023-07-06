@@ -76,8 +76,9 @@ const SearchPanel: React.FC<SearchPanelProps> = ({ isOpen, onClose }) => {
               searchField: "",
               searchValue: "",
             }}
-            onSubmit={(values) => {
-              getEmployees(values);
+            onSubmit={async (values) => {
+              await getEmployees(values);
+              onClose();
             }}
           >
             <Form>

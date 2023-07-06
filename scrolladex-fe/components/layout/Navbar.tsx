@@ -40,18 +40,11 @@ const Navbar: React.FC = () => {
   const [justClosed, setJustClosed] = useState(false);
 
   const onClose = () => {
-    setJustClosed(true);
     setIsSearchPanelOpen(false);
-    setTimeout(() => {
-      setJustClosed(false);
-    }, 100);
   };
 
-  const toggleSearchPanel = () => {
-    if (justClosed) {
-      setJustClosed(false);
-      return;
-    }
+  const toggleSearchPanel = (event?: React.MouseEvent<HTMLButtonElement>) => {
+    event && event.preventDefault();
     setIsSearchPanelOpen(!isSearchPanelOpen);
   };
 

@@ -23,7 +23,7 @@ const ModalIconButton: React.FC<ModalIconButtons> = ({
         border="none"
         color="white"
         _hover={hover}
-        onClick={onClick}
+        onMouseDown={onClick}
         {...props}
       >
         {icon}
