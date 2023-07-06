@@ -28,7 +28,7 @@ const handleAsyncReducers = <ThunkArg, ThunkConfig>({
   };
 
   const fulfilledReducer: CaseReducer<State, PayloadAction<ThunkArg, string, any, any>> = (state, action) => {
-    state[stateKey].status = "idle";
+    state[stateKey].status = "succeeded";
     state[stateKey].data = action.payload;
     if (onFulfilled) {
       onFulfilled(state, action);
