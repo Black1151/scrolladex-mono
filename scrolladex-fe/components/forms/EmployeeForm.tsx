@@ -53,7 +53,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
   onClose,
   selectedEmployeeImageUrl,
 }) => {
-  const fetchDropdownData = useAsyncAction({
+  const { executeAction: fetchDropdownData } = useAsyncAction({
     action: fetchDepartmentDropdownList,
     errorMessage: "Failed to fetch department list",
   });
