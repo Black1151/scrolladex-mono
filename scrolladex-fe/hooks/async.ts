@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useErrorToast, useSuccessToast } from './toasts';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from "@/store/store";
@@ -14,13 +15,21 @@ interface UseAsyncActionOptions {
   showSuccess?: boolean;
 }
 
-export const useAsyncAction = (options: UseAsyncActionOptions): ExecuteAction => {
+interface UseAsyncActionReturn {
+  executeAction: ExecuteAction;
+  isLoading: boolean;
+}
+
+export const useAsyncAction = (options: UseAsyncActionOptions): UseAsyncActionReturn => {
   const { action, successMessage = "Action executed successfully", errorMessage = null, showSuccess = false } = options;
   const dispatch: AppDispatch = useDispatch();
   const showErrorToast = useErrorToast();
   const showSuccessToast = useSuccessToast();
+  
+  const [isLoading, setIsLoading] = useState(false);
 
   const executeAction: ExecuteAction = async (arg?: any) => {
+    setIsLoading(true);
     try {
       const resultAction = await dispatch(action(arg));
       const result = unwrapResult(resultAction);
@@ -36,8 +45,10 @@ export const useAsyncAction = (options: UseAsyncActionOptions): ExecuteAction =>
           showErrorToast(errorMessage);
         }
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return executeAction;
+  return { executeAction, isLoading };
 };

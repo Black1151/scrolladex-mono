@@ -20,7 +20,7 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
     onClose: onClose,
   });
 
-  const fetchDepartments = useAsyncAction({
+  const { executeAction: fetchDepartments } = useAsyncAction({
     action: fetchDepartmentDropdownList,
     errorMessage: "Error fetching department list",
   });

@@ -35,8 +35,7 @@ const UpdateDepartmentModal: React.FC<FormModalProps> = ({
   const getChanges = useUpdateChanges(
     (state: RootState) => state.department.departmentDetail.data
   );
-
-  const getDepartments = useAsyncAction({
+  const { executeAction: getDepartments } = useAsyncAction({
     action: fetchDepartmentDropdownList,
     errorMessage: "Failed to fetch department list",
   });

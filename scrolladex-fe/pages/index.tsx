@@ -26,12 +26,13 @@ const Index = () => {
   const employees = employeeState.employeeEntities.data;
   const [loaded, setLoaded] = useState<boolean[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const fetchEmployees = useAsyncAction({
+  const { executeAction: fetchEmployees } = useAsyncAction({
     action: fetchEmployeeOverview,
     successMessage: "Employees fetched successfully",
     errorMessage: "Failed to fetch employees",
   });
-  const fetchEmployeeDetails = useAsyncAction({
+
+  const { executeAction: fetchEmployeeDetails } = useAsyncAction({
     action: fetchEmployee,
     successMessage: "Employee details fetched successfully",
     errorMessage: "Failed to fetch employee details",

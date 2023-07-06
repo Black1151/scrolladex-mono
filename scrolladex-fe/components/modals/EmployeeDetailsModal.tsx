@@ -45,12 +45,12 @@ const EmployeeDetailsModal: React.FC<Props> = ({
 
   const { getDepartmentColor } = useDepartmentColor();
 
-  const fetchEmployees = useAsyncAction({
+  const { executeAction: fetchEmployees } = useAsyncAction({
     action: fetchEmployeeOverview,
     errorMessage: "Failed to fetch employees",
   });
 
-  const executeDelete = useAsyncAction({
+  const { executeAction: executeDelete } = useAsyncAction({
     action: deleteEmployee,
     successMessage: `${employee.firstName} ${employee.lastName} has been deleted.`,
     errorMessage: "Failed to delete employee",

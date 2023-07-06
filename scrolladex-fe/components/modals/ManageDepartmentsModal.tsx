@@ -67,22 +67,22 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     onClose: viewDepartmentOnClose,
   } = useDisclosure();
 
-  const getDepartments = useAsyncAction({
+  const { executeAction: getDepartments } = useAsyncAction({
     action: fetchDepartmentDropdownList,
     errorMessage: "Failed to fetch department list",
   });
 
-  const getDepartmentDetails = useAsyncAction({
+  const { executeAction: getDepartmentDetails } = useAsyncAction({
     action: fetchDepartment,
     errorMessage: "Failed to fetch department details",
   });
 
-  const getDepartmentAndEmployees = useAsyncAction({
+  const { executeAction: getDepartmentAndEmployees } = useAsyncAction({
     action: fetchDepartmentWithEmployees,
     errorMessage: "Failed to fetch department details",
   });
 
-  const removeDepartment = useAsyncAction({
+  const { executeAction: removeDepartment } = useAsyncAction({
     action: deleteDepartment,
     errorMessage: "Failed to delete department",
     successMessage: `${
@@ -93,7 +93,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     showSuccess: true,
   });
 
-  const getEmployees = useAsyncAction({
+  const { executeAction: getEmployees } = useAsyncAction({
     action: fetchEmployeeOverview,
     errorMessage: "Error fetching employee overview",
   });

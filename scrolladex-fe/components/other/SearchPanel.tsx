@@ -26,7 +26,7 @@ const ResetFormOnClose: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
 const SearchPanel: React.FC<SearchPanelProps> = ({ isOpen, onClose }) => {
   const slideRef = useRef<HTMLDivElement>(null);
 
-  const getEmployees = useAsyncAction({
+  const { executeAction: getEmployees } = useAsyncAction({
     action: fetchEmployeeOverview,
     errorMessage: "Error fetching employees",
   });

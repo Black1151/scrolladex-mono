@@ -13,7 +13,7 @@ const withAuth = (WrappedComponent: React.ComponentType<any>) => {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const executeCheckSession = useAsyncAction({
+    const { executeAction: executeCheckSession } = useAsyncAction({
       action: checkSession,
       showSuccess: false,
     });

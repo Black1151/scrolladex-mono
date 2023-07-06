@@ -26,8 +26,7 @@ const UpdateEmployeeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const selectedEmployee = useSelector(
     (state: RootState) => state.employee.employeeDetail.data
   );
-
-  const updateEmployeeOverview = useAsyncAction({
+  const { executeAction: updateEmployeeOverview } = useAsyncAction({
     action: fetchEmployeeOverview,
     errorMessage: "Error fetching employee overview",
   });

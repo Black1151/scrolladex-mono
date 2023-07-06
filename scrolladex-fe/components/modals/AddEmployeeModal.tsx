@@ -19,7 +19,7 @@ const AddEmployeeModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
     onClose: () => onClose(),
   });
 
-  const updateEmployeeOverview = useAsyncAction({
+  const { executeAction: updateEmployeeOverview } = useAsyncAction({
     action: fetchEmployeeOverview,
     errorMessage: "Error fetching employee overview",
   });

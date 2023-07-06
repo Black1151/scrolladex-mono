@@ -37,7 +37,6 @@ import SearchPanel from "../other/SearchPanel";
 
 const Navbar: React.FC = () => {
   const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
-  const [justClosed, setJustClosed] = useState(false);
 
   const onClose = () => {
     setIsSearchPanelOpen(false);
@@ -67,7 +66,7 @@ const Navbar: React.FC = () => {
     onClose: drawerOnClose,
   } = useDisclosure();
 
-  const logOut = useAsyncAction({
+  const { executeAction: logOut } = useAsyncAction({
     action: logoutUser,
     errorMessage: "Error logging out",
   });
