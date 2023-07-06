@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    domains: ["nginx"],
+  },
 };
 
 if (process.env.NODE_ENV !== "production") {
