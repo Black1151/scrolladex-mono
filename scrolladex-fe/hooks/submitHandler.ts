@@ -18,7 +18,7 @@ export const useSubmitHandler = <Values = any>(
   ): ((values: Values, actions: FormikHelpers<Values>) => Promise<SubmitHandlerResult>) => {
     const { apiFunction, successMessage, errorMessage, showSuccess, resetForm, onClose } = options;
   
-    const executeAction = useAsyncAction({
+    const { executeAction: executeAction } = useAsyncAction({
       action: apiFunction,
       successMessage,
       errorMessage,
