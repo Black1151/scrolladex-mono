@@ -17,15 +17,24 @@ import { useAsyncAction } from "@/hooks/async";
 import useDepartmentColor from "@/hooks/useDepartmentColor";
 import { GetServerSidePropsContext } from "next";
 import { checkUserAuthentication } from "@/utils/checkUserAuthentication";
+import { EmployeeOverview } from "@/types";
 
 const MotionBox = motion(Box);
 
 const Index = () => {
-  const employeeState = useSelector((state: RootState) => state.employee);
+  const [displayedCards, setDisplayedCards] = useState<
+    EmployeeOverview[] | null
+  >([]);
+
+  const { data: employees, status: employeesLoading } = useSelector(
+    (state: RootState) => state.employee.employeeEntities
+  );
   const { getDepartmentColor } = useDepartmentColor();
-  const employees = employeeState.employeeEntities.data;
-  const [loaded, setLoaded] = useState<boolean[]>([]);
+  const [animationState, setAnimationState] = useState("");
+  const maxTransitionDuration = 1500;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { executeAction: fetchEmployees } = useAsyncAction({
     action: fetchEmployeeOverview,
     successMessage: "Employees fetched successfully",
@@ -46,13 +55,17 @@ const Index = () => {
     fetchEmployees();
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleImageLoad = (index: number) => {
-    setLoaded((prev) => {
-      const newLoaded = [...prev];
-      newLoaded[index] = true;
-      return newLoaded;
-    });
-  };
+  useEffect(() => {
+    if (employeesLoading === "loading") {
+      setAnimationState("fadeOut");
+    } else if (employeesLoading === "succeeded") {
+      const fadeInTimeout = setTimeout(() => {
+        setDisplayedCards(employees);
+        setAnimationState("fadeIn");
+      }, maxTransitionDuration);
+      return () => clearTimeout(fadeInTimeout);
+    }
+  }, [employeesLoading]);
 
   const handleCardClick = (id: number) => {
     fetchEmployeeDetails(id).then(() => {
@@ -86,13 +99,17 @@ const Index = () => {
         position="relative"
         justifyContent="center"
       >
-        {employees &&
-          employees.map((employee, index) => (
+        {displayedCards &&
+          displayedCards.map((employee, index) => (
             <MotionBox
               key={employee.id}
               initial={{ opacity: 0 }}
-              animate={{ opacity: loaded[index] ? 1 : 0 }}
-              transition={{ duration: Math.random() * 1 }}
+              animate={{
+                opacity: animationState === "fadeIn" ? 1 : 0,
+              }}
+              transition={{
+                duration: (Math.random() * maxTransitionDuration) / 1000,
+              }}
               onClick={() => handleCardClick(employee.id)}
               cursor="pointer"
             >
@@ -160,7 +177,6 @@ const Index = () => {
                       }`}
                       alt={employee.firstName + " " + employee.lastName}
                       fallbackSrc="/placeholder.png"
-                      onLoad={() => handleImageLoad(index)}
                     />
                   </Box>
                 </Flex>
