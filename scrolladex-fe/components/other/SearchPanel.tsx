@@ -26,10 +26,11 @@ const ResetFormOnClose: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
 const SearchPanel: React.FC<SearchPanelProps> = ({ isOpen, onClose }) => {
   const slideRef = useRef<HTMLDivElement>(null);
 
-  const { executeAction: getEmployees } = useAsyncAction({
-    action: fetchEmployeeOverview,
-    errorMessage: "Error fetching employees",
-  });
+  const { executeAction: getEmployees, isLoading: getEmployeesLoading } =
+    useAsyncAction({
+      action: fetchEmployeeOverview,
+      errorMessage: "Error fetching employees",
+    });
 
   useEffect(() => {
     if (isOpen && slideRef.current) {
@@ -104,7 +105,12 @@ const SearchPanel: React.FC<SearchPanelProps> = ({ isOpen, onClose }) => {
                   name="searchValue"
                   type="text"
                 />
-                <Button mt={2} type="submit" variant="green">
+                <Button
+                  mt={2}
+                  type="submit"
+                  variant="green"
+                  isLoading={getEmployeesLoading}
+                >
                   Search
                 </Button>
               </Grid>
