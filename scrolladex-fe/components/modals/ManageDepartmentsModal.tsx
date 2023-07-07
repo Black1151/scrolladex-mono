@@ -18,7 +18,6 @@ import {
 import ConfirmationModal from "./ConfirmationModal";
 import { FaPlusCircle } from "react-icons/fa";
 import AddDepartmentModal from "./AddDepartmentModal";
-import { fetchEmployeeOverview } from "@/store/employeeSlice";
 import DepartmentDetailsModal from "./DepartmentDetailsModal";
 import useDepartmentColor from "@/hooks/useDepartmentColor";
 
@@ -93,11 +92,6 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     showSuccess: true,
   });
 
-  const { executeAction: getEmployees } = useAsyncAction({
-    action: fetchEmployeeOverview,
-    errorMessage: "Error fetching employee overview",
-  });
-
   const handleViewDepartmentModalOpen = async (departmentId: number) => {
     await getDepartmentAndEmployees(departmentId);
     viewDepartmentOnOpen();
@@ -120,8 +114,6 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const handleDeleteDepartment = async (departmentId: number) => {
     const response = await removeDepartment(departmentId);
     if (!response.error) {
-      getDepartments();
-      getEmployees();
       deleteConfirmationOnClose();
     }
   };
@@ -196,6 +188,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
           onClose={updateDepartmentOnClose}
         />
       )}
+
       <ConfirmationModal
         isOpen={deleteConfirmationIsOpen}
         onClose={deleteConfirmationOnClose}
@@ -212,9 +205,10 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
           </>
         }
         onConfirm={() =>
-          handleDeleteDepartment(selectedDepartment!.id as number)
+          handleDeleteDepartment(selectedDepartmentWithEmp!.id as number)
         }
       />
+
       <AddDepartmentModal
         isOpen={addDepartmentIsOpen}
         onClose={addDepartmentOnClose}
