@@ -1,12 +1,7 @@
 import React from "react";
-import { FormikHelpers } from "formik";
 import { useSubmitHandler } from "@/hooks/submitHandler";
-import { useAsyncAction } from "@/hooks/async";
-import {
-  fetchDepartmentDropdownList,
-  createDepartment,
-} from "@/store/departmentSlice";
-import { Department, FormModalProps } from "@/types";
+import { createDepartment } from "@/store/departmentSlice";
+import { FormModalProps } from "@/types";
 import DepartmentForm from "../forms/DepartmentForm";
 import ModalWrapper from "./ModalWrapper";
 
@@ -20,21 +15,6 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
     onClose: onClose,
   });
 
-  const { executeAction: fetchDepartments } = useAsyncAction({
-    action: fetchDepartmentDropdownList,
-    errorMessage: "Error fetching department list",
-  });
-
-  const handleFormSubmit = async (
-    values: Department,
-    actions: FormikHelpers<Department>
-  ) => {
-    const result = await submitForm(values, actions);
-    if (result) {
-      fetchDepartments();
-    }
-  };
-
   return (
     <ModalWrapper title="Add Department" isOpen={isOpen} onClose={onClose}>
       <DepartmentForm
@@ -46,7 +26,8 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
           county: "",
           postcode: "",
         }}
-        onSubmit={handleFormSubmit}
+        // onSubmit={handleFormSubmit}
+        onSubmit={submitForm}
         onClose={onClose}
       />
     </ModalWrapper>
