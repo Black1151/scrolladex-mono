@@ -4,7 +4,7 @@ import { FormModalProps } from "@/types";
 
 import EmployeeForm from "../forms/EmployeeForm";
 import ModalWrapper from "./ModalWrapper";
-import { createEmployee, fetchEmployeeOverview } from "@/store/employeeSlice";
+import { createEmployee } from "@/store/employeeSlice";
 
 const AddEmployeeModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
   const submitForm = useSubmitHandler({
