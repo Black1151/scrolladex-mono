@@ -6,11 +6,8 @@ import { useSelector } from "react-redux";
 // Internal dependencies
 import ModalWrapper from "./ModalWrapper";
 import { useSubmitHandler } from "@/hooks/submitHandler";
-import { useAsyncAction } from "@/hooks/async";
-import {
-  fetchEmployeeOverview,
-  updateEmployee,
-} from "../../store/employeeSlice";
+
+import { updateEmployee } from "../../store/employeeSlice";
 import { RootState } from "@/store/store";
 import { EmployeeCreateUpdate } from "@/types";
 import EmployeeForm from "../forms/EmployeeForm";
@@ -26,10 +23,6 @@ const UpdateEmployeeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const selectedEmployee = useSelector(
     (state: RootState) => state.employee.employeeDetail.data
   );
-  const { executeAction: updateEmployeeOverview } = useAsyncAction({
-    action: fetchEmployeeOverview,
-    errorMessage: "Error fetching employee overview",
-  });
 
   const getChanges = useUpdateChanges(
     (state: RootState) => state.employee.employeeDetail.data
@@ -61,10 +54,7 @@ const UpdateEmployeeModal: React.FC<Props> = ({ isOpen, onClose }) => {
       id: selectedEmployee!.id,
     };
 
-    const result = await submitForm(changesWithId, actions);
-    if (result) {
-      updateEmployeeOverview();
-    }
+    submitForm(changesWithId, actions);
   };
 
   const mapSelectedEmployeeToFormValues = {
