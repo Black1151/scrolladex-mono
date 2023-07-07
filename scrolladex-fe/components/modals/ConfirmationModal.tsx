@@ -23,7 +23,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       onClose={onClose}
       title={title}
       titleBarColor="xanthous"
-      maxWidth={700}
+      maxWidth={600}
     >
       <VStack spacing={6} py={4}>
         {message}
