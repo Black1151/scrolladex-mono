@@ -26,7 +26,6 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
           county: "",
           postcode: "",
         }}
-        // onSubmit={handleFormSubmit}
         onSubmit={submitForm}
         onClose={onClose}
       />
