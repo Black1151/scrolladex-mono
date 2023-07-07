@@ -55,8 +55,14 @@ export const fetchEmployee = createAsyncThunk(
 );
 
 export const createEmployee = createAsyncThunk(
-  "employees/createEmployee",
-   (newEmployee: EmployeeCreateUpdate, thunkAPI) => handleThunkAPI(createEmployeeAPI(newEmployee), thunkAPI)
+  "departments/createDepartment",
+  async (newEmployee: EmployeeCreateUpdate, thunkAPI) => {
+    const response = await handleThunkAPI(createEmployeeAPI(newEmployee), thunkAPI);
+    if (response) {
+      thunkAPI.dispatch(fetchEmployeeOverview({}));
+    }
+    return response;
+  }
 );
 
 export const updateEmployee = createAsyncThunk(

@@ -75,24 +75,14 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
       return handleThunkAPI(getDepartmentAPI(id), thunkAPI);
     }
   );
-  
-  // export const createDepartment = createAsyncThunk(
-  //   "departments/createDepartment",
-  //     (newDepartment: Department, thunkAPI) => {
-  //     handleThunkAPI(createDepartmentAPI(newDepartment), thunkAPI);
-  //   }
-  // );
 
   export const createDepartment = createAsyncThunk(
     "departments/createDepartment",
     async (newDepartment: Department, thunkAPI) => {
       const response = await handleThunkAPI(createDepartmentAPI(newDepartment), thunkAPI);
-      
-      // You can also dispatch another thunk to refetch the department list after a department has been created
       if (response) {
         thunkAPI.dispatch(fetchDepartmentDropdownList());
       }
-  
       return response;
     }
   );

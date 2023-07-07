@@ -1,9 +1,6 @@
 import React from "react";
-import { FormikHelpers } from "formik";
-
 import { useSubmitHandler } from "@/hooks/submitHandler";
-import { useAsyncAction } from "@/hooks/async";
-import { EmployeeCreateUpdate, FormModalProps } from "@/types";
+import { FormModalProps } from "@/types";
 
 import EmployeeForm from "../forms/EmployeeForm";
 import ModalWrapper from "./ModalWrapper";
@@ -19,21 +16,6 @@ const AddEmployeeModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
     onClose: () => onClose(),
   });
 
-  const { executeAction: updateEmployeeOverview } = useAsyncAction({
-    action: fetchEmployeeOverview,
-    errorMessage: "Error fetching employee overview",
-  });
-
-  const handleFormSubmit = async (
-    values: EmployeeCreateUpdate,
-    actions: FormikHelpers<EmployeeCreateUpdate>
-  ) => {
-    const result = await submitForm(values, actions);
-    if (result) {
-      updateEmployeeOverview();
-    }
-  };
-
   return (
     <ModalWrapper title="Add Employee" isOpen={isOpen} onClose={onClose}>
       <EmployeeForm
@@ -48,7 +30,7 @@ const AddEmployeeModal: React.FC<FormModalProps> = ({ isOpen, onClose }) => {
           email: "",
           profilePicture: null,
         }}
-        onSubmit={handleFormSubmit}
+        onSubmit={submitForm}
         onClose={onClose}
       />
     </ModalWrapper>
