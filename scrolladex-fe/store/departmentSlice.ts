@@ -10,6 +10,7 @@ import {
   getDepartmentDropDownListAPI,
   getDepartmentWithEmployeesAPI 
 } from "@/api/departmentAPI";
+import { fetchEmployeeOverview } from "./employeeSlice";
 
 const initialRequestState = <T>(): RequestState<T> => ({
     data: null,
@@ -82,6 +83,7 @@ const handleThunkAPI = async (apiCall: Promise<any>, thunkAPI: any) => {
       const response = await handleThunkAPI(createDepartmentAPI(newDepartment), thunkAPI);
       if (response) {
         thunkAPI.dispatch(fetchDepartmentDropdownList());
+        thunkAPI.dispatch(fetchEmployeeOverview({}));
       }
       return response;
     }
