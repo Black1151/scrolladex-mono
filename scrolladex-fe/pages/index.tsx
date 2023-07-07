@@ -47,11 +47,16 @@ const Index = () => {
 
   useEffect(() => {
     if (employeesLoading === "succeeded") {
-      const fadeInTimeout = setTimeout(() => {
+      const setImageTimeout = setTimeout(() => {
         setDisplayedCards(employees);
+      }, 1200);
+      const fadeInTimeout = setTimeout(() => {
         setFadeIn(true);
-      }, 1100);
-      return () => clearTimeout(fadeInTimeout);
+      }, 1400);
+      return () => {
+        clearTimeout(setImageTimeout);
+        clearTimeout(fadeInTimeout);
+      };
     } else {
       setFadeIn(false);
     }
