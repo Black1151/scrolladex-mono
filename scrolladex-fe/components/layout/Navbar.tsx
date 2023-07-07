@@ -100,7 +100,7 @@ const Navbar: React.FC = () => {
       <Flex
         position="fixed"
         top="0"
-        width="100%"
+        width="100vw"
         zIndex="1000"
         py={1}
         bg="pictonBlue"
