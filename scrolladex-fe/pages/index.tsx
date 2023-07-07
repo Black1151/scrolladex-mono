@@ -14,6 +14,7 @@ import OverviewCard from "@/components/other/OverviewCard";
 const MotionBox = motion(Box);
 
 const Index = () => {
+  const [fadeIn, setFadeIn] = useState(false);
   const [displayedCards, setDisplayedCards] = useState<
     EmployeeOverview[] | null
   >([]);
@@ -46,7 +47,13 @@ const Index = () => {
 
   useEffect(() => {
     if (employeesLoading === "succeeded") {
-      setDisplayedCards(employees);
+      const fadeInTimeout = setTimeout(() => {
+        setDisplayedCards(employees);
+        setFadeIn(true);
+      }, 1100);
+      return () => clearTimeout(fadeInTimeout);
+    } else {
+      setFadeIn(false);
     }
   }, [employeesLoading]);
 
@@ -89,6 +96,7 @@ const Index = () => {
               employee={employee}
               handleCardClick={handleCardClick}
               employeesLoading={employeesLoading}
+              showCard={fadeIn}
             />
           ))}
       </SimpleGrid>

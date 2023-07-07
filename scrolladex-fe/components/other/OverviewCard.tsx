@@ -11,26 +11,15 @@ interface Props {
   employee: EmployeeOverview;
   handleCardClick: (id: number) => void;
   employeesLoading: string;
+  showCard: boolean;
 }
 
 const OverviewCard: React.FC<Props> = ({
   employee,
   handleCardClick,
-  employeesLoading,
+  showCard,
 }) => {
   const { getDepartmentColor } = useDepartmentColor();
-  const [showCard, setShowCard] = React.useState(false);
-
-  useEffect(() => {
-    if (employeesLoading === "succeeded") {
-      const fadeInTimeout = setTimeout(() => {
-        setShowCard(true);
-      }, 1000);
-      return () => clearTimeout(fadeInTimeout);
-    } else {
-      setShowCard(false);
-    }
-  }, [employeesLoading]);
 
   return (
     <MotionBox
