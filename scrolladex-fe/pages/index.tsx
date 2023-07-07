@@ -49,10 +49,10 @@ const Index = () => {
     if (employeesLoading === "succeeded") {
       const setImageTimeout = setTimeout(() => {
         setDisplayedCards(employees);
-      }, 1200);
+      }, 1000);
       const fadeInTimeout = setTimeout(() => {
         setFadeIn(true);
-      }, 1400);
+      }, 1500);
       return () => {
         clearTimeout(setImageTimeout);
         clearTimeout(fadeInTimeout);
