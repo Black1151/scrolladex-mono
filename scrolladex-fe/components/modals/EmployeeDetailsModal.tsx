@@ -23,7 +23,7 @@ import {
 // Internal Dependencies
 import { Employee } from "@/types";
 import ConfirmationModal from "./ConfirmationModal";
-import { deleteEmployee, fetchEmployeeOverview } from "@/store/employeeSlice";
+import { deleteEmployee } from "@/store/employeeSlice";
 import { useAsyncAction } from "@/hooks/async";
 import UpdateEmployeeModal from "./UpdateEmployeeModal";
 import ModalWrapper from "./ModalWrapper";
@@ -45,11 +45,6 @@ const EmployeeDetailsModal: React.FC<Props> = ({
 
   const { getDepartmentColor } = useDepartmentColor();
 
-  const { executeAction: fetchEmployees } = useAsyncAction({
-    action: fetchEmployeeOverview,
-    errorMessage: "Failed to fetch employees",
-  });
-
   const { executeAction: executeDelete } = useAsyncAction({
     action: deleteEmployee,
     successMessage: `${employee.firstName} ${employee.lastName} has been deleted.`,
@@ -60,7 +55,6 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   const handleDelete = async () => {
     const response = await executeDelete(employee.id);
     if (!response.error) {
-      fetchEmployees();
       onClose();
     }
   };
@@ -166,7 +160,20 @@ const EmployeeDetailsModal: React.FC<Props> = ({
         isOpen={confirmationDisclosure.isOpen}
         onClose={confirmationDisclosure.onClose}
         title="Delete Employee"
-        message={`Are you sure you want to delete ${employee.firstName} ${employee.lastName}? This action cannot be undone.`}
+        message={
+          <>
+            <Text>
+              Are you sure you want to delete {employee.firstName}{" "}
+              {employee.lastName}?
+            </Text>
+            <Text>
+              This will delete both their employee entry and their user account.
+            </Text>
+            <Text color="red" fontWeight="bold">
+              This action cannot be undone.
+            </Text>
+          </>
+        }
       />
       <UpdateEmployeeModal
         isOpen={editEmployeeDisclosure.isOpen}

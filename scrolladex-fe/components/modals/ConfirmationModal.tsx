@@ -25,7 +25,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       titleBarColor="xanthous"
       maxWidth={700}
     >
-      <VStack spacing={6} pb={4}>
+      <VStack spacing={6} py={4}>
         {message}
       </VStack>
       <HStack mt={4} justifyContent="flex-end">

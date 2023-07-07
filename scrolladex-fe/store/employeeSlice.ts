@@ -78,7 +78,13 @@ export const updateEmployee = createAsyncThunk(
 
 export const deleteEmployee = createAsyncThunk(
   "employees/deleteEmployee",
-  async (id: number, thunkAPI) => handleThunkAPI(deleteEmployeeAPI(id), thunkAPI)
+  async (id: number, thunkAPI) => {
+    const response = await handleThunkAPI(deleteEmployeeAPI(id), thunkAPI);
+    if (response) {
+      thunkAPI.dispatch(fetchEmployeeOverview({}));
+    }
+    return response
+  }
 );
 
 const employeesSlice = createSlice({
