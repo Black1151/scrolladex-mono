@@ -1,26 +1,6 @@
+// Libraries
 import React, { useState } from "react";
-import {
-  Box,
-  Flex,
-  Text,
-  Spacer,
-  IconButton,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-  VStack,
-  HStack,
-  Button,
-  Select,
-} from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
-import AddEmployeeModal from "../modals/AddEmployeeModal";
 import { useRouter } from "next/router";
-import ManageDepartmentsModal from "../modals/ManageDepartmentsModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserPlus,
@@ -28,18 +8,48 @@ import {
   faSignOutAlt,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import ModalIconButton from "../modals/ModalIconButton";
-import { useAsyncAction } from "@/hooks/async";
-import { logoutUser } from "@/store/authSlice";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+
+// Chakra UI components
+import {
+  Box,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  HStack,
+  IconButton,
+  Select,
+  Spacer,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
+
+// Local components
+import AddEmployeeModal from "../modals/AddEmployeeModal";
+import ManageDepartmentsModal from "../modals/ManageDepartmentsModal";
+import ModalIconButton from "../modals/ModalIconButton";
 import SearchPanel from "../other/SearchPanel";
+
+// Store and hooks
+import { useAsyncAction } from "@/hooks/async";
+import { fetchEmployeeOverview } from "@/store/employeeSlice";
+import { logoutUser } from "@/store/authSlice";
+import { RootState } from "@/store/store";
 
 const Navbar: React.FC = () => {
   const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
 
   const onClose = () => {
     setIsSearchPanelOpen(false);
+    setSelectedDepartment("");
   };
 
   const toggleSearchPanel = (event?: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,6 +86,11 @@ const Navbar: React.FC = () => {
     router.replace("/login");
   };
 
+  const { executeAction: getEmployees } = useAsyncAction({
+    action: fetchEmployeeOverview,
+    errorMessage: "Error fetching employees",
+  });
+
   const departmentList = useSelector(
     (state: RootState) => state.department.departmentDropdownList.data
   );
@@ -100,7 +115,15 @@ const Navbar: React.FC = () => {
         <Spacer />
         <HStack display={{ base: "none", md: "flex" }}>
           <Select
-            placeholder="Select department"
+            value={selectedDepartment}
+            onChange={(e) => {
+              setSelectedDepartment(e.target.value);
+              getEmployees({
+                searchField: "department_id",
+                searchValue: e.target.value,
+              });
+            }}
+            defaultValue=""
             width="200px"
             bg="white"
             color="black"

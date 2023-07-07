@@ -41,9 +41,15 @@ export default class EmployeesController {
         .preload('department', (query) => query.select('id', 'department_name'))
         .orderBy('last_name', 'asc');
   
-    if (searchField && searchValue) {
-        query = query.where(searchField, 'like', `%${searchValue}%`);
-    }
+        if (searchField && searchValue) {
+          if (searchField === 'department_id') {
+            query = query.where(searchField, '=', searchValue);
+          }
+          else {
+            query = query.where(searchField, 'like', `%${searchValue}%`);
+          }
+        }
+
     const employees = await query;
     const employeesWithDepartment = employees.map((employee) => {
         return {
