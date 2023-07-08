@@ -33,7 +33,6 @@ const NavDepartmentSelect: React.FC<DepartmentSelectProps> = ({
           searchValue: e.target.value,
         });
       }}
-      defaultValue=""
       width="200px"
       bg="white"
       color="black"
