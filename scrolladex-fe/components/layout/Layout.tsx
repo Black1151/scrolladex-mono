@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar/Navbar";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { AppProps } from "next/app";
