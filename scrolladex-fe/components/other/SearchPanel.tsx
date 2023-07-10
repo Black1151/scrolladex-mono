@@ -18,7 +18,7 @@ const ResetFormOnClose: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
     if (!isOpen) {
       formik.resetForm();
     }
-  }, [isOpen]);
+  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };

@@ -70,7 +70,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
 
   useEffect(() => {
     fetchDropdownData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const departmentList = useSelector(
     (state: RootState) => state.department.departmentDropdownList.data
