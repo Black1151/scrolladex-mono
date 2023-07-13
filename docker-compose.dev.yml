@@ -11,6 +11,7 @@ services:
   backend:
     build: 
       context: ./scrolladex-be
+      dockerfile: Dockerfile.dev
     volumes:
       - ./scrolladex-be:/usr/src/app:delegated
       - ./scrolladex-be/public/uploads:/usr/src/app/public/uploads
@@ -22,17 +23,19 @@ services:
   frontend:
     build:
       context: ./scrolladex-fe
+      dockerfile: Dockerfile.dev
     volumes:
       - ./scrolladex-fe:/usr/src/app:delegated
       - /usr/src/app/node_modules
       - /usr/src/app/.next
+   
   nginx:
     image: nginx:latest
     ports:
       - '80:80'
       - '443:443'
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf
       - ./certs/ssl:/etc/ssl/certs
       - ./scrolladex-be/public:/usr/src/nginx/public
     depends_on:

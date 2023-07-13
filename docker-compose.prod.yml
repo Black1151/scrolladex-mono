@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    env_file:
+      - .env.db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  backend:
+    image: ${DOCKER_USERNAME}/scrolladex-backend:1.0
+    env_file:
+      - .env.backend
+    depends_on:
+      - db
+    networks:
+      - backend
+    volumes:
+      - ./scrolladex-be/public/uploads:/usr/src/app/build/public/uploads
+  frontend:
+    image: ${DOCKER_USERNAME}/scrolladex-frontend:1.0
+    env_file:
+      - .env.frontend
+    networks:
+      - frontend
+
+  nginx:
+    image: ${DOCKER_USERNAME}/scrolladex-nginx:1.0
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf
+      - ./certs/ssl:/etc/ssl/certs
+      - ./scrolladex-be/public/uploads:/usr/src/nginx/public/uploads
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - frontend
+      - backend
+
+volumes:
+  db-data:
+
+networks:
+  frontend:
+  backend:

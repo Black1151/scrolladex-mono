@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { Box, Heading, Text, Flex } from "@chakra-ui/react";
+import React from "react";
+import { Box, Heading, Text, Flex, Image } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import useDepartmentColor from "@/hooks/useDepartmentColor";
 import { EmployeeOverview } from "@/types";
-import Image from "next/image";
 
 const MotionBox = motion(Box);
 
@@ -90,7 +89,11 @@ const OverviewCard: React.FC<Props> = ({
             overflow="hidden"
           >
             <Image
-              src={`https://nginx/public${employee.profilePictureUrl}`}
+              src={
+                process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
+                  "/public" +
+                  employee?.profilePictureUrl || ""
+              }
               alt={employee.firstName + " " + employee.lastName}
               width={110}
               height={110}
