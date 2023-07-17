@@ -16,7 +16,7 @@ const LoginPage = () => {
   const submitForm = useSubmitHandler({
     apiFunction: loginUser,
     successMessage: "Logged in successfully",
-    errorMessage: "An error occurred while logging in.",
+    errorMessage: "Authentication failed",
     showSuccess: true,
     resetForm: true,
   });
