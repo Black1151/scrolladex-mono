@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Box, SimpleGrid, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  SimpleGrid,
+  useDisclosure,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import EmployeeDetailsModal from "@/components/modals/EmployeeDetailsModal";
 import { useSelector } from "react-redux";
@@ -68,7 +73,7 @@ const Index = () => {
     });
   };
 
-  const columnWidth = 350;
+  const columnWidth = useBreakpointValue([250, 350]);
 
   return (
     <MotionBox

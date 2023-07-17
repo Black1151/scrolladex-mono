@@ -7,8 +7,17 @@ import {
   Button,
   Flex,
   Text,
+  useBreakpointValue,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  HStack,
+  Box,
 } from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
+import { GiHamburgerMenu } from "react-icons/gi";
 import ModalIconButton from "./ModalIconButton";
 
 interface Props {
@@ -50,6 +59,9 @@ const ModalWrapper: React.FC<Props> = ({
 
   const modalContentProps = fitContent ? {} : { maxW: maxWidth };
 
+  const iconSize = useBreakpointValue([20, 20, 30]);
+  const isMobile = useBreakpointValue([true, false]);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -60,28 +72,76 @@ const ModalWrapper: React.FC<Props> = ({
             borderTopRadius="md"
             justifyContent="space-between"
             alignItems="center"
-            px={6}
+            px={[4, 6]}
             py={4}
           >
-            <Text fontSize="2xl" color="white">
+            <Text fontSize={["xl", null, "2xl"]} color="white" isTruncated>
               {title}
             </Text>
             <Flex>
-              {extraButtons.map((button, index) => (
-                <ModalIconButton {...button} key={index} />
-              ))}
-              <Button
-                ref={closeButtonRef}
-                bg={titleBarColor}
-                border="none"
-                color="white"
-                size="xl"
-                _hover={{ bg: titleBarColor }}
-                onClick={onClose}
-                pl={4}
-              >
-                <FaTimes size={30} />
-              </Button>
+              {!isMobile &&
+                extraButtons.map((button, index) => (
+                  <ModalIconButton {...button} key={index} />
+                ))}
+              {!isMobile && (
+                <Button
+                  ref={closeButtonRef}
+                  bg={titleBarColor}
+                  border="none"
+                  color="white"
+                  size={"xl"}
+                  _hover={{ bg: titleBarColor }}
+                  onClick={onClose}
+                  pl={4}
+                >
+                  <FaTimes style={{ fontSize: iconSize }} />
+                </Button>
+              )}
+              {isMobile && extraButtons.length > 0 && (
+                <Menu>
+                  <MenuButton
+                    as={IconButton}
+                    aria-label="Options"
+                    icon={<GiHamburgerMenu />}
+                    bg={titleBarColor}
+                    border="none"
+                    color="white"
+                    _hover={{ bg: titleBarColor }}
+                  />
+                  <MenuList>
+                    {extraButtons.map((button, index) => (
+                      <MenuItem key={index} onClick={button.onClick}>
+                        <HStack spacing={2}>
+                          <Box minW={6}>{button.icon}</Box>
+                          <Text>{button.tooltipLabel}</Text>
+                        </HStack>
+                      </MenuItem>
+                    ))}
+                    <MenuItem onClick={onClose}>
+                      <HStack spacing={2}>
+                        <Box minW={6}>
+                          <FaTimes />
+                        </Box>
+                        <Text>Close</Text>
+                      </HStack>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              )}
+              {isMobile && extraButtons.length === 0 && (
+                <Button
+                  ref={closeButtonRef}
+                  bg={titleBarColor}
+                  border="none"
+                  color="white"
+                  size={"xl"}
+                  _hover={{ bg: titleBarColor }}
+                  onClick={onClose}
+                  pl={4}
+                >
+                  <FaTimes style={{ fontSize: iconSize }} />
+                </Button>
+              )}
             </Flex>
           </Flex>
           <ModalBody py={4} bg={bg} borderTopRadius="lg">

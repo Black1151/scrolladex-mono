@@ -9,6 +9,7 @@ import {
   Text,
   useDisclosure,
   VStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import {
   FaBriefcase,
@@ -59,6 +60,8 @@ const EmployeeDetailsModal: React.FC<Props> = ({
     }
   };
 
+  const iconSize = useBreakpointValue([20, 20, 30]);
+
   const employeeDetails = [
     { icon: <FaBriefcase />, key: "jobTitle" },
     { icon: <FaBuilding />, key: "departmentName" },
@@ -68,7 +71,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
   ].map(({ icon, key }) => (
     <Flex gap={2} alignItems="center" key={key}>
       <Box color="pictonBlue">{icon}</Box>
-      <Text pl={6} fontSize={["md", "md", "xl"]} whiteSpace="nowrap">
+      <Text pl={[2, 4, 6]} fontSize={["sm", "md", "xl"]} whiteSpace="nowrap">
         {employee?.[key as keyof Employee]}
       </Text>
     </Flex>
@@ -76,7 +79,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
 
   const actionButtons = [
     {
-      icon: <FaEdit size={25} />,
+      icon: <FaEdit style={{ fontSize: iconSize }} />,
       tooltipLabel: "Edit Employee Details",
       onClick: () => {
         editEmployeeDisclosure.onOpen();
@@ -84,7 +87,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
       },
     },
     {
-      icon: <FaTrash size={20} />,
+      icon: <FaTrash style={{ fontSize: iconSize && iconSize - 5 }} />,
       tooltipLabel: "Delete Employee",
       onClick: confirmationDisclosure.onOpen,
     },
@@ -97,7 +100,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
         isOpen={isOpen}
         onClose={onClose}
         extraButtons={actionButtons}
-        maxWidth={[350, null, 700]}
+        maxWidth={[300, 400, 700]}
         bg="transparent"
       >
         <SimpleGrid
@@ -113,13 +116,13 @@ const EmployeeDetailsModal: React.FC<Props> = ({
                 top={10}
                 left={0}
                 right={0}
-                height={[160, null, 130]}
+                height={[110, null, 130]}
                 background={`linear-gradient(to right, #3498db, white)`}
                 zIndex={-1}
               />
               <Box
                 position="absolute"
-                top={[200, null, 170]}
+                top={[150, null, 170]}
                 left={0}
                 right={0}
                 height={1}
@@ -129,7 +132,7 @@ const EmployeeDetailsModal: React.FC<Props> = ({
                 zIndex={-1}
               />
             </Box>
-            <Text whiteSpace="nowrap" fontSize={"4xl"} pb={10}>
+            <Text whiteSpace="nowrap" fontSize={["2xl", null, "4xl"]} pb={10}>
               {employee?.firstName} {employee?.lastName}
             </Text>
             <Flex flexDirection="column" gap={4}>
@@ -147,8 +150,8 @@ const EmployeeDetailsModal: React.FC<Props> = ({
                 alt={employee?.firstName + " " + employee?.lastName}
                 borderRadius="100%"
                 objectFit="cover"
-                maxW={300}
-                maxH={300}
+                maxW={[250, 300]}
+                maxH={[250, 300]}
               />
             </Box>
           </Center>

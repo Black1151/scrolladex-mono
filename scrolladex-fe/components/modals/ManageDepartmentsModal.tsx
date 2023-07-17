@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import ModalWrapper from "./ModalWrapper";
-import { VStack, Box, HStack, IconButton, Text } from "@chakra-ui/react";
+import {
+  VStack,
+  Box,
+  Flex,
+  IconButton,
+  Text,
+  HStack,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { useAsyncAction } from "@/hooks/async";
 import { fetchDepartmentDropdownList } from "@/store/departmentSlice";
 import { useSelector } from "react-redux";
@@ -118,9 +126,11 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   };
 
+  const iconSize = useBreakpointValue([20, 20, 30]);
+
   const extraButtons = [
     {
-      icon: <FaPlusCircle size={25} />,
+      icon: <FaPlusCircle size={iconSize} />,
       tooltipLabel: "Add department",
       onClick: () => {
         addDepartmentOnOpen();
@@ -137,43 +147,51 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
       bg={theme.colors.medPBlue}
       extraButtons={extraButtons}
     >
-      <VStack>
+      <VStack w="100%">
         {departments !== null &&
           departments.map((department) => (
-            <Box key={department.id}>
-              <HStack
+            <Box key={department.id} w="100%">
+              <Flex
+                flexDirection={["row"]}
+                justifyContent="space-between"
                 bg="transparent"
-                spacing={4}
                 py={3}
-                px={8}
+                px={[2, 8]}
                 color="white"
                 background="#3498db"
                 zIndex={0}
+                flex={1}
+                width="full"
               >
-                <Box fontSize="xl" borderRadius={20} w={60}>
+                <Box fontSize={["sm", "md", "xl"]} isTruncated>
                   {department.departmentName}
                 </Box>
-                <IconButton
-                  variant="green"
-                  icon={<FontAwesomeIcon icon={faEye} />}
-                  aria-label="View"
-                  onClick={() => handleViewDepartmentModalOpen(department.id)}
-                />
-                <IconButton
-                  variant="orange"
-                  icon={<FontAwesomeIcon icon={faEdit} />}
-                  aria-label="Edit"
-                  onClick={() => handleEditDepartmentModalOpen(department.id)}
-                />
-                <IconButton
-                  variant="red"
-                  icon={<FontAwesomeIcon icon={faTrashAlt} />}
-                  aria-label="Delete"
-                  onClick={() =>
-                    handleDeleteConfirmationModalOpen(department.id)
-                  }
-                />
-              </HStack>
+                <HStack>
+                  <IconButton
+                    variant="green"
+                    size={["xs", "sm"]}
+                    icon={<FontAwesomeIcon icon={faEye} />}
+                    aria-label="View"
+                    onClick={() => handleViewDepartmentModalOpen(department.id)}
+                  />
+                  <IconButton
+                    variant="orange"
+                    size={["xs", "sm"]}
+                    icon={<FontAwesomeIcon icon={faEdit} />}
+                    aria-label="Edit"
+                    onClick={() => handleEditDepartmentModalOpen(department.id)}
+                  />
+                  <IconButton
+                    variant="red"
+                    size={["xs", "sm"]}
+                    icon={<FontAwesomeIcon icon={faTrashAlt} />}
+                    aria-label="Delete"
+                    onClick={() =>
+                      handleDeleteConfirmationModalOpen(department.id)
+                    }
+                  />
+                </HStack>
+              </Flex>
               <Box
                 top={0}
                 height={1}

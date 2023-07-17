@@ -34,7 +34,7 @@ const OverviewCard: React.FC<Props> = ({
     >
       <Box
         bg="white"
-        p={5}
+        p={[2, 5]}
         shadow="md"
         borderWidth="1px"
         transition="all 0.25s"
@@ -53,13 +53,13 @@ const OverviewCard: React.FC<Props> = ({
             top={0}
             left={0}
             right={0}
-            height={16}
+            height={[12, 16]}
             background={`linear-gradient(to right, #3498db, white)`}
             zIndex={-1}
           />
           <Box
             position="absolute"
-            top={16}
+            top={[12, 16]}
             left={0}
             right={0}
             height={1}
@@ -70,14 +70,14 @@ const OverviewCard: React.FC<Props> = ({
           />
           <Box whiteSpace="nowrap" zIndex={1}>
             <Box width="100%">
-              <Heading fontSize="xl" pb={6}>
+              <Heading fontSize={["sm", "xl"]} pb={[3, 6]} pt={[3, 0]}>
                 {employee.firstName} {employee.lastName}
               </Heading>
             </Box>
-            <Text mt={2} fontWeight="bold" fontSize="md">
+            <Text mt={2} fontWeight="bold" fontSize={["xs", "md"]}>
               {employee.jobTitle}
             </Text>
-            <Text mt={2} fontSize="sm">
+            <Text mt={2} fontSize={["xs", "md"]}>
               {employee.departmentName}
             </Text>
           </Box>
@@ -95,8 +95,8 @@ const OverviewCard: React.FC<Props> = ({
                   employee?.profilePictureUrl || ""
               }
               alt={employee.firstName + " " + employee.lastName}
-              width={110}
-              height={110}
+              width={[92, 110]}
+              height={[92, 110]}
             />
           </Box>
         </Flex>

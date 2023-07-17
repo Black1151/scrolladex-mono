@@ -15,9 +15,12 @@ const NavbarContainer: React.FC<any> = ({ navbarButtonsProps }) => {
       bg="pictonBlue"
       color="white"
       px={[6, null, 8, null, 24]}
+      // pt={[5, 0]}
+      alignItems={"center"}
+      h={16}
     >
       <VStack alignItems="flex-start">
-        <Text fontSize="4xl" color="white">
+        <Text fontSize={["xl", "4xl"]} color="white">
           Scroll-a-dex!
         </Text>
       </VStack>
