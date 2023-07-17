@@ -32,8 +32,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(isAuthenticated);
-
     if (isAuthenticated === false && router.pathname !== "/login") {
       router.replace("/login");
     }

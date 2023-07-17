@@ -13,8 +13,6 @@ const DepartmentDetailsModal: React.FC<FormModalProps> = ({
     (state: RootState) => state.department.departmentWithEmployees.data
   );
 
-  console.log(selectedDepartment);
-
   return (
     <ModalWrapper title="Department Details" onClose={onClose} isOpen={isOpen}>
       <Box pb={5}>

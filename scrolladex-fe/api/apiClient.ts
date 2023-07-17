@@ -14,7 +14,6 @@ const convertKeys = (data: any, converter: (key: string) => string): any => {
       })
     );
   } else {
-    console.log('data', data);
     return data;
   }
 };
