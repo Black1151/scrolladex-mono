@@ -10,7 +10,9 @@ services:
       - backend
 
   backend:
-    image: ${DOCKER_USERNAME}/scrolladex-backend:1.0
+    build: 
+      context: ./scrolladex-be
+      dockerfile: Dockerfile.prod
     env_file:
       - .env.backend
     depends_on:
@@ -20,21 +22,25 @@ services:
     volumes:
       - ./scrolladex-be/public/uploads:/usr/src/app/build/public/uploads
   frontend:
-    image: ${DOCKER_USERNAME}/scrolladex-frontend:1.0
+    build:
+      context: ./scrolladex-fe
+      dockerfile: Dockerfile.prod
     env_file:
       - .env.frontend
     networks:
       - frontend
 
   nginx:
-    image: ${DOCKER_USERNAME}/scrolladex-nginx:1.0
+    build:
+      context: ./nginx
     ports:
       - '80:80'
       - '443:443'
     volumes:
       - ./nginx.prod.conf:/etc/nginx/nginx.conf
-      - ./certs/ssl:/etc/ssl/certs
       - ./scrolladex-be/public/uploads:/usr/src/nginx/public/uploads
+      - ./nginx/www:/var/www
+      - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - frontend
       - backend
