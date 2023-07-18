@@ -3,11 +3,13 @@ import colors from "./colors";
 
 const theme = extendTheme({
   breakpoints: {
-    sm: "480px",
-    md: "768px",
-    lg: "1125px",
-    xl: "1500px",
-    "2xl": "1850",
+    base: "375px",
+    sm: "620px",
+    md: "730px",
+    lg: "900px",
+    xl: "1090px",
+    xxl: "1420px",
+    xxxl: "1850px",
   },
   colors,
   fonts: {

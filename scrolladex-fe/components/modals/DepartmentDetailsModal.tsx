@@ -16,11 +16,12 @@ const DepartmentDetailsModal: React.FC<FormModalProps> = ({
   return (
     <ModalWrapper title="Department Details" onClose={onClose} isOpen={isOpen}>
       <Box pb={5}>
-        <Text fontSize="3xl">{selectedDepartment?.departmentName}</Text>
+        <Text fontSize={["2xl", "3xl"]}>
+          {selectedDepartment?.departmentName}
+        </Text>
       </Box>
-      <Grid templateColumns="1fr 2fr" gap={4}>
+      <Grid templateColumns={["1fr", "1fr 2fr"]} gap={4}>
         <Box>
-          <Text fontSize="2xl">Address</Text>
           <Text>{selectedDepartment?.addressLineOne}</Text>
           <Text>{selectedDepartment?.addressLineTwo}</Text>
           <Text>{selectedDepartment?.town}</Text>
@@ -28,13 +29,15 @@ const DepartmentDetailsModal: React.FC<FormModalProps> = ({
           <Text>{selectedDepartment?.postcode}</Text>
         </Box>
         <VStack gap={5} alignItems="start">
-          <Box fontSize="2xl">Employees</Box>
+          <Box fontSize={["xl", "2xl"]}>Employees</Box>
           {selectedDepartment?.employees.map((employee, index) => (
             <Box key={index}>
-              <Text fontSize="xl">
+              <Text fontSize={["md", "xl"]} isTruncated>
                 {employee.title} {employee.firstName} {employee.lastName}
               </Text>
-              <Text>{employee.jobTitle}</Text>
+              <Text fontSize={["sm", "md"]} isTruncated>
+                {employee.jobTitle}
+              </Text>
             </Box>
           ))}
         </VStack>

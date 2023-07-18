@@ -42,13 +42,13 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({
     >
       {(formik) => (
         <Form onSubmit={formik.handleSubmit}>
-          <Flex p={4} gap={4} flexDirection="column">
+          <Flex gap={4} flexDirection="column">
             <AppFormInput
               label="Department Name"
               name="departmentName"
               type="text"
             />
-            <Flex gap={4} flexDirection={["column", "row"]}>
+            <Flex gap={4} flexDirection={["column", null, "row"]}>
               <AppFormInput
                 label="Address Line 1"
                 name="addressLineOne"
@@ -60,7 +60,7 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({
                 type="text"
               />
             </Flex>
-            <Flex gap={4} flexDirection={["column", "row"]}>
+            <Flex gap={4} flexDirection={["column", null, "row"]}>
               <AppFormInput label="Town" name="town" type="text" />
               <AppFormInput label="County" name="county" type="text" />
               <AppFormInput label="Postcode" name="postcode" type="text" />

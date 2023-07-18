@@ -8,6 +8,11 @@ import {
   Text,
   HStack,
   useBreakpointValue,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useTheme,
 } from "@chakra-ui/react";
 import { useAsyncAction } from "@/hooks/async";
 import { fetchDepartmentDropdownList } from "@/store/departmentSlice";
@@ -15,7 +20,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
-import { useTheme } from "@chakra-ui/react";
 import UpdateDepartmentModal from "./UpdateDepartmentModal";
 import { useDisclosure } from "@chakra-ui/react";
 import {
@@ -28,6 +32,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import AddDepartmentModal from "./AddDepartmentModal";
 import DepartmentDetailsModal from "./DepartmentDetailsModal";
 import useDepartmentColor from "@/hooks/useDepartmentColor";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 interface Props {
   isOpen: boolean;
@@ -138,6 +143,84 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     },
   ];
 
+  const ActionButtons = ({ departmentId }: { departmentId: number }) => {
+    return (
+      <>
+        <Box display={["block", null, "none"]}>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<GiHamburgerMenu />}
+              bg="pictonBlue"
+              border="none"
+              _hover={{ bg: "pictonBlue" }}
+              p={0}
+            />
+            <MenuList w={10}>
+              <MenuItem
+                onClick={() => handleViewDepartmentModalOpen(departmentId)}
+                color="emerald"
+              >
+                <HStack>
+                  <Box w={5}>
+                    <FontAwesomeIcon icon={faEye} />
+                  </Box>
+                  <Text>View</Text>
+                </HStack>
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleEditDepartmentModalOpen(departmentId)}
+                color="xanthous"
+              >
+                <HStack>
+                  <Box w={5}>
+                    <FontAwesomeIcon icon={faEdit} />
+                  </Box>
+                  <Text>Edit</Text>
+                </HStack>
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleDeleteConfirmationModalOpen(departmentId)}
+                color="bittersweet"
+              >
+                <HStack>
+                  <Box w={5}>
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </Box>
+                  <Text>Delete</Text>
+                </HStack>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+
+        <HStack display={["none", null, "block"]}>
+          <IconButton
+            variant="green"
+            size={["xs", "sm"]}
+            icon={<FontAwesomeIcon icon={faEye} />}
+            aria-label="View"
+            onClick={() => handleViewDepartmentModalOpen(departmentId)}
+          />
+          <IconButton
+            variant="orange"
+            size={["xs", "sm"]}
+            icon={<FontAwesomeIcon icon={faEdit} />}
+            aria-label="Edit"
+            onClick={() => handleEditDepartmentModalOpen(departmentId)}
+          />
+          <IconButton
+            variant="red"
+            size={["xs", "sm"]}
+            icon={<FontAwesomeIcon icon={faTrashAlt} />}
+            aria-label="Delete"
+            onClick={() => handleDeleteConfirmationModalOpen(departmentId)}
+          />
+        </HStack>
+      </>
+    );
+  };
+
   return (
     <ModalWrapper
       maxWidth={500}
@@ -154,8 +237,9 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <Flex
                 flexDirection={["row"]}
                 justifyContent="space-between"
+                alignItems="center"
                 bg="transparent"
-                py={3}
+                py={[3, 3]}
                 px={[2, 8]}
                 color="white"
                 background="#3498db"
@@ -166,31 +250,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 <Box fontSize={["sm", "md", "xl"]} isTruncated>
                   {department.departmentName}
                 </Box>
-                <HStack>
-                  <IconButton
-                    variant="green"
-                    size={["xs", "sm"]}
-                    icon={<FontAwesomeIcon icon={faEye} />}
-                    aria-label="View"
-                    onClick={() => handleViewDepartmentModalOpen(department.id)}
-                  />
-                  <IconButton
-                    variant="orange"
-                    size={["xs", "sm"]}
-                    icon={<FontAwesomeIcon icon={faEdit} />}
-                    aria-label="Edit"
-                    onClick={() => handleEditDepartmentModalOpen(department.id)}
-                  />
-                  <IconButton
-                    variant="red"
-                    size={["xs", "sm"]}
-                    icon={<FontAwesomeIcon icon={faTrashAlt} />}
-                    aria-label="Delete"
-                    onClick={() =>
-                      handleDeleteConfirmationModalOpen(department.id)
-                    }
-                  />
-                </HStack>
+                <ActionButtons departmentId={department.id} />
               </Flex>
               <Box
                 top={0}

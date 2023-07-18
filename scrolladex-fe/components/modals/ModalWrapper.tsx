@@ -60,7 +60,7 @@ const ModalWrapper: React.FC<Props> = ({
   const modalContentProps = fitContent ? {} : { maxW: maxWidth };
 
   const iconSize = useBreakpointValue([20, 20, 30]);
-  const isMobile = useBreakpointValue([true, false]);
+  const isMobile = useBreakpointValue({ base: true, sm: false });
 
   return (
     <>

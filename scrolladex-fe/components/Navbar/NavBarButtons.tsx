@@ -33,7 +33,7 @@ const NavBarButtons: React.FC<NavBarButtonsProps> = ({
 }) => {
   return (
     <>
-      <HStack display={["none", null, "flex"]}>
+      <HStack display={["none", null, null, "flex"]}>
         <NavDepartmentSelect
           selectedDepartment={selectedDepartment}
           setSelectedDepartment={setSelectedDepartment}
@@ -64,7 +64,7 @@ const NavBarButtons: React.FC<NavBarButtonsProps> = ({
           onClick={handleLogout}
         />
       </HStack>
-      <Box display={["block", null, "none"]}>
+      <Box display={["block", null, null, "none"]}>
         <Box>
           <ModalIconButton
             bg="pictonBlue"

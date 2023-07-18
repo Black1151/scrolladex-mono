@@ -11,6 +11,7 @@ import {
   GridItem,
   Box,
   Flex,
+  Center,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import AppFormInput from "@/components/forms/AppFormInput";
@@ -89,12 +90,21 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
     >
       {(formik) => (
         <Form onSubmit={formik.handleSubmit}>
-          <Grid templateColumns={["1fr", null, "repeat(3, 1fr)"]} gap={4} p={4}>
+          <Grid
+            templateColumns={[
+              "1fr",
+              null,
+              null,
+              "repeat(2, 1fr)",
+              "repeat(3, 1fr)",
+            ]}
+            gap={4}
+          >
             <GridItem colSpan={{ base: 1, md: 2 }}>
               <Grid
                 gap={4}
                 rowGap={8}
-                templateColumns={["1fr", "repeat(2, 1fr)"]}
+                templateColumns={["1fr", null, "repeat(2, 1fr)"]}
                 gridRow="span 2"
               >
                 <AppFormInput
@@ -130,17 +140,19 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 <AppFormInput type="email" name="email" label="Email" />
               </Grid>
             </GridItem>
-            <GridItem colSpan={{ base: 1, md: 1 }}>
+            <GridItem colSpan={[1, 2, null, null, 1]}>
               {!!!showUpload ? (
                 <Box>
-                  <Image
-                    src={
-                      process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
-                        "/public" +
-                        selectedEmployeeImageUrl || ""
-                    }
-                    alt="Profile"
-                  />
+                  <Center>
+                    <Image
+                      src={
+                        process.env.NEXT_PUBLIC_SERVER_ADDRESS! +
+                          "/public" +
+                          selectedEmployeeImageUrl || ""
+                      }
+                      alt="Profile"
+                    />
+                  </Center>
                   <Box display="flex" justifyContent="center" mt={2}>
                     <Button
                       variant="blue"

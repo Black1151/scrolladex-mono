@@ -53,13 +53,13 @@ const OverviewCard: React.FC<Props> = ({
             top={0}
             left={0}
             right={0}
-            height={[12, 16]}
+            height={[12, 16, 12, 16, 12, 16]}
             background={`linear-gradient(to right, #3498db, white)`}
             zIndex={-1}
           />
           <Box
             position="absolute"
-            top={[12, 16]}
+            top={[12, 16, 12, 16, 12, 16]}
             left={0}
             right={0}
             height={1}
@@ -70,14 +70,22 @@ const OverviewCard: React.FC<Props> = ({
           />
           <Box whiteSpace="nowrap" zIndex={1}>
             <Box width="100%">
-              <Heading fontSize={["sm", "xl"]} pb={[3, 6]} pt={[3, 0]}>
+              <Heading
+                fontSize={["sm", "xl", "sm", "xl", "sm", "xl"]}
+                pb={[3, 6, null, 6, 6, 6]}
+                pt={[3, 0, null, 0, 0, 0]}
+              >
                 {employee.firstName} {employee.lastName}
               </Heading>
             </Box>
-            <Text mt={2} fontWeight="bold" fontSize={["xs", "md"]}>
+            <Text
+              mt={2}
+              fontWeight="bold"
+              fontSize={["xs", "md", "xs", "md", "xs", "md"]}
+            >
               {employee.jobTitle}
             </Text>
-            <Text mt={2} fontSize={["xs", "md"]}>
+            <Text mt={2} fontSize={["xs", "md", "xs", "md", "xs", "md"]}>
               {employee.departmentName}
             </Text>
           </Box>
@@ -95,8 +103,8 @@ const OverviewCard: React.FC<Props> = ({
                   employee?.profilePictureUrl || ""
               }
               alt={employee.firstName + " " + employee.lastName}
-              width={[92, 110]}
-              height={[92, 110]}
+              width={[92, 110, 92, 110, 92, 110]}
+              height={[92, 110, 92, 110, 92, 110]}
             />
           </Box>
         </Flex>

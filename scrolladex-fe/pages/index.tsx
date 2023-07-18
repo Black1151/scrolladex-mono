@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  SimpleGrid,
-  useDisclosure,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Box, SimpleGrid, useDisclosure } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import EmployeeDetailsModal from "@/components/modals/EmployeeDetailsModal";
 import { useSelector } from "react-redux";
@@ -72,9 +67,6 @@ const Index = () => {
       onOpen();
     });
   };
-
-  const columnWidth = useBreakpointValue([250, 350]);
-
   return (
     <MotionBox
       p={5}
@@ -88,12 +80,14 @@ const Index = () => {
     >
       <SimpleGrid
         gridTemplateColumns={[
-          `repeat(1, ${columnWidth}px)`,
+          `repeat(1, 1fr)`,
+          `repeat(1, 1fr)`,
+          `repeat(2, 1fr)`,
           null,
-          `repeat(2, ${columnWidth}px)`,
+          `repeat(3, 1fr)`,
           null,
-          `repeat(4, ${columnWidth}px)`,
-          `repeat(5, ${columnWidth}px)`,
+          `repeat(4, 1fr)`,
+          `repeat(5, 1fr)`,
         ]}
         spacing={5}
         position="relative"
