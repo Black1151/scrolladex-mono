@@ -120,6 +120,7 @@ const ManageDepartmentsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   const handleDeleteConfirmationModalOpen = async (departmentId: number) => {
+    await getDepartmentDetails(departmentId);
     await getDepartmentAndEmployees(departmentId);
     deleteConfirmationOnOpen();
   };
