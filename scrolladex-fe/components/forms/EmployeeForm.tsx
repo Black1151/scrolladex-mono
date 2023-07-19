@@ -29,7 +29,12 @@ const validationSchema = (shouldRequireProfilePicture: boolean) =>
     empNo: Yup.string().required("Employee Number is a required field."),
     jobTitle: Yup.string().required("Job Title is a required field."),
     departmentId: Yup.number().required("Department ID is a required field."),
-    telephone: Yup.string().required("Telephone number is a required field."),
+    telephone: Yup.string()
+      .matches(
+        /^(?:\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/,
+        "Please enter a valid UK phone number"
+      )
+      .required("Telephone number is a required field."),
     email: Yup.string()
       .email("Please provide a valid email address.")
       .required("Email is a required field."),
@@ -87,6 +92,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
       initialValues={initialValues}
       validationSchema={validationSchema(showUpload)}
       onSubmit={onSubmit}
+      validateOnChange={false}
+      validateOnBlur={false}
     >
       {(formik) => (
         <Form onSubmit={formik.handleSubmit}>

@@ -21,7 +21,12 @@ const validationSchema = Yup.object({
   addressLineTwo: Yup.string(),
   town: Yup.string().required("Town is a required field."),
   county: Yup.string().required("County is a required field."),
-  postcode: Yup.string().required("Postcode is a required field."),
+  postcode: Yup.string()
+    .matches(
+      new RegExp("^([A-Z]{1,2}[0-9]{1,2}([A-Z]{1})? [0-9][A-Z]{2})$"),
+      "Please enter a valid UK postcode"
+    )
+    .required("Postcode is a required field."),
 });
 
 const DepartmentForm: React.FC<DepartmentFormProps> = ({
@@ -39,6 +44,8 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      validateOnChange={false}
+      validateOnBlur={false}
     >
       {(formik) => (
         <Form onSubmit={formik.handleSubmit}>

@@ -72,6 +72,8 @@ const LoginPage = () => {
             password: Yup.string().required("Required"),
           })}
           onSubmit={handleFormSubmit}
+          validateOnChange={false}
+          validateOnBlur={false}
         >
           <Form>
             <Box p={6}>
