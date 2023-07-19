@@ -25,7 +25,7 @@ const UpdateDepartmentModal: React.FC<FormModalProps> = ({
     apiFunction: updateDepartment,
     successMessage: `${
       selectedDepartment!.departmentName
-    }Department was added successfully`,
+    } department was updated successfully`,
     errorMessage: "An error occurred while updating the department.",
     showSuccess: true,
     resetForm: true,

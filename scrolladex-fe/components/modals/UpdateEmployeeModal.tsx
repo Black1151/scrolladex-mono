@@ -30,7 +30,9 @@ const UpdateEmployeeModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const submitForm = useSubmitHandler({
     apiFunction: updateEmployee,
-    successMessage: "Employee was updated successfully",
+    successMessage: `${selectedEmployee!.firstName} ${
+      selectedEmployee!.lastName
+    } was updated successfully`,
     errorMessage: "An error occurred while updating the employee.",
     showSuccess: true,
     resetForm: true,
