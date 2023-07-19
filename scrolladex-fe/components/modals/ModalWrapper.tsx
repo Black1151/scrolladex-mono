@@ -47,16 +47,6 @@ const ModalWrapper: React.FC<Props> = ({
   extraButtons = [],
   titleBarColor = "emerald",
 }) => {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        closeButtonRef.current?.focus();
-      }, 100);
-    }
-  }, [isOpen]);
-
   const modalContentProps = fitContent ? {} : { maxW: maxWidth };
 
   const iconSize = useBreakpointValue([20, 20, 30]);
@@ -64,7 +54,7 @@ const ModalWrapper: React.FC<Props> = ({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} autoFocus={false}>
         <ModalOverlay />
         <ModalContent {...modalContentProps} borderTopRadius="lg">
           <Flex
@@ -85,7 +75,6 @@ const ModalWrapper: React.FC<Props> = ({
                 ))}
               {!isMobile && (
                 <Button
-                  ref={closeButtonRef}
                   bg={titleBarColor}
                   border="none"
                   color="white"
@@ -130,7 +119,6 @@ const ModalWrapper: React.FC<Props> = ({
               )}
               {isMobile && extraButtons.length === 0 && (
                 <Button
-                  ref={closeButtonRef}
                   bg={titleBarColor}
                   border="none"
                   color="white"
