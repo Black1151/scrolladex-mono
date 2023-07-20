@@ -70,5 +70,10 @@ export default class EmployeeSeeder extends BaseSeeder {
       user.employee_id = employeeEntry.id;
       await user.save();
     }
+
+    const guestUser = new User();
+    guestUser.username = 'guest';
+    guestUser.password = 'hireme';
+    await guestUser.save();
   }
 }
