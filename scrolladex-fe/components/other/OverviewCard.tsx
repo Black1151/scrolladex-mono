@@ -38,14 +38,15 @@ const OverviewCard: React.FC<Props> = ({
         shadow="md"
         borderWidth="1px"
         transition="all 0.25s"
-        transform="scale(1)"
+        transform="translateZ(0)"
         zIndex={0}
         position="relative"
         _hover={{
-          transform: "scale(1.025)",
+          transform: "scale(1.02) translateZ(0)",
           shadow: "xl",
           zIndex: 10,
         }}
+        willChange="transform"
       >
         <Flex justifyContent="space-between">
           <Box
