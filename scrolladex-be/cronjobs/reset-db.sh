@@ -1,5 +1,5 @@
 #!/bin/bash
-docker exec -it scrolladex-mono-backend-1 bash sh -c "
+docker exec -it scrolladex-mono-backend-1 sh -c "
 cd build &&
 node ace migration:rollback &&
 node ace migration:run &&
