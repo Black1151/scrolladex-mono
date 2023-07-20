@@ -7,9 +7,10 @@ export async function checkUserAuthentication(context: GetServerSidePropsContext
   const serverAddress = process.env.NEXT_PUBLIC_SERVER_ADDRESS || '';
 
   try {
-    isProduction && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0");
 
-    const response = await fetch( isProduction ? serverAddress : "https://nginx" + '/api/check-session', {
+    !!!isProduction && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0");
+
+    const response = await fetch(isProduction ? serverAddress + '/api/check-session' : "https://nginx" + '/api/check-session', {
       headers: {
         'Cookie': context.req.headers.cookie || ''
       },
